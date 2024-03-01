@@ -1,35 +1,51 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Header } from './components/Header.jsx'; 
+import { Main } from './components/Main.jsx';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 
-function App() {
-  const [count, setCount] = useState(0)
+import './global.css';
+import styles from './App.module.css'
+
+const libraries = ['places'];
+const mapContainerStyle = {
+  width: '100vw',
+  height: '100vh',
+};
+const center = {
+  lat: -23.5505, // latitude for São Paulo
+  lng: -46.6333, // longitude for São Paulo
+};
+
+export function App() {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyAdxIG67xrVviqqJWnZEwxU28iLh8lQG1o',
+    libraries,
+  });
+
+  if (loadError) {
+    return <div>Error loading maps</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading maps</div>;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router>
+      <Header />
+      <Main />
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={10}
+        center={center}
+      >
+        <Marker position={center} />
+      </GoogleMap>
+    </Router>
+    
   )
 }
 
-export default App

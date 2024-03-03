@@ -1,7 +1,11 @@
 .main {
+    position: relative;
     display: flex;
+    text-align: center;
     align-items: center;
+    width: 100%;
     justify-content: center;
     background-color: #282c34;
     color: white;
+    top: 0;
 }

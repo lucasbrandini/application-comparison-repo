@@ -1,9 +1,13 @@
 .header {
+    position: relative;
     height: 4rem;
-    background-color: var(--gray-400);
-    padding-top: 0.475rem;
+    width: 100vw;
+    background-color: gray;
+    /*padding-top: 0.475rem;*/
     font-size: 10px;
-    display: flex;
+    /*display: flex;*/
+    text-align: center;
     justify-content: center;
     color: white;
+    top: 0;
 }

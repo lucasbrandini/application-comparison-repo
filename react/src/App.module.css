@@ -1,4 +1,9 @@
 body {
-  background-color: black;
-  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  background-color: #282c34;
+  color: white;
+  font-size: 20px;
 }

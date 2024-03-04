@@ -1,5 +1,5 @@
 {
-  "name": "react",
+  "name": "vite-project",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,7 +13,6 @@
     "@react-google-maps/api": "^2.19.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.3.4",
     "use-places-autocomplete": "^4.0.1"
   },

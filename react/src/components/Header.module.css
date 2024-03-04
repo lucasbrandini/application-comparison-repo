@@ -1,9 +1,0 @@
-.header {
-    height: 4rem;
-    background-color: var(--gray-400);
-    padding-top: 0.475rem;
-    font-size: 10px;
-    display: flex;
-    justify-content: center;
-    color: white;
-}

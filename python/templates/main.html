@@ -1,0 +1,18 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="main">
+        <h1>Welcome to page!</h1>   
+        <p>about welcome page</p> 
+    
+        <form class="mainForm" method="post">
+            <input type="text" name="name" placeholder="your name is here">
+            <input type="text" name="content" placeholder="your content is here">
+            <input type="submit" value="submit">
+        </form>
+    </div>
+</body>

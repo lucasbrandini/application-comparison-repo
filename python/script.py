@@ -1,29 +1,53 @@
+import requests
+import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pybars import Compiler
-import os
 
-# Compilador Handlebars
 compiler = Compiler()
 
-# Definindo uma variável que será passada para o template
-data = {
-    'nome': 'Mundo',
-    'number': 10
+def render_template(template_name, data):
+    template_path = os.path.join('templates', template_name)
+    with open(template_path, 'r') as file:
+        source = file.read()
+    template = compiler.compile(source)
+    output = template(data)
+    return output
+
+def handle_home():
+    data = {}
+    output = render_template('home.hbs', data)
+    return output
+
+def handle_about():
+    data = {}
+    output = render_template('about.hbs', data)
+    return output
+
+def handle_posts():
+    response = requests.get('https://jsonplaceholder.typicode.com/posts')
+    data = response.json()
+    output = render_template('posts.hbs', data)
+    return output
+
+def handle_404():
+    return "Rota nao encontrada."
+
+routes = {
+    '/home': handle_home,
+    '/about': handle_about,
+    '/posts': handle_posts,
 }
 
-# Lendo o arquivo de template Handlebars
-with open('template.hbs', 'r') as file:
-    source = file.read()
-
-# Compilando o template
-template = compiler.compile(source)
-
-# Renderizando o template handlebars com a variável
-output = template(data)
-
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+
     def do_GET(self):
-        self.send_response(200)
+        route = self.path
+        handler = routes.get(route, handle_404)
+        output = handler()
+        if output == "Rota nao encontrada.":
+            self.send_response(404)
+        else:
+            self.send_response(200)
         self.end_headers()
         self.wfile.write(output.encode())
 

@@ -1,23 +1,31 @@
-from flask import Flask, jsonify, request, redirect, url_for, render_template
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from pybars import Compiler
+import os
 
-app = Flask(__name__)
+# Compilador Handlebars
+compiler = Compiler()
 
-data = []
+# Definindo uma variável que será passada para o template
+data = {
+    'nome': 'Mundo',
+    'number': 10
+}
 
-@app.route('/main', methods=['GET', 'POST'])
-def main():
-    if request.method == 'POST':
-        name = request.json.get('name')  
-        content = request.json.get('content')  
-        print(f'Name: {name}, Content: {content}')  
-        data.append({'name': name, 'content': content})
-        return redirect(url_for('show_data'))
+# Lendo o arquivo de template Handlebars
+with open('template.hbs', 'r') as file:
+    source = file.read()
 
-    return jsonify(data)
+# Compilando o template
+template = compiler.compile(source)
 
-@app.route('/show_data')
-def show_data():
-    return render_template('data.html', data=data)
+# Renderizando o template handlebars com a variável
+output = template(data)
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(output.encode())
+
+httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
+httpd.serve_forever()

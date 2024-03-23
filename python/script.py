@@ -1,7 +1,16 @@
 import requests
 import os
+from sqlalchemy import create_engine, Table, MetaData
+from sqlalchemy.orm import sessionmaker
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pybars import Compiler
+
+engine = create_engine('mysql+pymysql://admin:Password1!@localhost/python')
+metadata = MetaData()
+table = Table('table_name', metadata, autoload_with=engine)
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 compiler = Compiler()
 
@@ -14,8 +23,16 @@ def render_template(template_name, data):
     return output
 
 def handle_home():
-    data = {}
+    results = session.query(table).all()
+    data = [row._asdict() for row in results]
+    print(data, 'data')
     output = render_template('home.hbs', data)
+    return output
+
+def handle_data():
+    results = session.query(table).all()
+    data = [row._asdict() for row in results]
+    output = render_template('data.hbs', data)
     return output
 
 def handle_about():
@@ -36,6 +53,7 @@ routes = {
     '/home': handle_home,
     '/about': handle_about,
     '/posts': handle_posts,
+    '/data': handle_data,
 }
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):

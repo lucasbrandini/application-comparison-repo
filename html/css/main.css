@@ -1,0 +1,164 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-section {
+  display: flex;
+  align-items: center;
+}
+
+.login-form {
+  background-color: #ffffff;
+  padding: 30px;
+  max-width: 400px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  max-width: 94.5%;
+}
+
+.custom-button-purple {
+  width: 100%;
+  padding: 10px;
+  background-color: #bf86f3;
+  color: #8a2be2;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.custom-button-purple:hover {
+  background-color: #9e53d2;
+}
+
+.image-section {
+  margin-left: 20px;
+}
+
+.image {
+  background-color: #ffffff;
+  width: auto;
+  height: 360px;
+  border-radius: 10px;
+}
+
+.cima {
+  position: absolute;
+  top: 20px;
+  right: 150px;
+  margin-top: 20px;
+  color: #8a2be2;
+}
+/* Media queries para dispositivos com largura máxima de 600px (celulares) */
+@media only screen and (max-width: 600px) {
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-form {
+    background-color: #ffffff;
+    padding: 30px;
+    max-width: 400px;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    color: #666;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    max-width: 94.5%;
+  }
+
+  .custom-button-purple {
+    width: 100%;
+    padding: 10px;
+    background-color: #8a2be2; /* Cor roxa */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: 100%;
+  }
+
+  .custom-button-purple:hover {
+    background-color: #800080;
+  }
+
+  .image-section {
+    margin-bottom: 20px;
+  }
+
+  .image {
+    background-color: #ffffff;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  .cima {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    margin-top: 20px;
+    color: #8a2be2;
+  }
+}

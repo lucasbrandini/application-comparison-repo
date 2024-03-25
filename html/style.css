@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+    background-color: #fff;
+}
+
+main {
+    margin: 10.8rem auto 0 auto;
+    display: flex;
+    align-items: center;
+    width: 52rem;
+    gap: 3.5rem;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2rem;
+    height: 4rem;
+    background-color: #fff;
+    color: #5B2EAA;
+    font-size: 1.1rem;
+    align-items: center;
+}
+
+.container {
+    width: 36rem;
+}
+
+.container h1 {
+    font-size: 1.8125rem;
+    margin-top: 0.63rem;
+    font-weight: bold;
+}
+
+.container p {
+    font-size: 1.4375rem;
+    color: #313131;
+    font-weight: 400;
+    margin-bottom: .625rem;
+}
+
+#name {
+    font-size: 1.3125rem;
+    font-weight: bold;
+}
+
+#name-input {
+    margin-top: .625rem;
+    display: block;
+    border: 2px solid #D9D9D9;
+    width: 100%;
+    border-radius: 6px;
+    color: #313131;
+    padding: .3rem;
+    font-size: .9875rem;
+    font-weight: 400;
+
+    margin-bottom: .625rem;
+    width: 20.8rem;
+}
+
+#password-input {
+    margin-top: .625rem;
+    display: block;
+    border: 2px solid #D9D9D9;
+    width: 100%;
+    border-radius: 6px;
+    color: #313131;
+    padding: .3rem;
+    font-size: .9875rem;
+    font-weight: 400;
+
+    margin-bottom: .625rem;
+    width: 20.8rem;
+}
+
+#password {
+    font-size: 1.3125rem;
+    font-weight: bold
+}
+
+#submit-login {
+    font-size: .575rem;
+    border: 1px solid #5B2EAA;
+    color: #5B2EAA;
+    font-size: 1.1875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    background-color: #D5C4F2;
+
+    width: 20.8rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}

@@ -56,14 +56,23 @@ const connectDatabase = () => {
   });
 
   // SELECT
-  function selectUser(userId, callback) {
-    if (!userId) {
-      callback(new Error("User ID cannot be null"));
-      return;
-    }
+  function selectUser(userId) {
+    return new Promise((resolve, reject) => {
+      if (!userId) {
+        reject(new Error("User ID cannot be null"));
+        return;
+      }
 
-    const sql = `SELECT * FROM Usuarios WHERE id_user = ?`;
-    connection.query(sql, [userId], callback);
+      const sql = `SELECT * FROM Usuarios WHERE id_user = ?`;
+      connection.query(sql, [userId], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(results);
+      });
+    });
   }
 
   // INSERT

@@ -19,10 +19,19 @@ app.get("/about", (req, res) => {
   res.render("about");
 });
 
+app.get("/user/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const userData = await db.selectUser(userId);
+    res.json(userData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao buscar usuário");
+  }
+});
+
+
 const PORT = process.env.PORT || 3000;
-
-db.deleteUser(11);
-
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

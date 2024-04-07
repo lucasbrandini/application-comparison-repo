@@ -54,7 +54,7 @@ const connectDatabase = () => {
       });
     });
   });
-
+  // User functions
   // SELECT
   function selectUser(userId) {
     return new Promise((resolve, reject) => {
@@ -107,8 +107,123 @@ const connectDatabase = () => {
     const sql = `UPDATE Usuarios SET name_user = ? WHERE id_user = ?`;
     connection.query(sql, [newName, userId], callback);
   }
+  // Post functions
+  // SELECT
+  function selectPost(postId) {
+    return new Promise((resolve, reject) => {
+      if (!postId) {
+        reject(new Error("Post ID cannot be null"));
+        return;
+      }
 
-  return { connection, selectUser, insertUser, deleteUser, updateUser };
+      const sql = `SELECT * FROM Posts WHERE id_posts = ?`;
+      connection.query(sql, [postId], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(results);
+      });
+    });
+  }
+  // INSERT
+  function insertPost(p_id_user, post, callback) {
+    if (!p_id_user || !post) {
+      callback(new Error("User ID or post cannot be null"));
+      return;
+    }
+
+    const sql = "INSERT INTO Posts (p_id_user, post) VALUES (?, ?)";
+    connection.query(sql, [p_id_user, post], callback);
+  }
+  // DELETE
+  function deletePost(postId, callback) {
+    if (!postId) {
+      callback(new Error("Post ID cannot be null"));
+      return;
+    }
+
+    const sql = `DELETE FROM Posts WHERE id_posts = ?`;
+    connection.query(sql, [postId], callback);
+  }
+  // UPDATE
+  function updatePost(postId, newPost, callback) {
+    if (!postId || !newPost) {
+      callback(new Error("Post ID or new post cannot be null"));
+      return;
+    }
+
+    const sql = `UPDATE Posts SET post = ? WHERE id_posts = ?`;
+    connection.query(sql, [newPost, postId], callback);
+  }
+  // Comment functions
+  // SELECT
+  function selectComment(commentId) {
+    return new Promise((resolve, reject) => {
+      if (!commentId) {
+        reject(new Error("Comment ID cannot be null"));
+        return;
+      }
+
+      const sql = `SELECT * FROM Comentarios WHERE id_comment = ?`;
+      connection.query(sql, [commentId], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(results);
+      });
+    });
+  }
+  // INSERT
+  function insertComment(p_id_user, p_id_post, comment, callback) {
+    if (!p_id_user || !p_id_post || !comment) {
+      callback(new Error("User ID, post ID or comment cannot be null"));
+      return;
+    }
+
+    const sql =
+      "INSERT INTO Comentarios (p_id_user, p_id_post, comment) VALUES (?, ?, ?)";
+    connection.query(sql, [p_id_user, p_id_post, comment], callback);
+  }
+  // DELETE
+  function deleteComment(commentId, callback) {
+    if (!commentId) {
+      callback(new Error("Comment ID cannot be null"));
+      return;
+    }
+
+    const sql = `DELETE FROM Comentarios WHERE id_comment = ?`;
+    connection.query(sql, [commentId], callback);
+  }
+  // UPDATE
+  function updateComment(commentId, newComment, callback) {
+    if (!commentId || !newComment) {
+      callback(new Error("Comment ID or new comment cannot be null"));
+      return;
+    }
+
+    const sql = `UPDATE Comentarios SET comment = ? WHERE id_comment = ?`;
+    connection.query(sql, [newComment, commentId], callback);
+  }
+
+  return {
+    connection,
+    selectUser,
+    insertUser,
+    deleteUser,
+    updateUser,
+    selectPost,
+    insertPost,
+    deletePost,
+    updatePost,
+    selectComment,
+    insertComment,
+    deleteComment,
+    updateComment,
+  };
 };
 
 module.exports = connectDatabase;

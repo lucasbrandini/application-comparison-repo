@@ -1,12 +1,6 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
-const {
-  connectDatabase,
-  selectUser,
-  insertUser,
-  updateUser,
-  deleteUser,
-} = require("./db");
+const db = require("./db")();
 
 const app = express();
 
@@ -26,8 +20,9 @@ app.get("/about", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-connectDatabase();
-insertUser("lucas", "123456");
+
+db.deleteUser(11);
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

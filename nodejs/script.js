@@ -29,11 +29,32 @@ app.get("/user/:id", async (req, res) => {
     res.status(500).send("Erro ao buscar usuário");
   }
 });
+// Rota para a página de usuários
+app.get("/users", async (req, res) => {
+  try {
+    const userData = await db.selectAllUsers();
+    res.json(userData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao buscar usuário");
+  }
+});
 // Rota para a página de posts
 app.get("/post/:id", async (req, res) => {
   try {
     const postId = req.params.id;
     const postData = await db.selectPost(postId);
+    res.json(postData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao buscar post");
+  }
+});
+// Rota all posts from a user
+app.get("/posts/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const postData = await db.selectAllPostsFromUser(userId);
     res.json(postData);
   } catch (err) {
     console.error(err);
@@ -51,6 +72,7 @@ app.get("/comment/:id", async (req, res) => {
     res.status(500).send("Erro ao buscar comentario");
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

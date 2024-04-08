@@ -1,17 +1,16 @@
 const mysql = require("mysql");
 
+// Create a function that connects to the database
 const connectDatabase = () => {
   const connection = mysql.createConnection({
     host: process.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "123456",
-    database: process.env.DB_NAME || "mydb",
+    database: process.env.DB_NAME || "mydb", // criar o banco de dados no mysql com o nome "mydb",
   });
-
   connection.connect((err) => {
     if (err) throw err;
     console.log("Connected to the database.");
-
     const tableDefinitions = [
       {
         tableName: "Usuarios",
@@ -74,7 +73,20 @@ const connectDatabase = () => {
       });
     });
   }
+  // Select all users
+  function selectAllUsers() {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM Usuarios`;
+      connection.query(sql, function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
 
+        resolve(results);
+      });
+    });
+  }
   // INSERT
   function insertUser(name, password, callback) {
     if (!name || !password) {
@@ -118,6 +130,25 @@ const connectDatabase = () => {
 
       const sql = `SELECT * FROM Posts WHERE id_posts = ?`;
       connection.query(sql, [postId], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(results);
+      });
+    });
+  }
+  // Select all posts from a user
+  function selectAllPostsFromUser(userId) {
+    return new Promise((resolve, reject) => {
+      if (!userId) {
+        reject(new Error("User ID cannot be null"));
+        return;
+      }
+
+      const sql = `SELECT * FROM Posts WHERE p_id_user = ?`;
+      connection.query(sql, [userId], function (err, results) {
         if (err) {
           reject(err);
           return;
@@ -177,6 +208,25 @@ const connectDatabase = () => {
       });
     });
   }
+  // Select all comments from a post
+  function selectAllCommentsFromPost(postId) {
+    return new Promise((resolve, reject) => {
+      if (!postId) {
+        reject(new Error("Post ID cannot be null"));
+        return;
+      }
+
+      const sql = `SELECT * FROM Comentarios WHERE p_id_post = ?`;
+      connection.query(sql, [postId], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(results);
+      });
+    });
+  }
   // INSERT
   function insertComment(p_id_user, p_id_post, comment, callback) {
     if (!p_id_user || !p_id_post || !comment) {
@@ -223,6 +273,9 @@ const connectDatabase = () => {
     insertComment,
     deleteComment,
     updateComment,
+    selectAllPostsFromUser,
+    selectAllUsers,
+    selectAllCommentsFromPost,
   };
 };
 

@@ -5,7 +5,8 @@ const db = require("./db")();
 const app = express();
 
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
-app.set("view engine", ".hbs");
+app.use(express.static(__dirname + '/public'));
+app.set("view engine", ".hbs"); 
 
 // Rota para a página inicial
 app.get("/", (req, res) => {
@@ -29,6 +30,7 @@ app.get("/user/:id", async (req, res) => {
     res.status(500).send("Erro ao buscar usuário");
   }
 });
+
 // Rota para a página de usuários
 app.get("/users", async (req, res) => {
   try {
@@ -39,6 +41,7 @@ app.get("/users", async (req, res) => {
     res.status(500).send("Erro ao buscar usuário");
   }
 });
+
 // Rota para a página de posts
 app.get("/post/:id", async (req, res) => {
   try {
@@ -50,7 +53,8 @@ app.get("/post/:id", async (req, res) => {
     res.status(500).send("Erro ao buscar post");
   }
 });
-// Rota all posts from a user
+
+// Rota para todos os posts de um usuario
 app.get("/posts/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -61,6 +65,7 @@ app.get("/posts/:id", async (req, res) => {
     res.status(500).send("Erro ao buscar post");
   }
 });
+
 // Rota para a página de comentarios
 app.get("/comment/:id", async (req, res) => {
   try {
@@ -72,7 +77,26 @@ app.get("/comment/:id", async (req, res) => {
     res.status(500).send("Erro ao buscar comentario");
   }
 });
+
+// rota para ir para tela de registro
+app.get("/register", (req, res) => {
+  res.render("register")
+})
+
+// rota para ir para tela de login
+app.get("/login", (req, res) => {
+  res.render("login")
+})
+
+app.post("/register-user", (req, res) => {
+  console.log(req.body)
+  res.redirect("/login")
+})
+
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+

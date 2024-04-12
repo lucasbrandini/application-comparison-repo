@@ -5,6 +5,7 @@ const db = require("./db")();
 const app = express();
 
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.set("view engine", ".hbs"); 
 
@@ -88,12 +89,40 @@ app.get("/login", (req, res) => {
   res.render("login")
 })
 
-app.post("/register-user", (req, res) => {
-  console.log(req.body)
-  res.redirect("/login")
+// rota para home
+// app.get("/home", autenticToken (req, res) => {
+//   res.render("home")
+// })
+
+// rota para home
+app.get("/home", (req, res) => {
+  res.render("home")
 })
 
+// rota para registrar o usuario
+app.post("/register-user-sucess", (req, res) => {
+  const { name, password } = req.body 
+  try {
+    db.insertUser(name, password)
+    res.redirect("/login");
+  } catch (error) {
+    console.error(err);
+  }
+})
 
+app.post("/login-user-sucess", async (req, res) => {
+  const { nameLogin, passwordLogin } = req.body
+  const searchUser = await db.selectUserByName(nameLogin)
+  const [ RowDataPacket ] = searchUser
+  const { name_user, password } = RowDataPacket
+  const hasPassword = password === passwordLogin
+  
+  if (name_user && hasPassword) {
+    res.redirect("home")
+  } else {
+    res.status(500).send("Erro ao buscar usuario");
+  }
+}) 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

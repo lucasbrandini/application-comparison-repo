@@ -87,6 +87,25 @@ const connectDatabase = () => {
       });
     });
   }
+  // Select user by name
+  function selectUserByName(name) {
+    return new Promise((resolve, reject) => {
+      if (!name) {
+        reject(new Error("User name cannot be null"));
+        return;
+      }
+
+      const sql = `SELECT * FROM Usuarios WHERE name_user = ?`;
+      connection.query(sql, [name], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(results);
+      });
+    });
+  }
   // INSERT
   function insertUser(name, password, callback) {
     if (!name || !password) {
@@ -275,6 +294,7 @@ const connectDatabase = () => {
     updateComment,
     selectAllPostsFromUser,
     selectAllUsers,
+    selectUserByName,
     selectAllCommentsFromPost,
   };
 };

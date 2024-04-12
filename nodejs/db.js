@@ -1,12 +1,13 @@
 const mysql = require("mysql");
+require("dotenv").config();
 
 // Create a function that connects to the database
 const connectDatabase = () => {
   const connection = mysql.createConnection({
-    host: process.DB_HOST || "localhost",
-    user: process.env.DB_USER || "admin",
-    password: process.env.DB_PASSWORD || "Password1!",
-    database: process.env.DB_NAME || "python", // criar o banco de dados no mysql com o nome "mydb",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   });
   connection.connect((err) => {
     if (err) throw err;

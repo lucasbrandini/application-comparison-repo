@@ -2,20 +2,20 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const db = require("./db")();
 const bcrypt = require("bcrypt");
-
+require("dotenv").config();
 const app = express();
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", ".hbs");
+app.use(cookieParser());
 
 // Rota para a página inicial
 app.get("/", (req, res) => {
-  const nome = "Mundo";
-  const number = 10;
-
-  res.render("index", { nome, number });
+  res.render("login");
 });
 
 app.get("/about", (req, res) => {
@@ -95,8 +95,31 @@ app.get("/login", (req, res) => {
 //   res.render("home")
 // })
 
+function authenticateToken(req, res, next) {
+  const token = req.cookies ? req.cookies["token"] : null;
+
+  if (!token) {
+    return res.status(401).send("Acesso Negado. Token não fornecido.");
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).send("Token inválido.");
+    }
+    req.user = decoded;
+    next();
+  });
+}
+
 // rota para home
-app.get("/home", (req, res) => {
+app.get("/home", authenticateToken, (req, res) => {
+  // Asegure-se de que o userId está disponível no objeto do usuário
+  //if (!req.user || !req.user.userId) {
+  //  return res.status(400).send("Informações do usuário não disponíveis");
+  // }
+
+  // Renderizando o template "home" e passando o userId como parte dos dados
+  //res.render("home", { userId: req.user.userId });
   res.render("home");
 });
 
@@ -140,9 +163,21 @@ app.post("/login-user-success", async (req, res) => {
     const [rowDataPacket] = searchUser;
     const { name_user, password } = rowDataPacket;
 
-    // Verificar senha aqui, assumindo que você use bcrypt para hashing
+    // Verificar senha usando bcrypt
     const passwordIsValid = await bcrypt.compare(passwordLogin, password);
     if (passwordIsValid) {
+      const token = jwt.sign({ name_user }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+
+      // Enviando o token via cookie
+      res.cookie("token", token, {
+        httpOnly: true, // O cookie não é acessível via JavaScript no cliente (protege contra ataques XSS)
+        secure: process.env.NODE_ENV === "production", // Em produção, envie apenas via HTTPS
+        sameSite: "strict", // Proteção contra ataques CSRF
+        maxAge: 3600000, // Tempo de vida do cookie em milissegundos (1 hora)
+      });
+
       res.redirect("/home");
     } else {
       res.status(401).send("Senha inválida.");

@@ -1,13 +1,14 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const db = require("./db")();
+const bcrypt = require("bcrypt");
 
 const app = express();
 
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'));
-app.set("view engine", ".hbs"); 
+app.use(express.static(__dirname + "/public"));
+app.set("view engine", ".hbs");
 
 // Rota para a página inicial
 app.get("/", (req, res) => {
@@ -81,13 +82,13 @@ app.get("/comment/:id", async (req, res) => {
 
 // rota para ir para tela de registro
 app.get("/register", (req, res) => {
-  res.render("register")
-})
+  res.render("register");
+});
 
 // rota para ir para tela de login
 app.get("/login", (req, res) => {
-  res.render("login")
-})
+  res.render("login");
+});
 
 // rota para home
 // app.get("/home", autenticToken (req, res) => {
@@ -96,36 +97,63 @@ app.get("/login", (req, res) => {
 
 // rota para home
 app.get("/home", (req, res) => {
-  res.render("home")
-})
+  res.render("home");
+});
 
 // rota para registrar o usuario
-app.post("/register-user-sucess", (req, res) => {
-  const { name, password } = req.body 
-  try {
-    db.insertUser(name, password)
-    res.redirect("/login");
-  } catch (error) {
-    console.error(err);
-  }
-})
+app.post("/register-user-success", async (req, res) => {
+  const { name, password } = req.body;
+  const saltRounds = 10; // Número de rodadas de sal, típico é 10 ou 12
 
-app.post("/login-user-sucess", async (req, res) => {
-  const { nameLogin, passwordLogin } = req.body
-  const searchUser = await db.selectUserByName(nameLogin)
-  const [ RowDataPacket ] = searchUser
-  const { name_user, password } = RowDataPacket
-  const hasPassword = password === passwordLogin
-  
-  if (name_user && hasPassword) {
-    res.redirect("home")
-  } else {
-    res.status(500).send("Erro ao buscar usuario");
+  try {
+    // Criar um hash da senha antes de salvar no banco de dados
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Inserir o usuário com a senha hash
+    await db.insertUser(name, hashedPassword);
+
+    // Redirecionar para a página de login após registro bem-sucedido
+    res.redirect("/login");
+  } catch (err) {
+    console.error(err);
+
+    // Verificar se o erro é devido a um nome de usuário já existente
+    if (err.code === "ER_DUP_ENTRY") {
+      // ER_DUP_ENTRY é um código comum para entradas duplicadas em SQL
+      res.status(409).send("Usuário já existe");
+    } else {
+      res.status(500).send("Erro ao registrar usuário");
+    }
   }
-}) 
+});
+// rota para logar o usuario
+app.post("/login-user-success", async (req, res) => {
+  const { nameLogin, passwordLogin } = req.body;
+
+  try {
+    const searchUser = await db.selectUserByName(nameLogin);
+
+    if (searchUser.length === 0) {
+      return res.status(404).send("Usuário não encontrado.");
+    }
+
+    const [rowDataPacket] = searchUser;
+    const { name_user, password } = rowDataPacket;
+
+    // Verificar senha aqui, assumindo que você use bcrypt para hashing
+    const passwordIsValid = await bcrypt.compare(passwordLogin, password);
+    if (passwordIsValid) {
+      res.redirect("/home");
+    } else {
+      res.status(401).send("Senha inválida.");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro no servidor.");
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
-

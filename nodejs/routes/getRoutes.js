@@ -1,12 +1,13 @@
+//! This file contains the routes for the GET requests
 const express = require("express");
 const exphbs = require("express-handlebars");
-const db = require("../db")();
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const authenticateToken = require("../auth/auth");
+const db = require("../db/dbOperations");
 
 // rota para home
 router.get("/home", authenticateToken, (req, res) => {

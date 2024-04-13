@@ -13,7 +13,7 @@ const setupTables = () => {
         tableName: "Usuarios",
         columns: `
                     id_user INT AUTO_INCREMENT PRIMARY KEY,
-                    name_user VARCHAR(255) NOT NULL,
+                    name_user VARCHAR(255) UNIQUE NOT NULL,
                     password VARCHAR(255) NOT NULL,
                     create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 `,

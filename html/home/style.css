@@ -92,11 +92,103 @@ strong {
 
 .cardBox {
     margin: 20px auto;
-    width: 800px;
+    width: 900px;
+    height: 150px;
 }
 
 .card {
     background: #21274A;
     border-radius: 12px;
     margin-bottom: 20px;
+    padding: 20px;
+}
+
+.cardTop {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.initTop {
+    display: flex;
+    align-items: center;
+    gap: 20px
+}
+
+.endTop {
+    display: flex;
+    justify-content: center;
+}
+
+.cardTxt {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    font-family: Plus Jakarta Sans;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 26.8px;
+    text-align: left;
+    color: #FFFFFF8F;
+    text-align:left;
+}
+
+.username {
+    font-family: Plus Jakarta Sans;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 33.5px;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+.hora {
+    font-family: Plus Jakarta Sans;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 29.48px;
+    text-align: left;
+    color: #FFFFFF7A;
+}
+
+.comentarios {
+    font-family: Plus Jakarta Sans;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 29.48px;
+    text-align: left;
+    color: #FFFFFF7A;
+    text-decoration: underline;
+}
+
+.cardBottom {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.voteStyle {
+    display: flex;
+    width: 100px;
+}
+
+.upvote {
+    width:73%;
+    border-radius: 5px;
+    border: 1px solid #5E6ECE;
+    background:transparent;
+    color: #5E6ECE;
+
+    font-family: Plus Jakarta Sans;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24.12px;
+    text-align: left;
+
+}
+
+.downvote {
+    width: 27%;
+    border-radius: 5px;
+    border: 1px solid #5E6ECE;
+    background:transparent;
 }

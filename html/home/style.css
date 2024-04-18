@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+    text-decoration: none;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+    font-size: 100%;
+    background: #111427;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+}
+
+.cabecalho {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 25px;
+}
+
+.cabecalhoMenu {
+    display: flex;
+    gap: 30px;
+    
+}
+
+.cabecalhoItem {
+    font-weight: 800;
+    color:#FFFFFF;
+    font-size: 20px;
+}
+
+.banner {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.bannerTxt {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 45.36px;
+    letter-spacing: 0.01em;
+    background-image: linear-gradient(90deg, #9F00EB, #05F2B5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.subBanner {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.subFrase {
+    font-weight: 500;
+    color: #FFFFFF94;
+}
+
+strong {
+    color: #FFFFFF;
+}
+
+.btnPost {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 60px;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 33.5px;
+    color:#FFFFFF;
+    background: #4900EB;
+    border-radius: 12px;
+    border: none;
+    width: 500px;
+    height: 80px;
+    gap: 23px;
+}
+
+.cardBox {
+    margin: 20px auto;
+    width: 800px;
+}
+
+.card {
+    background: #21274A;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}

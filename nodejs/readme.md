@@ -1,7 +1,6 @@
 # steps
 
 ```bash
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_current_password';
 ALTER USER 'admin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Password1!';
 npm i nodemon -g
 npm i
@@ -12,13 +11,14 @@ npm run start
 npm i cookie-parser
 npm install jsonwebtoken dotenv
 npm i bcrypt
+npm i
 ```
 ## Criar arquivo .env e declarar
 
 ```bash
   JWT_SECRET=secret
   DB_HOST=localhost
-  DB_USER=
-  DB_PASSWORD=
-  DB_NAME=
+  DB_USER=admin
+  DB_PASSWORD=Password1!
+  DB_NAME=python
 ```

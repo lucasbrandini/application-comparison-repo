@@ -15,15 +15,21 @@
         <img src="assets/-.svg" alt="tela de boas vindas">
         <div class="container">
             <form action="/register-user-success" method="POST">
-                <h1>Olá, seja bem-vindo(a)!</h1>    
-                <p>lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsum</p>
-                <label id="name">Nome</label>
-                <input id="name-input" type="text" name="name" placeholder="Como podemos te chamar?">
-                <label id="password">Senha</label>
-                <input id="password-input" type="text" name="password" placeholder="*****">
+                <h1>Olá, seja bem-vindo(a)!</h1>
+                <p>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</p>
+                <div class="form-field">
+                    <label for="name-input">Nome</label>
+                    <input id="name-input" type="text" name="name" placeholder="Como podemos te chamar?">
+                </div>
+                <div class="form-field">
+                    <label for="password-input">Senha</label>
+                    <input id="password-input" type="password" name="password" placeholder="*****">
+                </div>
                 <button id="submit-login" type="submit">Registre seu usuário!</button>
+                <div id="error-message" style="color: red;"></div>
             </form>
         </div>
-    </main>    
+    </main>
+    <script src="/scripts/handleErrors.js"></script>
 </body>
 </html>

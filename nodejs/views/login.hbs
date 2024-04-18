@@ -17,13 +17,19 @@
             <div class="container">
                 <h1>Olá, seja bem-vindo(a)!</h1>
                 <p>lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsum</p>
-                <label for="name" id="name">Nome</label>
-                <input id="name-input" type="text" name="nameLogin" placeholder="Como podemos te chamar?">
-                <label for="password" id="password">Senha</label>
-                <input id="password-input" type="text" name="passwordLogin" placeholder="*****">
+                <div class="form-field">
+                    <label for="name-input">Nome</label>
+                    <input id="name-input" type="text" name="nameLogin" placeholder="Como podemos te chamar?">
+                </div>
+                <div class="form-field">
+                    <label for="password-input">Senha</label>
+                    <input id="password-input" type="password" name="passwordLogin" placeholder="*****">
+                </div>
                 <button type="submit" id="submit-login">Login!</button>
+                <div id="error-message" style="color: red;"></div>
             </div>
         </form>
-    </main>    
+    </main>
+    <script src="/scripts/handleErrors.js"></script>
 </body>
 </html>

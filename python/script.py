@@ -1,4 +1,3 @@
-import sys
 import os
 import json
 import datetime
@@ -6,9 +5,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from pybars import Compiler
 
 # Configure o caminho para o módulo dbOperations, dbSetupTables
-sys.path.append(os.path.join(os.path.dirname(__file__), './db'))
-from dbOperations import select_user, select_all_users, insert_user, update_user, delete_user, insert_post, update_post, delete_post, select_post, insert_comment, update_comment, delete_comment, select_comment
-from dbSetupTables import create_tables
+from db.dbOperations import select_user, select_all_users, insert_user, update_user, delete_user, insert_post, update_post, delete_post, select_post, insert_comment, update_comment, delete_comment, select_comment
+from db.dbSetupTables import create_tables
 
 # Cria as tabelas no banco de dados
 create_tables()

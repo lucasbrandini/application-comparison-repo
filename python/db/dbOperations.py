@@ -1,5 +1,5 @@
 # This file contains all the functions that interact with the database
-from dbConnection import get_connection
+from db.dbConnection import get_connection
 #! Users
 # Select
 def select_user(user_id):

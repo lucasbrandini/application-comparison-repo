@@ -10,7 +10,7 @@ from db.dbSetupTables import create_tables
 
 # Cria as tabelas no banco de dados
 create_tables()
-# Configurações de templatea
+# Configurações de template
 compiler = Compiler()
 
 def render_template(template_name, data):

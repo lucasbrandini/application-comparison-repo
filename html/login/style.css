@@ -3,6 +3,8 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Plus Jakarta Sans", sans-serif;
+    border: none;
+    outline: none;
 }
 
 body {
@@ -12,21 +14,16 @@ body {
 main {
     margin: 10.8rem auto 0 auto;
     display: flex;
-    align-items: center;
     width: 52rem;
-    gap: 3.5rem;
+    gap: 3.5rem;    
 }
 
 header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding-right: 2rem;
-    height: 4rem;
-    background-color: #111427;
-    color: #5B2EAA;
-    font-size: 1.1rem;
-    align-items: center;
+    margin: 1.88rem 2.25rem 0 0;
+
 }
 
 .container {
@@ -34,69 +31,73 @@ header {
 }
 
 .container h1 {
-    font-size: 1.8125rem;
-    margin-top: 0.63rem;
     line-height: 36.54px;
     color: #FFFFFF;
     font-weight: 800;
+    font-size: 1.8125rem;
 }
 
 .container p {
     margin-top: .625rem;
-    font-size: 1.4375rem;
+    font-size: 1.5625rem;
     color: #9B9CA4;
-    font-weight: 400;
-    margin-bottom: 1.25rem;
-    text-align: justify;
+    font-weight: 600;
+
+    margin-bottom: 2.3125rem;
 }
 
 #name {
-    font-size: 1.3125rem;
+    font-size: 1.5625rem;
     font-weight: bold;
     color: #FFFFFF;
-}
 
-.usernameField {
-    margin-top: .625rem;
-    display: flex;
-    flex-direction: row;
-    gap: .625rem;
-    align-items: center;
-    justify-content: center;
-    padding: .4375rem;
-    background: #21274A;
-    border-radius: .3125rem;
-    margin-bottom: .9375rem;
-    width: 24.125rem;
-}
-
-.imgInput {
-    width: 1.5625rem;
-    height: 1.5625rem;
 }
 
 #name-input {
-    display: block;
-    border: 0;
-    outline: 0;
+    margin-top: 4px;
+    
     width: 100%;
     background: transparent;
+}
+
+#name-input::placeholder {
     color: #4A569C;
     font-size: 1.25rem;
     font-weight: 600;
 }
 
-.passwordField {
-    display: flex;
-    flex-direction: row;
-    gap: .625rem;
+.usernameField {
     margin-top: .625rem;
+    display: flex;
+    gap: .625rem;
     align-items: center;
-    justify-content: center;
     padding: .4375rem;
     background: #21274A;
-    border-radius: .3125rem;
+    border-radius: .375rem;
+    margin-bottom: .9375rem;
     width: 24.125rem;
+    height: 3.0625rem;
+}
+
+.imgInput {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    margin-left: .625rem;
+}
+
+
+
+.passwordField {
+    margin-top: .625rem;
+    display: flex;
+    gap: .625rem;
+    align-items: center;
+    padding: .4375rem;
+    background: #21274A;
+    border-radius: .375rem;
+    margin-bottom: .9375rem;
+    width: 24.125rem;
+    height: 3.0625rem;
 }
 
 #password-input {

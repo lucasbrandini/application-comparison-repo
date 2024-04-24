@@ -6,13 +6,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Q/A</title>
+    <link rel="stylesheet" href="style.register.css">
+    <title>Registro</title>
 </head>
 <body>
-    <header><img src="assets/change.svg" href="./register.html"></header>
+    <header>
+        <p>Já tem seu registro? Entre por aqui!</p> 
+        <div>
+            <a href="./login.html">
+                <p>Entre</p>
+            </a>
+        </div>
+    </header>
     <main>
-        <img src="assets/illustration.svg" alt="tela de boas vindas">
+        <img id="main-image" src="assets/illustration.svg" alt="tela de boas vindas">
         <div class="container">
             <h1>Olá, seja bem-vindo(a)!</h1>
             <p>lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsum</p>
@@ -24,7 +31,7 @@
             <label for="password" id="password">Senha</label>
             <div class="passwordField">
                 <img class="imgInput" src="assets/password.svg">
-                <input id="password-input" type="text" name="password" placeholder="Senha">
+                <input id="password-input" type="password" name="password" placeholder="Senha">
             </div>
             <button id="submit-login">Registre-se!<img class="imgButton" src="assets/register.svg"></button>
         </div>

@@ -98,4 +98,9 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
+// rota para ir para tela de commits do github
+router.get("/github", (req, res) => {
+  res.render("github");
+});
+
 module.exports = router;

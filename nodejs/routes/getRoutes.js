@@ -11,13 +11,8 @@ const db = require("../db/dbOperations");
 
 // rota para home
 router.get("/home", authenticateToken, (req, res) => {
-  // Asegure-se de que o userId está disponível no objeto do usuário
-  //if (!req.user || !req.user.userId) {
-  //  return res.status(400).send("Informações do usuário não disponíveis");
-  // }
 
   // Renderizando o template "home" e passando o userId como parte dos dados
-  //res.render("home", { userId: req.user.userId });
   res.render("home");
 });
 
@@ -26,9 +21,6 @@ router.get("/", (req, res) => {
   res.render("login");
 });
 
-router.get("/about", (req, res) => {
-  res.render("about");
-});
 // Rota para a página de usuários
 router.get("/user/:id", async (req, res) => {
   try {
@@ -96,11 +88,6 @@ router.get("/register", (req, res) => {
 // rota para ir para tela de login
 router.get("/login", (req, res) => {
   res.render("login");
-});
-
-// rota para ir para tela de commits do github
-router.get("/github", (req, res) => {
-  res.render("github");
 });
 
 module.exports = router;

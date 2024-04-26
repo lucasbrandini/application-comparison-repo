@@ -10,7 +10,7 @@ function authenticateToken(req, res, next) {
   const token = req.cookies ? req.cookies["token"] : null;
 
   if (!token) {
-    return res.render("login");
+    return res.redirect("login");
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {

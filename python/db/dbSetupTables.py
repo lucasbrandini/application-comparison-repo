@@ -19,6 +19,33 @@ def create_tables():
             """
         },
         {
+            "tableName": "Avatar_Images",
+            "columns": """
+                id_imageAv INT AUTO_INCREMENT PRIMARY KEY,
+                image BLOB NOT NULL,
+                date_av TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            """
+        },
+        {
+            "tableName": "Avatar",
+            "columns": """
+                id_avatar INT AUTO_INCREMENT PRIMARY KEY,
+                id_user INT,
+                id_imageAv INT,
+                date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (id_user) REFERENCES Usuarios(id_user),
+                FOREIGN KEY (id_imageAv) REFERENCES Avatar_Images(id_imageAv)
+            """
+        },
+        {
+            "tableName": "post_images",
+            "columns": """
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                image BLOB NOT NULL,
+                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            """
+        },
+        {
             "tableName": "Posts",
             "columns": """
                 id_posts INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,6 +53,16 @@ def create_tables():
                 post VARCHAR(1024) NOT NULL,
                 post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (p_id_user) REFERENCES Usuarios(id_user)
+            """
+        },
+        {
+            "tableName": "relat_post_images",
+            "columns": """
+                id_rel INT AUTO_INCREMENT PRIMARY KEY,
+                id_post INT,
+                id_image INT,
+                FOREIGN KEY (id_post) REFERENCES Posts(id_posts),
+                FOREIGN KEY (id_image) REFERENCES post_images(id)
             """
         },
         {
@@ -39,8 +76,9 @@ def create_tables():
                 FOREIGN KEY (p_id_user) REFERENCES Usuarios(id_user),
                 FOREIGN KEY (p_id_post) REFERENCES Posts(id_posts)
             """
-        }
+        },
     ]
+
 
     try:
         for table in table_definitions:

@@ -1,5 +1,6 @@
+import os
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user, select_all_users
+from db.dbOperations import select_all_users, select_user
 import json
 import datetime
 
@@ -12,7 +13,10 @@ class GetRoutes(BaseHTTPRequestHandler):
     def do_GET(self):
         routes = {
             '/users': self.handle_users,
-            '/about': self.handle_about
+            '/about': self.handle_about,
+            '/login': self.handle_login,
+            '/register': self.handle_register,
+            '/home': self.handle_home
         }
 
         if self.path.startswith('/user/'):
@@ -45,6 +49,36 @@ class GetRoutes(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
         self.wfile.write("About page".encode('utf-8'))
+
+    def handle_login(self):
+        if self.path == '/login':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            with open(os.path.join(os.path.dirname(__file__), '..', 'views', 'login.hbs'), 'r') as file:
+                self.wfile.write(file.read().encode('utf-8'))
+        else:
+            self.handle_404()
+
+    def handle_register(self):
+        if self.path == '/register':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            with open(os.path.join(os.path.dirname(__file__), '..', 'views', 'register.hbs'), 'r') as file:
+                self.wfile.write(file.read().encode('utf-8'))
+        else:
+            self.handle_404()
+
+    def handle_home(self):
+        if self.path == '/home':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            with open(os.path.join(os.path.dirname(__file__), '..', 'views', 'home.hbs'), 'r') as file:
+                self.wfile.write(file.read().encode('utf-8'))
+        else:
+            self.handle_404()
 
     def handle_404(self):
         self.send_error_response(404, "Rota nao encontrada.")

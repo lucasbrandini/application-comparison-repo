@@ -6,10 +6,13 @@ require("dotenv").config();
 const setupTables = require("./db/dbSetupTables");
 
 const app = express();
+const path = require('path');
+const hbs = require('hbs');
 
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+hbs.registerPartials(path.join(__dirname, './views/partials'));
 app.set("view engine", ".hbs");
 app.use(cookieParser());
 setupTables();

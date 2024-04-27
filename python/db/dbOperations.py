@@ -30,6 +30,7 @@ def select_all_users():
         connection.close()
 # Insert
 def insert_user(name, password):
+    print(name, password)
     if not name or not password:
         raise ValueError("Name or password cannot be null")
 

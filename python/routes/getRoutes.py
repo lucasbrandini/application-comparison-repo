@@ -37,10 +37,15 @@ class GetRoutes(BaseHTTPRequestHandler):
         self.send_error(code, message)
 
     def render_login(self):
+        compiler = Compiler()
+
+        with open(os.path.join('templates', 'login.hbs'), 'r') as file:
+            source = file.read()
+        template = compiler.compile(source)
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(b'Login page')
+        self.wfile.write(template({}).encode())
 
     def render_register(self):
         compiler = Compiler()

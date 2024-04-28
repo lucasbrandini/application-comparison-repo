@@ -1,5 +1,6 @@
 # This file contains all the functions that interact with the database
 from db.dbConnection import get_connection
+import bcrypt
 #! Users
 # Select
 def select_user(user_id):
@@ -132,6 +133,20 @@ def delete_post(post_id):
         cursor.close()
         connection.close()
 #! Comments
+def select_user_by_name(name):
+    if not name:
+        raise ValueError("Name cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = "SELECT * FROM Usuarios WHERE name_user = %s"
+        cursor.execute(sql, (name,))
+        result = cursor.fetchone()
+        return result
+    finally:
+        cursor.close()
+        connection.close()
 # Select
 def select_comment(comment_id):
     if not comment_id:

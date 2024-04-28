@@ -1,18 +1,42 @@
 from http.server import BaseHTTPRequestHandler
 import json
-from db.dbOperations import insert_user
+from db.dbOperations import insert_user, select_user_by_name
 
 class PostRoutes(BaseHTTPRequestHandler):
 
     def do_POST(self):
         routes = {
-            '/register': self.handle_register
+            '/register': self.handle_register,
+            '/login': self.handle_login
         }
 
         if self.path in routes:
             routes[self.path]()
         else:
             self.handle_404()
+
+    def handle_login(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        post_data = post_data.decode('utf-8')
+        post_data = post_data.split('&')
+        user_data = {}
+        for data in post_data:
+            key, value = data.split('=')
+            user_data[key] = value
+
+        try:
+            # Verifica se o usuário está no banco de dados
+            user = select_user_by_name(user_data['name'])
+            if user and user['password'] == user_data['password']:
+                self.send_response(200)
+                self.send_header('Content-type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(b'Login successful!')
+            else:
+                self.send_error_response(401, "Unauthorized: Incorrect username or password")
+        except Exception as e:
+            self.send_error_response(500, f"Server error: {str(e)}")
 
     def handle_register(self):
         content_length = int(self.headers['Content-Length'])

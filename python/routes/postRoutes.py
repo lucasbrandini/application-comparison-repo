@@ -1,6 +1,13 @@
+import http.cookies
+import os
 from http.server import BaseHTTPRequestHandler
 import json
+import bcrypt
+import jwt
 from db.dbOperations import insert_user, select_user_by_name
+
+# Defina o número de salt rounds
+saltRounds = 10
 
 class PostRoutes(BaseHTTPRequestHandler):
 
@@ -14,7 +21,7 @@ class PostRoutes(BaseHTTPRequestHandler):
             routes[self.path]()
         else:
             self.handle_404()
-
+            
     def handle_login(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
@@ -28,15 +35,29 @@ class PostRoutes(BaseHTTPRequestHandler):
         try:
             # Verifica se o usuário está no banco de dados
             user = select_user_by_name(user_data['name'])
-            if user and user['password'] == user_data['password']:
-                self.send_response(200)
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
-                self.wfile.write(b'Login successful!')
+            # Verificar se a senha fornecida corresponde à senha hash no banco de dados
+            if user and bcrypt.checkpw(user_data['password'].encode('utf-8'), user['password'].encode('utf-8')):
+                # Gera o token JWT
+                token = jwt.encode({'name_user': user['name_user']}, os.getenv('JWT_SECRET'), algorithm='HS256')
+                # Define um cookie com o token JWT
+                self.send_cookie_response(token)
             else:
                 self.send_error_response(401, "Unauthorized: Incorrect username or password")
         except Exception as e:
             self.send_error_response(500, f"Server error: {str(e)}")
+
+    def send_cookie_response(self, token):
+        # Cria um objeto de cookie
+        cookie = http.cookies.SimpleCookie()
+        # Define o valor do cookie como o token JWT
+        cookie['jwt_token'] = token
+        # Define a configuração do cookie (por exemplo, caminho, domínio, etc.)
+        cookie['jwt_token']['path'] = '/'
+        # Define o cabeçalho de 'Set-Cookie' com o cookie criado
+        self.send_header('Set-Cookie', cookie.output(header=''))
+        # Envie uma resposta 200 OK sem corpo
+        self.send_response(200)
+        self.end_headers()
 
     def handle_register(self):
         content_length = int(self.headers['Content-Length'])
@@ -50,7 +71,9 @@ class PostRoutes(BaseHTTPRequestHandler):
 
         try:
             # Insere o usuário no banco de dados
-            insert_user(user_data['name'], user_data['password'])
+            # A senha é criptografada antes de ser inserida
+            hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt(saltRounds)).decode('utf-8')
+            insert_user(user_data['name'], hashed_password)
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()

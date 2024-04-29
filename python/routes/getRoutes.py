@@ -16,7 +16,7 @@ class GetRoutes(BaseHTTPRequestHandler):
             '/login': self.render_login,
             '/register': self.render_register,
             '/home': self.render_home,
-            '/404': self.render_404
+            '/404': self.render_404,
         }
         if self.path in routes:
             routes[self.path]()
@@ -26,10 +26,13 @@ class GetRoutes(BaseHTTPRequestHandler):
     def render_home(self):
         try: 
             user_data = select_all_users()
-            self.send_json_response(user_data)
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(user_data, default=datetime_converter).encode())
         except Exception as e:
             self.send_error_response(500, "Server Error")
-    
+
     def render_404(self):
         self.send_error_response(404, "Rota nao encontrada.")
 

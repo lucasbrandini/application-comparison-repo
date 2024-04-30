@@ -4,6 +4,8 @@ import json
 import datetime
 from pybars import Compiler
 import os
+import jwt
+import http.cookies
 
 def datetime_converter(o):
     if isinstance(o, datetime.datetime):
@@ -24,12 +26,37 @@ class GetRoutes(BaseHTTPRequestHandler):
             self.render_404()
 
     def render_home(self):
-        try: 
-            user_data = select_all_users()
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps(user_data, default=datetime_converter).encode())
+        try:
+            # Verifica se o token JWT está presente nos cookies
+            if 'Cookie' in self.headers:
+                cookies = http.cookies.SimpleCookie(self.headers['Cookie'])
+                if 'jwt_token' in cookies:
+                    token = cookies['jwt_token'].value
+                    try:
+                        # Decodifica o token JWT
+                        decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
+                        # Se o token for válido, permite o acesso à página home
+                        if decoded_token.get('name_user'):
+                            user_data = select_all_users()
+                            self.send_response(200)
+                            self.send_header('Content-type', 'application/json')
+                            self.end_headers()
+                            self.wfile.write(json.dumps(user_data, default=datetime_converter).encode())
+                        else:
+                            # Token inválido
+                            self.send_error_response(401, "Unauthorized: Invalid token")
+                    except jwt.ExpiredSignatureError:
+                        # Token expirado
+                        self.send_error_response(401, "Unauthorized: Token expired")
+                    except jwt.InvalidTokenError:
+                        # Token inválido
+                        self.send_error_response(401, "Unauthorized: Invalid token")
+                else:
+                    # Nenhum token JWT presente nos cookies
+                    self.send_error_response(401, "Unauthorized: Missing token")
+            else:
+                # Nenhum cookie presente na requisição
+                self.send_error_response(401, "Unauthorized: No cookies")
         except Exception as e:
             self.send_error_response(500, "Server Error")
 

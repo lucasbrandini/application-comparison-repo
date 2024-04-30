@@ -40,12 +40,13 @@ class PostRoutes(BaseHTTPRequestHandler):
                 # Gera o token JWT
                 token = jwt.encode({'name_user': user['name_user']}, os.getenv('JWT_SECRET'), algorithm='HS256')
                 # Define um cookie com o token JWT
+                print(token)
                 self.send_cookie_response(token)
             else:
                 self.send_error_response(401, "Unauthorized: Incorrect username or password")
         except Exception as e:
             self.send_error_response(500, f"Server error: {str(e)}")
-
+    
     def send_cookie_response(self, token):
         # Cria um objeto de cookie
         cookie = http.cookies.SimpleCookie()
@@ -53,10 +54,10 @@ class PostRoutes(BaseHTTPRequestHandler):
         cookie['jwt_token'] = token
         # Define a configuração do cookie (por exemplo, caminho, domínio, etc.)
         cookie['jwt_token']['path'] = '/'
-        # Define o cabeçalho de 'Set-Cookie' com o cookie criado
+        # Redireciona para a página home com o token JWT incluído
+        self.send_response(302)
+        self.send_header('Location', '/home')
         self.send_header('Set-Cookie', cookie.output(header=''))
-        # Envie uma resposta 200 OK sem corpo
-        self.send_response(200)
         self.end_headers()
 
     def handle_register(self):
@@ -74,10 +75,9 @@ class PostRoutes(BaseHTTPRequestHandler):
             # A senha é criptografada antes de ser inserida
             hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt(saltRounds)).decode('utf-8')
             insert_user(user_data['name'], hashed_password)
-            self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
+            self.send_response(302)
+            self.send_header('Location', '/login')
             self.end_headers()
-            self.wfile.write(b'User registered successfully!')
         except Exception as e:
             self.send_error_response(500, f"Server error: {str(e)}")
 

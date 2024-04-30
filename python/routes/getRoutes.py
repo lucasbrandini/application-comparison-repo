@@ -80,10 +80,17 @@ class GetRoutes(BaseHTTPRequestHandler):
     def render_register(self):
         compiler = Compiler()
 
+        # Lendo o conteúdo do arquivo style.css
+        with open(os.path.join('public', 'style.css'), 'r') as file:
+            css_source = file.read()
+
         with open(os.path.join('templates', 'register.hbs'), 'r') as file:
-            source = file.read()
-        template = compiler.compile(source)
+            html_source = file.read()
+
+        html_template = compiler.compile(html_source)
+
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(template({}).encode())
+
+        self.wfile.write(html_template({ 'css_content': css_source }).encode())

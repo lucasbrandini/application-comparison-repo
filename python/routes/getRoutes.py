@@ -62,11 +62,14 @@ class GetRoutes(BaseHTTPRequestHandler):
                         decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
                         # Se o token for válido, permite o acesso à página home
                         if decoded_token.get('name_user'):
-                            user_data = select_all_users()
+                            compiler = Compiler()
+                            with open(os.path.join('templates', 'home.hbs'), 'r') as file:
+                                source = file.read()
+                            template = compiler.compile(source)
                             self.send_response(200)
-                            self.send_header('Content-type', 'application/json')
+                            self.send_header('Content-type', 'text/html')
                             self.end_headers()
-                            self.wfile.write(json.dumps(user_data, default=datetime_converter).encode())
+                            self.wfile.write(template({}).encode())
                         else:
                             # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")
@@ -84,6 +87,7 @@ class GetRoutes(BaseHTTPRequestHandler):
                 self.send_error_response(401, "Unauthorized: No cookies")
         except Exception as e:
             self.send_error_response(500, "Server Error")
+
 
     def render_404(self):
         self.send_error_response(404, "Rota nao encontrada.")

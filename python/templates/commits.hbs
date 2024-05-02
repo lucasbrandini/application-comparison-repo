@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Commits</title>
+</head>
+<body>
+    <h1>Commits</h1>
+    <ul>
+        {{#each commits}}
+        <li>
+            <h2>{{this.commit.message}}</h2>
+            <p>Author: {{this.commit.author.name}}</p>
+            <p>Date: {{this.commit.author.date}}</p>
+        </li>
+        {{/each}}
+    </ul>
+</body>
+</html>

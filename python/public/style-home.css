@@ -1,7 +1,199 @@
-body {
-    background-color: #3638b6;
-    font-family: 'Roboto', sans-serif;
+* {
     margin: 0;
     padding: 0;
-    color: antiquewhite;
+    box-sizing:border-box;
+    text-decoration: none;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+    background: #111427;
+}
+
+.sectionTop {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1.5625rem;
+}
+
+.banner {
+    margin-top: 3.125rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.bannerTxt {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 2.835rem;
+    letter-spacing: 0.01em;
+    background-image: linear-gradient(90deg, #9F00EB, #05F2B5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.subBanner {
+    margin-top: 1.875rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.subText {
+    color: #FFFFFF94;
+    font-size: 1.5625rem;
+    font-weight: 500;
+    line-height: 2.0938rem;
+}
+
+strong {
+    color: #FFFFFF;
+}
+
+.btnPost {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 3.75rem;
+    font-size: 1.5625rem;
+    font-weight: 700;
+    line-height: 2.0938rem;
+    color:#FFFFFF;
+    background: #4900EB;
+    border-radius: .75rem;
+    border: none;
+    width: 31.25rem;
+    height: 5rem;
+    gap: 1.4375rem;
+}
+
+.cardBox {
+    margin: 3.125rem auto;
+    width: 56.25rem;
+    height: 9.375rem;
+}
+
+.card {
+    background: #21274A;
+    border-radius: .75rem;
+    margin-bottom: 1.25rem;
+    padding: 1.25rem;
+}
+
+.cardTop {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.initTop {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem
+}
+
+.endTop {
+    display: flex;
+    justify-content: center;
+}
+
+.cardText {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.675rem;
+    text-align: left;
+    color: #FFFFFF8F;
+    text-align:left;
+}
+
+.username {
+    font-size: 1.5625rem;
+    font-weight: 700;
+    line-height: 2.0938rem;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+.postTime {
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.8425rem;
+    text-align: left;
+    color: #FFFFFF7A;
+}
+
+.comentarios {
+    font-size: 1.375rem;
+    font-weight: 300;
+    line-height: 1.8425rem;
+    text-align: left;
+    color: #FFFFFF7A;
+    text-decoration: underline;
+}
+
+.cardBottom {
+    display: flex;
+    margin-top: .625rem;
+    flex-direction: row-reverse;
+}
+
+.voteStyle {
+    display: flex;
+    align-items: center;
+    width: 7.5rem;
+}
+
+.upvote {
+    width:73%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 5px 0px 0px 5px;
+    border: 1px solid #5E6ECE;
+    background:transparent;
+    color: #5E6ECE;
+
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.5075rem;
+    text-align: center;
+    padding: .3125rem;
+    height: 100%;
+}
+
+.downvote {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 27%;
+    border-radius: 0rem .3125rem .3125rem 0rem;
+    border: 1px solid #5E6ECE;
+    background:transparent;
+    text-align: center;
+    height: 100%;
+}
+
+.upvoteImg {
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.downvoteImg {
+    height: 1.25rem;
+    width: 1.25rem;
 }

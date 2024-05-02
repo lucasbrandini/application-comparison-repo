@@ -1,20 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/style-register.css">
-    <title>Registration</title>
+    <title>Registro</title>
 </head>
+
 <body>
-    <h1>Registration</h1>
-    <form action="/register" method="post">
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password">
-        <button type="submit">Submit</button>
-        <img src="/public/assets/illustration.svg" alt="" srcset="">
-    </form>
+    <header>
+        <p>Ja tem seu registro? Entre por aqui!</p>
+        <div>
+            <a href="/login">
+                <p>Entre</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <img id="main-image" src="/public/assets/illustration.svg" alt="tela de boas vindas">
+        <div class="container">
+            <h1>Ola, seja bem-vindo(a)!</h1>
+            <p>lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsum</p>
+            <form action="/register" method="post">
+                <label for="name" id="name">Nome</label>
+                <div class="usernameField">
+                    <img class="imgInput" src="/public/assets/username.svg">
+                    <input id="name-input" type="text" name="name" placeholder="Nome">
+                </div>
+                <label for="password" id="password">Senha</label>
+                <div class="passwordField">
+                    <img class="imgInput" src="/public/assets/password.svg">
+                    <input id="password-input" type="password" name="password" placeholder="Senha">
+                </div>
+                <button id="submit">Registre-se!<img class="imgButton" src="/public/assets/register.svg"></button>
+            </form>
+        </div>
+    </main>
 </body>
 </html>

@@ -65,11 +65,18 @@ class GetRoutes(BaseHTTPRequestHandler):
                             compiler = Compiler()
                             with open(os.path.join('templates', 'home.hbs'), 'r') as file:
                                 source = file.read()
+                            # Compila o template principal
                             template = compiler.compile(source)
+                            # Lê o conteúdo do arquivo parcial header.hbs
+                            with open(os.path.join('templates', 'header.hbs'), 'r') as file:
+                                header_source = file.read()
+                            # Compila o template do cabeçalho
+                            header_template = compiler.compile(header_source)
+                            # Renderiza o template principal com o cabeçalho incluído
                             self.send_response(200)
                             self.send_header('Content-type', 'text/html')
                             self.end_headers()
-                            self.wfile.write(template({}).encode())
+                            self.wfile.write(template({'header': header_template}).encode())
                         else:
                             # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")

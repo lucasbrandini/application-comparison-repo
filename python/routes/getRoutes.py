@@ -36,6 +36,12 @@ class GetRoutes(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/css')
             elif path.endswith('.js'):
                 self.send_header('Content-type', 'application/javascript')
+            elif path.endswith('.jpg') or path.endswith('.jpeg'):
+                self.send_header('Content-type', 'image/jpeg')
+            elif path.endswith('.png'):
+                self.send_header('Content-type', 'image/png')
+            elif path.endswith('.svg'):
+                self.send_header('Content-type', 'image/svg+xml')
             # add more content types if needed
             self.end_headers()
             self.wfile.write(content)

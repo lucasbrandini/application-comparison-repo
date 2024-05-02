@@ -18,17 +18,6 @@ body {
     padding: 1.5625rem;
 }
 
-.topMenu {
-    display: flex;
-    gap: 1.875rem;    
-}
-
-.topMenuItem {
-    font-weight: 800;
-    color:#FFFFFF;
-    font-size: 1.25rem;
-}
-
 .banner {
     margin-top: 3.125rem;
     display: flex;

@@ -1,4 +1,198 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    border: none;
+    outline: none;
+}
+
 body {
-    background-color: rgb(9, 29, 66);
-    color: #fff;
+    background-color: #111427;
+}
+
+main {
+    margin: 10.8rem auto 0 auto;
+    display: flex;
+    width: 52rem;
+    gap: 3.5rem;    
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 1.88rem 2.25rem 0 0;
+}
+
+header p {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-right: .625rem;
+}
+
+header div {
+    width: 5.125rem;
+    height: 2.5rem;
+    border-radius: 20px;
+    background-color: #D9D9D9;
+}
+
+header div a p {
+    color: #111427;
+    font-size: .925rem;
+    font-weight: 600;
+    text-align: center;
+
+    margin-top: 10px;
+    margin-left: 6px;
+}
+
+header div a {
+    text-decoration: none;
+}
+
+.container {
+    width: 386px;
+}
+
+.container h1 {
+    line-height: 36.54px;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 1.8125rem;
+}
+
+.container p {
+    margin-top: .625rem;
+    font-size: 1.5625rem;
+    color: #9B9CA4;
+    font-weight: 600;
+
+    margin-bottom: 2.3125rem;
+}
+
+#name {
+    font-size: 1.5625rem;
+    font-weight: bold;
+    color: #FFFFFF;
+
+}
+
+#name-input {
+    margin-top: 4px;
+    
+    width: 100%;
+    background: transparent;
+    color: #9B9CA4;
+    font-size: 1.225rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+#name-input::placeholder {
+    color: #4A569C;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.usernameField {
+    margin-top: .625rem;
+    display: flex;
+    gap: .625rem;
+    padding: .4375rem;
+    background: #21274A;
+    border-radius: .375rem;
+    margin-bottom: .9375rem;
+    width: 24.125rem;
+    height: 3.0625rem;
+}
+
+.usernameField .imgInput {
+    margin-top: .375rem;
+}
+
+.imgInput {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    margin-left: .625rem;
+}
+
+.passwordField .imgInput {
+    margin-top: 6px;
+}
+
+.passwordField {
+    margin-top: .625rem;
+    display: flex;
+    gap: .625rem;
+    padding: .4375rem;
+    background: #21274A;
+    border-radius: .375rem;
+    margin-bottom: .9375rem;
+    width: 24.125rem;
+    height: 3.0625rem;
+}
+
+#password {
+    font-size: 1.5625rem;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+#password-input {
+    margin-top: 4px;
+    
+    width: 100%;
+    background: transparent;
+    color: #9B9CA4;
+    font-size: 1.225rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+#password-input::placeholder {
+    color: #4A569C;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+#submit {
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    gap: .625rem;
+    margin-top: 2.5rem;
+    padding: 1.25rem;
+    font-size: .575rem;
+    border: 0;
+    color: #FFFFFF;
+    font-size: 1.1875rem;
+    font-weight: 700;
+    border-radius: .375rem;
+    background-color: #4900EB;
+    width: 24.125rem;
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+}
+
+#submit:hover {
+    background-color: #470ec2;
+}
+
+#main-image {
+    margin-top: .625rem;
+}
+
+.imgButton {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        gap: 2rem;
+    }
 }

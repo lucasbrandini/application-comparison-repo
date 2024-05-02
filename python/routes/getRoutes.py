@@ -22,8 +22,25 @@ class GetRoutes(BaseHTTPRequestHandler):
         }
         if self.path in routes:
             routes[self.path]()
+        elif self.path.startswith('/public/'):
+            self.serve_static_file(self.path)
         else:
             self.render_404()
+
+    def serve_static_file(self, path):
+        try:
+            with open(path[1:], 'rb') as file:  # remove the leading '/'
+                content = file.read()
+            self.send_response(200)
+            if path.endswith('.css'):
+                self.send_header('Content-type', 'text/css')
+            elif path.endswith('.js'):
+                self.send_header('Content-type', 'application/javascript')
+            # add more content types if needed
+            self.end_headers()
+            self.wfile.write(content)
+        except Exception as e:
+            self.send_error_response(404, 'File not found')
 
     def render_home(self):
         try:
@@ -80,17 +97,10 @@ class GetRoutes(BaseHTTPRequestHandler):
     def render_register(self):
         compiler = Compiler()
 
-        # Lendo o conteúdo do arquivo style.css
-        with open(os.path.join('public', 'style.css'), 'r') as file:
-            css_source = file.read()
-
         with open(os.path.join('templates', 'register.hbs'), 'r') as file:
-            html_source = file.read()
-
-        html_template = compiler.compile(html_source)
-
+            source = file.read()
+        template = compiler.compile(source)
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-
-        self.wfile.write(html_template({ 'css_content': css_source }).encode())
+        self.wfile.write(template({}).encode())

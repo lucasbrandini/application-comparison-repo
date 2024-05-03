@@ -1,10 +1,11 @@
+# Importando as funções necessárias
+from http.server import BaseHTTPRequestHandler
 import http.cookies
 import os
-from http.server import BaseHTTPRequestHandler
 import json
 import bcrypt
 import jwt
-from db.dbOperations import insert_user, select_user_by_name
+from db.dbOperations import insert_user, select_user_by_name, insert_post
 
 # Defina o número de salt rounds
 saltRounds = 10
@@ -14,7 +15,8 @@ class PostRoutes(BaseHTTPRequestHandler):
     def do_POST(self):
         routes = {
             '/register': self.handle_register,
-            '/login': self.handle_login
+            '/login': self.handle_login,
+            '/create-post': self.handle_create_post
         }
 
         if self.path in routes:
@@ -40,7 +42,6 @@ class PostRoutes(BaseHTTPRequestHandler):
                 # Gera o token JWT
                 token = jwt.encode({'name_user': user['name_user']}, os.getenv('JWT_SECRET'), algorithm='HS256')
                 # Define um cookie com o token JWT
-                print(token)
                 self.send_cookie_response(token)
             else:
                 self.send_error_response(401, "Unauthorized: Incorrect username or password")
@@ -86,3 +87,53 @@ class PostRoutes(BaseHTTPRequestHandler):
 
     def send_error_response(self, code, message):
         self.send_error(code, message)
+
+    def handle_create_post(self):
+        try:
+            # Verifica se o token JWT está presente nos cookies
+            if 'Cookie' in self.headers:
+                cookies = http.cookies.SimpleCookie(self.headers['Cookie'])
+                if 'jwt_token' in cookies:
+                    token = cookies['jwt_token'].value
+                    try:
+                        # Decodifica o token JWT
+                        decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
+                        # Se o token for válido, permite o acesso à página de criação de post
+                        if decoded_token.get('name_user'):
+                            content_length = int(self.headers['Content-Length'])
+                            post_data = self.rfile.read(content_length)
+                            post_data = post_data.decode('utf-8')
+                            post_data = post_data.split('&')
+                            post_content = {}
+                            for data in post_data:
+                                key, value = data.split('=')
+                                post_content[key] = value
+
+                            user_name = decoded_token.get('name_user')
+                            user = select_user_by_name(user_name)
+                            print(user['id_user'], post_content['content'], "xxxxxxxxxxxx")
+                            if user:
+                                insert_post(user['id_user'], post_content['content'])
+                                self.send_response(302)
+                                self.send_header('Location', '/home')
+                                self.end_headers()
+                            else:
+                                self.send_error_response(404, "User not found")
+                        else:
+                            # Token inválido
+                            self.send_error_response(401, "Unauthorized: Invalid token")
+                    except jwt.ExpiredSignatureError:
+                        # Token expirado
+                        self.send_error_response(401, "Unauthorized: Token expired")
+                    except jwt.InvalidTokenError:
+                        # Token inválido
+                        self.send_error_response(401, "Unauthorized: Invalid token")
+                else:
+                    # Nenhum token JWT presente nos cookies
+                    self.send_error_response(401, "Unauthorized: Missing token")
+            else:
+                # Nenhum cookie presente na requisição
+                self.send_error_response(401, "Unauthorized: No cookies")
+        except Exception as e:
+            print(e)
+            self.send_error_response(500, "Server Error: " + str(e))

@@ -1,6 +1,7 @@
 # This file contains all the functions that interact with the database
 from db.dbConnection import get_connection
 import bcrypt
+
 #! Users
 # Select
 def select_user(user_id):
@@ -17,6 +18,7 @@ def select_user(user_id):
     finally:
         cursor.close()
         connection.close()
+
 # Select all users
 def select_all_users():
     connection = get_connection()
@@ -29,6 +31,7 @@ def select_all_users():
     finally:
         cursor.close()
         connection.close()
+
 # Insert
 def insert_user(name, password):
     print(name, password)
@@ -45,6 +48,7 @@ def insert_user(name, password):
     finally:
         cursor.close()
         connection.close()
+
 # Update
 def update_user(user_id, name, password):
     if not user_id or not name or not password:
@@ -59,6 +63,7 @@ def update_user(user_id, name, password):
     finally:
         cursor.close()
         connection.close()
+
 # Delete
 def delete_user(user_id):
     if not user_id:
@@ -73,6 +78,7 @@ def delete_user(user_id):
     finally:
         cursor.close()
         connection.close()
+
 #! Posts
 # Select
 def select_post(post_id):
@@ -89,6 +95,20 @@ def select_post(post_id):
     finally:
         cursor.close()
         connection.close()
+
+# Select all posts
+def select_all_posts():
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = "SELECT * FROM Posts"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        return results
+    finally:
+        cursor.close()
+        connection.close()
+
 # Insert
 def insert_post(user_id, post):
     if not user_id or not post:
@@ -104,6 +124,7 @@ def insert_post(user_id, post):
     finally:
         cursor.close()
         connection.close()
+
 # Update
 def update_post(post_id, user_id, post):
     if not post_id or not user_id or not post:
@@ -118,6 +139,7 @@ def update_post(post_id, user_id, post):
     finally:
         cursor.close()
         connection.close()  
+
 # Delete
 def delete_post(post_id):
     if not post_id:
@@ -132,6 +154,7 @@ def delete_post(post_id):
     finally:
         cursor.close()
         connection.close()
+
 #! Comments
 def select_user_by_name(name):
     if not name:
@@ -147,6 +170,7 @@ def select_user_by_name(name):
     finally:
         cursor.close()
         connection.close()
+
 # Select
 def select_comment(comment_id):
     if not comment_id:
@@ -162,6 +186,7 @@ def select_comment(comment_id):
     finally:
         cursor.close()
         connection.close()
+
 # Insert
 def insert_comment(user_id, post_id, comment):
     if not user_id or not post_id or not comment:
@@ -177,6 +202,7 @@ def insert_comment(user_id, post_id, comment):
     finally:
         cursor.close()
         connection.close()
+
 # Update
 def update_comment(comment_id, user_id, post_id, comment):
     if not comment_id or not user_id or not post_id or not comment:
@@ -191,6 +217,7 @@ def update_comment(comment_id, user_id, post_id, comment):
     finally:
         cursor.close()
         connection.close()
+
 # Delete
 def delete_comment(comment_id):
     if not comment_id:
@@ -205,6 +232,3 @@ def delete_comment(comment_id):
     finally:
         cursor.close()
         connection.close()
-
-
-

@@ -181,12 +181,14 @@ class GetRoutes(BaseHTTPRequestHandler):
                         decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
                         # Se o token for válido, permite o acesso à página de commits
                         if decoded_token.get('name_user'):
-                            # Faz um fetch para a URL
+                            # Faz um fetch para a URL do GitHub usando o Personal Access Token (PAT)
                             commits = []
                             page = 1
                             while True:
                                 try:
-                                    response = requests.get(f'https://api.github.com/repos/lucaascriado/application-comparison-repo/commits?page={page}')
+                                    #Coloque a token após 'token'.
+                                    #headers = {'Authorization': 'token '}
+                                    response = requests.get(f'https://api.github.com/repos/lucaascriado/application-comparison-repo/commits?page={page}') # Adicione ", headers=headers" depois de {page}.
                                     # Verifica se a solicitação foi bem-sucedida
                                     if response.status_code == 200:
                                         # Parseia a resposta como JSON
@@ -229,6 +231,4 @@ class GetRoutes(BaseHTTPRequestHandler):
                 self.send_error_response(401, "Unauthorized: No cookies")
         except Exception as e:
             print(e)
-            self.send_error_response(500, "Server Error: " + str(e))
-
-    
+            self.send_error_response(500, "Server Error: " + str(e))    

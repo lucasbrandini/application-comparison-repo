@@ -10,7 +10,7 @@ function selectUser(userId) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `SELECT * FROM Usuarios WHERE id_user = ?`;
+      const sql = `SELECT * FROM users WHERE id_user = ?`;
       connection.query(sql, [userId], (err, results) => {
         connection.release();
         if (err) {
@@ -27,7 +27,7 @@ function selectAllUsers() {
   return new Promise((resolve, reject) => {
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `SELECT * FROM Usuarios`;
+      const sql = `SELECT * FROM users`;
       connection.query(sql, (err, results) => {
         connection.release();
         if (err) {
@@ -47,7 +47,7 @@ function selectUserByName(name) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `SELECT * FROM Usuarios WHERE name_user = ?`;
+      const sql = `SELECT * FROM users WHERE name_user = ?`;
       connection.query(sql, [name], (err, results) => {
         connection.release();
         if (err) {
@@ -67,7 +67,7 @@ function insertUser(name, password) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO Usuarios (name_user, password) VALUES (?, ?)";
+      const sql = "INSERT INTO users (name_user, password) VALUES (?, ?)";
       connection.query(sql, [name, password], (err, results) => {
         connection.release();
         if (err) {
@@ -87,7 +87,7 @@ function deleteUser(userId) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `DELETE FROM Usuarios WHERE id_user = ?`;
+      const sql = `DELETE FROM users WHERE id_user = ?`;
       connection.query(sql, [userId], (err, results) => {
         connection.release();
         if (err) {
@@ -107,7 +107,7 @@ function updateUser(userId, newName) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `UPDATE Usuarios SET name_user = ? WHERE id_user = ?`;
+      const sql = `UPDATE users SET name_user = ? WHERE id_user = ?`;
       connection.query(sql, [newName, userId], (err, results) => {
         connection.release();
         if (err) {
@@ -179,6 +179,27 @@ function insertPost(userId, post) {
     });
   });
 }
+//! Insert post with image
+function insertPostWithImage(userId, post, image) {
+  return new Promise((resolve, reject) => {
+    if (!userId || !post || !image) {
+      return reject(new Error("User ID, post or image cannot be null"));
+    }
+    db.getConnection((err, connection) => {
+      if (err) return reject(err);
+      const sql = "INSERT INTO Posts (p_id_user, post, post_image) VALUES (?, ?, ?)";
+      connection.query(sql, [userId, post, image], (err, results) => {
+        connection.release();
+        if (err) {
+          return reject(err);
+        }
+        resolve(results);
+      });
+    });
+  });
+}
+
+
 
 //* DELETE
 function deletePost(postId) {
@@ -229,7 +250,7 @@ function selectComment(commentId) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `SELECT * FROM Comentarios WHERE id_comment = ?`;
+      const sql = `SELECT * FROM comments WHERE id_comment = ?`;
       connection.query(sql, [commentId], (err, results) => {
         connection.release();
         if (err) {
@@ -249,7 +270,7 @@ function selectAllCommentsFromPost(postId) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `SELECT * FROM Comentarios WHERE p_id_post = ?`;
+      const sql = `SELECT * FROM comments WHERE p_id_post = ?`;
       connection.query(sql, [postId], (err, results) => {
         connection.release();
         if (err) {
@@ -270,7 +291,7 @@ function insertComment(userId, postId, comment) {
     db.getConnection((err, connection) => {
       if (err) return reject(err);
       const sql =
-        "INSERT INTO Comentarios (p_id_user, p_id_post, comment) VALUES (?, ?, ?)";
+        "INSERT INTO comments (p_id_user, p_id_post, comment) VALUES (?, ?, ?)";
       connection.query(sql, [userId, postId, comment], (err, results) => {
         connection.release();
         if (err) {
@@ -290,7 +311,7 @@ function deleteComment(commentId) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `DELETE FROM Comentarios WHERE id_comment = ?`;
+      const sql = `DELETE FROM comments WHERE id_comment = ?`;
       connection.query(sql, [commentId], (err, results) => {
         connection.release();
         if (err) {
@@ -310,7 +331,7 @@ function updateComment(commentId, newComment) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `UPDATE Comentarios SET comment = ? WHERE id_comment = ?`;
+      const sql = `UPDATE comments SET comment = ? WHERE id_comment = ?`;
       connection.query(sql, [newComment, commentId], (err, results) => {
         connection.release();
         if (err) {

@@ -6,9 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/create-post" method="POST">
+    <form action="/create-post" method="POST" enctype="multipart/form-data">
         <label for="content">Content</label>
         <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image" accept="image/*">
         <button type="submit">Create post</button>
     </form>
 </body>

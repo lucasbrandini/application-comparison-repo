@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+</head>
+<body>
+    <h1>Posts</h1>
+    {{#each posts}}
+        <div class="post">
+            <p>{{post}}</p>
+            <!-- Renderiza a imagem a partir da string Base64 -->
+            <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
+        </div>
+    {{/each}}
+</body>
+</html>
+

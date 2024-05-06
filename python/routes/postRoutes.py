@@ -4,8 +4,10 @@ import http.cookies
 import os
 import json
 import bcrypt
+import base64
+import cgi
 import jwt
-from db.dbOperations import insert_user, select_user_by_name, insert_post
+from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image
 
 # Defina o número de salt rounds
 saltRounds = 10
@@ -100,20 +102,40 @@ class PostRoutes(BaseHTTPRequestHandler):
                         decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
                         # Se o token for válido, permite o acesso à página de criação de post
                         if decoded_token.get('name_user'):
+                            content_type = self.headers.get('Content-Type')
                             content_length = int(self.headers['Content-Length'])
-                            post_data = self.rfile.read(content_length)
-                            post_data = post_data.decode('utf-8')
-                            post_data = post_data.split('&')
-                            post_content = {}
-                            for data in post_data:
-                                key, value = data.split('=')
-                                post_content[key] = value
+                            #post_data = self.rfile.read(content_length)
+                            
+                            if 'multipart/form-data' in content_type:
+                                # Processar dados do formulário multipart
+                                fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': content_type})
+                                post_content = {}
+                                for key in fields:
+                                    post_content[key] = fields[key].value
+
+                                # Verifica se o campo de imagem está presente
+                                if 'image' in post_content:
+                                    # Converte a imagem em base64 ou blob, conforme necessário
+                                    image_file = fields['image'].file.read()
+
+                                    image_base64 = base64.b64encode(image_file)
+                                else:
+                                    image_file = None
+                            else:
+                                # Lidar com outros tipos de dados de formulário, se necessário
+                                pass
 
                             user_name = decoded_token.get('name_user')
                             user = select_user_by_name(user_name)
-                            print(user['id_user'], post_content['content'], "xxxxxxxxxxxx")
+
                             if user:
-                                insert_post(user['id_user'], post_content['content'])
+                                if image_file:
+                                    # Insira o post no banco de dados com a imagem
+                                    insert_post_image(user['id_user'], post_content.get('content', ''), image_base64)
+                                else:
+                                    # Insira o post no banco de dados sem a imagem
+                                    insert_post(user['id_user'], post_content.get('content', ''))
+                                    
                                 self.send_response(302)
                                 self.send_header('Location', '/home')
                                 self.end_headers()

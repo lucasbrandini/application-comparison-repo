@@ -10,7 +10,7 @@ const setupTables = () => {
     //! Define the tables to be created
     const tableDefinitions = [
       {
-        tableName: "Usuarios",
+        tableName: "users",
         columns: `
         id_user INT AUTO_INCREMENT PRIMARY KEY,
         name_user VARCHAR(255) UNIQUE NOT NULL,
@@ -19,62 +19,36 @@ const setupTables = () => {
     `,
       },
       {
-        tableName: "Avatar_Images",
-        columns: `
-        id_imageAv INT AUTO_INCREMENT PRIMARY KEY,
-        image BLOB NOT NULL,
-        date_av TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    `,
-      },
-      {
-        tableName: "Avatar",
+        tableName: "users_avatar",
         columns: `
         id_avatar INT AUTO_INCREMENT PRIMARY KEY,
         id_user INT,
-        id_imageAv INT,
+        avatar_image LONGBLOB,
         date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (id_user) REFERENCES Usuarios(id_user),
-        FOREIGN KEY (id_imageAv) REFERENCES Avatar_Images(id_imageAv)
+        FOREIGN KEY (id_user) REFERENCES users(id_user)
     `,
       },
       {
-        tableName: "post_images",
-        columns: `
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        image BLOB NOT NULL,
-        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    `,
-      },
-      {
-        tableName: "Posts",
+        tableName: "posts",
         columns: `
         id_posts INT AUTO_INCREMENT PRIMARY KEY,
         p_id_user INT,
         post VARCHAR(1024) NOT NULL,
+        post_image LONGBLOB,
         post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (p_id_user) REFERENCES Usuarios(id_user)
+        FOREIGN KEY (p_id_user) REFERENCES users(id_user)
     `,
       },
       {
-        tableName: "relat_post_images",
-        columns: `
-        id_rel INT AUTO_INCREMENT PRIMARY KEY,
-        id_post INT,
-        id_image INT,
-        FOREIGN KEY (id_post) REFERENCES Posts(id_posts),
-        FOREIGN KEY (id_image) REFERENCES post_images(id)
-    `,
-      },
-      {
-        tableName: "Comentarios",
+        tableName: "comments",
         columns: `
         id_comment INT AUTO_INCREMENT PRIMARY KEY,
         p_id_user INT,
         p_id_post INT,
         comment VARCHAR(512) NOT NULL,
         comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (p_id_user) REFERENCES Usuarios(id_user),
-        FOREIGN KEY (p_id_post) REFERENCES Posts(id_posts)
+        FOREIGN KEY (p_id_user) REFERENCES users(id_user),
+        FOREIGN KEY (p_id_post) REFERENCES posts(id_posts)
     `,
       },
     ];

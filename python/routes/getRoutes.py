@@ -1,6 +1,6 @@
 import requests
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user, select_all_users
+from db.dbOperations import select_user, select_all_users, select_all_posts
 import json
 import datetime
 from pybars import Compiler
@@ -22,6 +22,7 @@ class GetRoutes(BaseHTTPRequestHandler):
             '/404': self.render_404,
             '/commits': self.render_commits,
             '/create-post': self.render_create_post,
+            '/render-posts': self.render_posts
         }
         if self.path in routes:
             routes[self.path]()
@@ -232,3 +233,53 @@ class GetRoutes(BaseHTTPRequestHandler):
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))    
+
+    # Render posts page
+    def render_posts(self):
+        try:
+            # Verifica se o token JWT está presente nos cookies
+            if 'Cookie' in self.headers:
+                cookies = http.cookies.SimpleCookie(self.headers['Cookie'])
+                if 'jwt_token' in cookies:
+                    token = cookies['jwt_token'].value
+                    try:
+                        # Decodifica o token JWT
+                        decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
+                        # Se o token for válido, permite o acesso à página de posts
+                        if decoded_token.get('name_user'):
+                            # Busca todos os posts no banco de dados
+                            posts = select_all_posts()
+                            # Compila o template Handlebars
+                            compiler = Compiler()
+                            with open(os.path.join('templates', 'render-posts.hbs'), 'r') as file:
+                                source = file.read()
+                            template = compiler.compile(source)
+                            # Renderiza o template com os dados dos posts
+                            self.send_response(200)
+                            self.send_header('Content-type', 'text/html')
+                            self.end_headers()
+                            # Remover o prefixo 'b' dos bytes das imagens
+                            for post in posts:
+                                if 'post_image' in post and post['post_image'] is not None:
+                                    post['post_image'] = str(post['post_image'])[2:-1]  # Remove o prefixo 'b' e as aspas
+                            self.wfile.write(template({'posts': posts}).encode())
+                        else:
+                            # Token inválido
+                            self.send_error_response(401, "Unauthorized: Invalid token")
+                    except jwt.ExpiredSignatureError:
+                        # Token expirado
+                        self.send_error_response(401, "Unauthorized: Token expired")
+                    except jwt.InvalidTokenError:
+                        # Token inválido
+                        self.send_error_response(401, "Unauthorized: Invalid token")
+                else:
+                    # Nenhum token JWT presente nos cookies
+                    self.send_error_response(401, "Unauthorized: Missing token")
+            else:
+                # Nenhum cookie presente na requisição
+                self.send_error_response(401, "Unauthorized: No cookies")
+        except Exception as e:
+            print(e)
+            self.send_error_response(500, "Server Error: " + str(e))
+
+

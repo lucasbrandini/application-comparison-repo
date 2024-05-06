@@ -11,7 +11,7 @@ def select_user(user_id):
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT * FROM Usuarios WHERE id_user = %s"
+        sql = "SELECT * FROM users WHERE id_user = %s"
         cursor.execute(sql, (user_id,))
         results = cursor.fetchall()
         return results
@@ -24,7 +24,7 @@ def select_all_users():
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT * FROM Usuarios"
+        sql = "SELECT * FROM users"
         cursor.execute(sql)
         results = cursor.fetchall()
         return results
@@ -41,7 +41,7 @@ def insert_user(name, password):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO Usuarios (name_user, password) VALUES (%s, %s)"
+        sql = "INSERT INTO users (name_user, password) VALUES (%s, %s)"
         cursor.execute(sql, (name, password))
         connection.commit()
         return cursor.lastrowid
@@ -57,7 +57,7 @@ def update_user(user_id, name, password):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "UPDATE Usuarios SET name_user = %s, password = %s WHERE id_user = %s"
+        sql = "UPDATE users SET name_user = %s, password = %s WHERE id_user = %s"
         cursor.execute(sql, (name, password, user_id))
         connection.commit()
     finally:
@@ -72,7 +72,7 @@ def delete_user(user_id):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "DELETE FROM Usuarios WHERE id_user = %s"
+        sql = "DELETE FROM users WHERE id_user = %s"
         cursor.execute(sql, (user_id,))
         connection.commit()
     finally:
@@ -101,13 +101,14 @@ def select_all_posts():
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT * FROM Posts"
+        sql = "SELECT post, post_image FROM Posts"
         cursor.execute(sql)
         results = cursor.fetchall()
         return results
     finally:
         cursor.close()
         connection.close()
+
 
 # Insert
 def insert_post(user_id, post):
@@ -124,6 +125,22 @@ def insert_post(user_id, post):
     finally:
         cursor.close()
         connection.close()
+#insert post with image
+def insert_post_image(user_id, post, image):
+    if not user_id or not post:
+        raise ValueError("User ID or post cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "INSERT INTO Posts (p_id_user, post, post_image) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (user_id, post, image))
+        connection.commit()
+        return cursor.lastrowid
+    finally:
+        cursor.close()
+        connection.close()
+
 
 # Update
 def update_post(post_id, user_id, post):
@@ -163,7 +180,7 @@ def select_user_by_name(name):
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT * FROM Usuarios WHERE name_user = %s"
+        sql = "SELECT * FROM users WHERE name_user = %s"
         cursor.execute(sql, (name,))
         result = cursor.fetchone()
         return result
@@ -179,7 +196,7 @@ def select_comment(comment_id):
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT * FROM Comentarios WHERE id_comment = %s"
+        sql = "SELECT * FROM comments WHERE id_comment = %s"
         cursor.execute(sql, (comment_id,))
         results = cursor.fetchall()
         return results
@@ -195,7 +212,7 @@ def insert_comment(user_id, post_id, comment):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO Comentarios (p_id_user, p_id_post, comment) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO comments (p_id_user, p_id_post, comment) VALUES (%s, %s, %s)"
         cursor.execute(sql, (user_id, post_id, comment))
         connection.commit()
         return cursor.lastrowid
@@ -211,7 +228,7 @@ def update_comment(comment_id, user_id, post_id, comment):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "UPDATE Comentarios SET p_id_user = %s, p_id_post = %s, comment = %s WHERE id_comment = %s"
+        sql = "UPDATE comments SET p_id_user = %s, p_id_post = %s, comment = %s WHERE id_comment = %s"
         cursor.execute(sql, (user_id, post_id, comment, comment_id))
         connection.commit()
     finally:
@@ -226,7 +243,7 @@ def delete_comment(comment_id):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "DELETE FROM Comentarios WHERE id_comment = %s"
+        sql = "DELETE FROM comments WHERE id_comment = %s"
         cursor.execute(sql, (comment_id,))
         connection.commit()
     finally:

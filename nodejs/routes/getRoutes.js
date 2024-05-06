@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const authenticateToken = require("../auth/auth");
 const db = require("../db/dbOperations");
+const axios = require('axios');
 
 // rota para home
 router.get("/home", authenticateToken, (req, res) => {
@@ -88,6 +89,31 @@ router.get("/register", (req, res) => {
 // rota para ir para tela de login
 router.get("/login", (req, res) => {
   res.render("login");
+});
+
+router.get("/commits", authenticateToken, async (req, res) => {
+  let commits = [];
+  let page = 1;
+  while (true) {
+    try {
+      const response = await axios.get(`https://api.github.com/repos/lucaascriado/application-comparison-repo/commits?page=${page}`);
+      if (response.status === 200) {
+        const newCommits = response.data;
+        if (!newCommits.length) {
+          break;
+        }
+        commits = commits.concat(newCommits);
+        page += 1;
+      } else {
+        res.status(response.status).send("Failed to fetch commits");
+        return;
+      }
+    } catch (error) {
+      res.status(500).send("An error occurred while fetching commits");
+      return;
+    }
+  }
+  res.render("commits", { commits });
 });
 
 module.exports = router;

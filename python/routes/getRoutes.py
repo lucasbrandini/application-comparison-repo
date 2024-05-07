@@ -1,6 +1,6 @@
 import requests
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user, select_all_users, select_all_posts
+from db.dbOperations import select_user, select_all_users, select_all_posts, select_all_posts_ordered
 import json
 import datetime
 from pybars import Compiler
@@ -64,6 +64,9 @@ class GetRoutes(BaseHTTPRequestHandler):
                         decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
                         # Se o token for válido, permite o acesso à página home
                         if decoded_token.get('name_user'):
+                            #Busca todos os posts do banco ordenado pela  data
+                            posts = select_all_posts_ordered()
+                            # Compila o template Handlebars
                             compiler = Compiler()
                             with open(os.path.join('templates', 'home.hbs'), 'r') as file:
                                 source = file.read()
@@ -78,7 +81,11 @@ class GetRoutes(BaseHTTPRequestHandler):
                             self.send_response(200)
                             self.send_header('Content-type', 'text/html')
                             self.end_headers()
-                            self.wfile.write(template({'header': header_template}).encode())
+                            # Remover o prefixo 'b' dos bytes das imagens
+                            for post in posts:
+                                if 'post_image' in post and post['post_image'] is not None:
+                                    post['post_image'] = str(post['post_image'])[2:-1]  # Remove o prefixo 'b' e as aspas
+                            self.wfile.write(template({'posts': posts,'header': header_template}).encode())
                         else:
                             # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")
@@ -122,7 +129,7 @@ class GetRoutes(BaseHTTPRequestHandler):
             source = file.read()
         template = compiler.compile(source)
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
         self.wfile.write(template({}).encode())
 

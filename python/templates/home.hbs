@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,75 +27,37 @@
                 <h2 class="subText">Descubra tudo o que você precisa <strong>em um só lugar.</strong></h2>
                 <h2 class="subText">Junte-se a nós e <strong>faça parte da experiência!</strong></h2>
             </div>
-            
-            <button class="btnPost">Crie sua postagem aqui! <img src="/public/assets/seta.svg" alt=""></button>
             <a href="/commits">
                 <button class="btnPost">Commmits page</button>
+            </a>
+            <a href="/create-post">
+                <button class="btnPost">Crie sua postagem aqui!</button>
             </a>
         </section>
 
         <section class="cardBox">
-
-            <div class="card">
-                <div class="cardTop">
-                    <div class="initTop">
-                        <img class="pfpImg" src="/public/assets/pfp.svg">                
-                        <h3 class="username">Lore ipsum</h3>
-                        <h4 class="postTime">(postado há 6 horas)</h4>
+            {{#each posts}}
+                <div class="card">
+                    <div class="cardTop">
+                        <div class="initTop">
+                            <img class="pfpImg" src="/public/assets/pfp.svg">                
+                            <h3 class="username">{{name_user}}</h3>
+                            <h4 class="postTime">há {{post_date}}</h4>
+                        </div>
+                        <div class="endTop">
+                            <h4 class="comentarios">(146)comentarios</h4>
+                        </div>
                     </div>
-                    <div class="endTop">
-                        <h4 class="comentarios">(146)comentarios</h4>
+                    <h5 class="cardText">{{post}}</h5>
+                    <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
+                    <div class="cardBottom">
+                        <div class="voteStyle">
+                            <button class="upvote"><img class="upvoteImg" src="/public/assets/upvote.svg" alt="upvote">6.8k</button>
+                            <button class="downvote"><img class="downvoteImg" src="/public/assets/downvote.svg" alt="downvote"></button>
+                        </div>
                     </div>
-                </div>
-                <h5 class="cardText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." </h5>
-                <div class="cardBottom">
-                    <div class="voteStyle">
-                        <button class="upvote"><img class="upvoteImg" src="/public/assets/upvote.svg" alt="upvote">6.8k</button>
-                        <button class="downvote"><img class="downvoteImg" src="/public/assets/downvote.svg" alt="downvote"></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="cardTop">
-                    <div class="initTop">
-                        <img class="pfpImg" src="/public/assets/pfp.svg">                
-                        <h3 class="username">Lore ipsum</h3>
-                        <h4 class="postTime">(postado há 6 horas)</h4>
-                    </div>
-                    <div class="endTop">
-                        <h4 class="comentarios">(146)comentarios</h4>
-                    </div>
-                </div>
-                <h5 class="cardText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." </h5>
-                <div class="cardBottom">
-                    <div class="voteStyle">
-                        <button class="upvote"><img class="upvoteImg" src="/public/assets/upvote.svg" alt="upvote">6.8k</button>
-                        <button class="downvote"><img class="downvoteImg" src="/public/assets/downvote.svg" alt="downvote"></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="cardTop">
-                    <div class="initTop">
-                        <img class="pfpImg" src="/public/assets/pfp.svg">                
-                        <h3 class="username">Lore ipsum</h3>
-                        <h4 class="postTime">(postado há 6 horas)</h4>
-                    </div>
-                    <div class="endTop">
-                        <h4 class="comentarios">(146)comentarios</h4>
-                    </div>
-                </div>
-                <h5 class="cardText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." </h5>
-                <div class="cardBottom">
-                    <div class="voteStyle">
-                        <button class="upvote"><img class="upvoteImg" src="/public/assets/upvote.svg" alt="upvote">6.8k</button>
-                        <button class="downvote"><img class="downvoteImg" src="/public/assets/downvote.svg" alt="downvote"></button>
-                    </div>
-                </div>
-            </div>
-
+                </div>    
+            {{/each}}
         </section>
     </main>
 </body>

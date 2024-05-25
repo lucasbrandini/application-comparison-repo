@@ -113,9 +113,10 @@ class GetRoutes(BaseHTTPRequestHandler):
 
     def render_login(self):
         compiler = Compiler()
-
+        print(os.getcwd())
         with open(os.path.join('templates', 'login.hbs'), 'r') as file:
             source = file.read()
+            
         template = compiler.compile(source)
         self.send_response(200)
         self.send_header('Content-type', 'text/html')

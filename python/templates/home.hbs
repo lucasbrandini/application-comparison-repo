@@ -48,8 +48,9 @@
                     </div>
                     <h5 class="cardText">{{post}}</h5>
                     {{#if post_image}}
-                        <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
-                        <video src="data:video/mp4;base64,{{post_image}}" width="400" height="200" controls></video>
+                        <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="imagem da postagem">
+                    {{else if post_video}}
+                        <video src="data:video/mp4;base64,{{post_video}}" width="400" height="200" alt="video da postagem" controls></video>
                     {{/if}}
                     <div class="cardBottom">
                         <div class="voteStyle">

@@ -74,10 +74,23 @@ class PostRoutes(BaseHTTPRequestHandler):
             user_data[key] = value
 
         try:
+            # verifica se o usuário já foi inserido no banco de dados
+            try:
+                user = select_user_by_name(user_data['name'])
+                if user:
+                    # self.send_error_response(400, "User already exists")
+                    self.send_response(302)
+                    self.send_header('Location', '/register')
+                    self.end_headers()
+                    return
+            except Exception as e:
+                self.send_error_response(500, f"Server error: {str(e)}")
+            
             # Insere o usuário no banco de dados
             # A senha é criptografada antes de ser inserida
             hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt(saltRounds)).decode('utf-8')
             insert_user(user_data['name'], hashed_password)
+
             self.send_response(302)
             self.send_header('Location', '/login')
             self.end_headers()
@@ -144,12 +157,24 @@ class PostRoutes(BaseHTTPRequestHandler):
                         else:
                             # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")
+
+                            self.send_response(302)
+                            self.send_header('Location', '/login')
+                            self.end_headers()
                     except jwt.ExpiredSignatureError:
                         # Token expirado
                         self.send_error_response(401, "Unauthorized: Token expired")
+
+                        self.send_response(302)
+                        self.send_header('Location', '/login')
+                        self.end_headers()
                     except jwt.InvalidTokenError:
                         # Token inválido
                         self.send_error_response(401, "Unauthorized: Invalid token")
+
+                        self.send_response(302)
+                        self.send_header('Location', '/login')
+                        self.end_headers()
                 else:
                     # Nenhum token JWT presente nos cookies
                     self.send_error_response(401, "Unauthorized: Missing token")

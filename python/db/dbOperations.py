@@ -140,7 +140,21 @@ def insert_post_image(user_id, post, image):
     finally:
         cursor.close()
         connection.close()
+#insert post with video
+def insert_post_video(user_id, post, video):
+    if not user_id or not post:
+        raise ValueError("User ID or post cannot be null")
 
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "INSERT INTO Posts (p_id_user, post, post_video) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (user_id, post, video))
+        connection.commit()
+        return cursor.lastrowid
+    finally:
+        cursor.close()
+        connection.close()
 
 # Update
 def update_post(post_id, user_id, post):
@@ -256,7 +270,7 @@ def select_all_posts_ordered():
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT u.name_user, p.post, p.post_image, CASE WHEN TIMESTAMPDIFF(SECOND, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, p.post_date, NOW()), 's') WHEN TIMESTAMPDIFF(MINUTE, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, p.post_date, NOW()), 'min') WHEN TIMESTAMPDIFF(HOUR, p.post_date, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, p.post_date, NOW()), 'h') WHEN TIMESTAMPDIFF(DAY, p.post_date, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(DAY, p.post_date, NOW()), 'd') WHEN TIMESTAMPDIFF(WEEK, p.post_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, p.post_date, NOW()), 'w') ELSE CONCAT(TIMESTAMPDIFF(MONTH, p.post_date, NOW()), 'm') END AS post_date FROM posts p JOIN users u ON p.p_id_user = u.id_user ORDER BY p.post_date DESC"
+        sql = "SELECT u.name_user, p.post, p.post_image, p.post_video, CASE WHEN TIMESTAMPDIFF(SECOND, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, p.post_date, NOW()), 's') WHEN TIMESTAMPDIFF(MINUTE, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, p.post_date, NOW()), 'min') WHEN TIMESTAMPDIFF(HOUR, p.post_date, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, p.post_date, NOW()), 'h') WHEN TIMESTAMPDIFF(DAY, p.post_date, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(DAY, p.post_date, NOW()), 'd') WHEN TIMESTAMPDIFF(WEEK, p.post_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, p.post_date, NOW()), 'w') ELSE CONCAT(TIMESTAMPDIFF(MONTH, p.post_date, NOW()), 'm') END AS post_date FROM posts p JOIN users u ON p.p_id_user = u.id_user ORDER BY p.post_date DESC"
         cursor.execute(sql)
         results = cursor.fetchall()
         return results

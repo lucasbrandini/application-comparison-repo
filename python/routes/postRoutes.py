@@ -7,7 +7,7 @@ import bcrypt
 import base64
 import cgi
 import jwt
-from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image
+from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image, insert_post_video
 
 # Defina o número de salt rounds
 saltRounds = 10
@@ -105,82 +105,91 @@ class PostRoutes(BaseHTTPRequestHandler):
 
     def handle_create_post(self):
         try:
-            # Verifica se o token JWT está presente nos cookies
             if 'Cookie' in self.headers:
                 cookies = http.cookies.SimpleCookie(self.headers['Cookie'])
                 if 'jwt_token' in cookies:
                     token = cookies['jwt_token'].value
                     try:
-                        # Decodifica o token JWT
                         decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
-                        # Se o token for válido, permite o acesso à página de criação de post
                         if decoded_token.get('name_user'):
                             content_type = self.headers.get('Content-Type')
                             content_length = int(self.headers['Content-Length'])
-                            #post_data = self.rfile.read(content_length)
-                            
+
                             if 'multipart/form-data' in content_type:
-                                # Processar dados do formulário multipart
                                 fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': content_type})
                                 post_content = {}
                                 for key in fields:
                                     post_content[key] = fields[key].value
 
-                                # Verifica se o campo de imagem está presente
-                                if 'image' in post_content:
-                                    # Converte a imagem em base64 ou blob, conforme necessário
-                                    image_file = fields['image'].file.read()
+                                # Verifique se o campo 'file' está presente diretamente no dicionário de fields
+                                if 'file' in fields:
+                                    file_field = fields['file']
 
-                                    image_base64 = base64.b64encode(image_file)
+                                    # Verifique se file_field é uma instância de FieldStorage e se possui atributos necessários
+                                    if isinstance(file_field, cgi.FieldStorage) and hasattr(file_field, 'file') and hasattr(file_field, 'filename') and hasattr(file_field, 'type'):
+                                        try:
+                                            file_data = file_field.file.read()
+                                            file_name = file_field.filename
+                                            file_size = len(file_data)
+                                            file_type = file_field.type
+                                        except Exception as e:
+                                            self.send_error_response(500, f"Server Error ao ler file_field: {e}")
+                                            return
+
+                                        # Limites de tamanho
+                                        image_types = ['image/gif', 'image/jpeg', 'image/png']
+                                        video_types = ['video/mp4']
+                                        max_image_size = 20 * 1024 * 1024  # 20 MB
+                                        max_video_size = 50 * 1024 * 1024  # 50 MB
+
+                                        if file_type in image_types and file_size <= max_image_size:
+                                            file_base64 = base64.b64encode(file_data).decode('utf-8')
+                                            is_image = True
+                                        elif file_type in video_types and file_size <= max_video_size:
+                                            file_base64 = base64.b64encode(file_data).decode('utf-8')
+                                            is_image = False
+                                        else:
+                                            self.send_error_response(400, "Invalid file type or size")
+                                            return
+
+                                        user_name = decoded_token.get('name_user')
+                                        user = select_user_by_name(user_name)
+
+                                        if user:
+                                            if is_image:
+                                                insert_post_image(user['id_user'], post_content.get('content', ''), file_base64)
+                                            else:
+                                                insert_post_video(user['id_user'], post_content.get('content', ''), file_base64)
+
+                                            self.send_response(302)
+                                            self.send_header('Location', '/home')
+                                            self.end_headers()
+                                        else:
+                                            self.send_error_response(404, "User not found")
+                                    else:
+                                        self.send_error_response(400, "File field is empty or invalid")
                                 else:
-                                    image_file = None
+                                    user_name = decoded_token.get('name_user')
+                                    user = select_user_by_name(user_name)
+                                    if user:
+                                        insert_post(user['id_user'], post_content.get('content', ''))
+                                        self.send_response(302)
+                                        self.send_header('Location', '/home')
+                                        self.end_headers()
+                                    else:
+                                        self.send_error_response(404, "User not found")
                             else:
-                                # Lidar com outros tipos de dados de formulário, se necessário
-                                pass
-
-                            user_name = decoded_token.get('name_user')
-                            user = select_user_by_name(user_name)
-
-                            if user:
-                                if image_file:
-                                    # Insira o post no banco de dados com a imagem
-                                    insert_post_image(user['id_user'], post_content.get('content', ''), image_base64)
-                                else:
-                                    # Insira o post no banco de dados sem a imagem
-                                    insert_post(user['id_user'], post_content.get('content', ''))
-                                    
-                                self.send_response(302)
-                                self.send_header('Location', '/home')
-                                self.end_headers()
-                            else:
-                                self.send_error_response(404, "User not found")
+                                self.send_error_response(400, "Invalid content type")
                         else:
-                            # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")
-
-                            self.send_response(302)
-                            self.send_header('Location', '/login')
-                            self.end_headers()
                     except jwt.ExpiredSignatureError:
-                        # Token expirado
                         self.send_error_response(401, "Unauthorized: Token expired")
-
-                        self.send_response(302)
-                        self.send_header('Location', '/login')
-                        self.end_headers()
                     except jwt.InvalidTokenError:
-                        # Token inválido
                         self.send_error_response(401, "Unauthorized: Invalid token")
-
-                        self.send_response(302)
-                        self.send_header('Location', '/login')
-                        self.end_headers()
                 else:
-                    # Nenhum token JWT presente nos cookies
                     self.send_error_response(401, "Unauthorized: Missing token")
             else:
-                # Nenhum cookie presente na requisição
                 self.send_error_response(401, "Unauthorized: No cookies")
         except Exception as e:
-            print(e)
-            self.send_error_response(500, "Server Error: " + str(e))
+            print(f"Exception: {e}")
+            self.send_error_response(500, f"Server Error: {e}")

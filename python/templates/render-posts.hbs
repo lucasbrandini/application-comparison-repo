@@ -10,10 +10,15 @@
     {{#each posts}}
         <div class="post">
             <p>{{post}}</p>
-            <!-- Renderiza a imagem a partir da string Base64 -->
-            <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
+            {{#if post_image}}
+                <!-- Renderiza a imagem a partir da string Base64 -->
+                <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
+            {{/if}}
+            {{#if post_video}}
+                <!-- Renderiza o vídeo a partir da string Base64 -->
+                <video src="data:video/mp4;base64,{{post_video}}" width="400" height="200" alt="Post Video" controls></video>
+            {{/if}}
         </div>
     {{/each}}
 </body>
 </html>
-

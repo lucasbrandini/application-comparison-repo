@@ -64,28 +64,34 @@ class GetRoutes(BaseHTTPRequestHandler):
                         decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
                         # Se o token for válido, permite o acesso à página home
                         if decoded_token.get('name_user'):
-                            #Busca todos os posts do banco ordenado pela  data
+                            # Busca todos os posts do banco ordenados pela data
                             posts = select_all_posts_ordered()
-                            # Compila o template Handlebars
+                            
+                            # Compila o template Handlebars para o corpo da página
                             compiler = Compiler()
                             with open(os.path.join('templates', 'home.hbs'), 'r') as file:
                                 source = file.read()
-                            # Compila o template principal
                             template = compiler.compile(source)
-                            # Lê o conteúdo do arquivo parcial header.hbs
+                            
+                            # Compila o template para o cabeçalho da página
                             with open(os.path.join('templates', 'header.hbs'), 'r') as file:
                                 header_source = file.read()
-                            # Compila o template do cabeçalho
                             header_template = compiler.compile(header_source)
+                            
                             # Renderiza o template principal com o cabeçalho incluído
                             self.send_response(200)
                             self.send_header('Content-type', 'text/html')
                             self.end_headers()
-                            # Remover o prefixo 'b' dos bytes das imagens
+                            
+                            # Remover o prefixo 'b' dos bytes das imagens e vídeos
                             for post in posts:
                                 if 'post_image' in post and post['post_image'] is not None:
-                                    post['post_image'] = str(post['post_image'])[2:-1]  # Remove o prefixo 'b' e as aspas
-                            self.wfile.write(template({'posts': posts,'header': header_template}).encode())
+                                    post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
+                                elif 'post_video' in post and post['post_video'] is not None:
+                                    post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
+                            
+                            # Escreve a resposta com o template renderizado
+                            self.wfile.write(template({'posts': posts, 'header': header_template}).encode())
                         else:
                             # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")
@@ -102,7 +108,7 @@ class GetRoutes(BaseHTTPRequestHandler):
                 # Nenhum cookie presente na requisição
                 self.send_error_response(401, "Unauthorized: No cookies")
         except Exception as e:
-            self.send_error_response(500, "Server Error")
+            self.send_error_response(500, "Server Error: " + str(e))
 
 
     def render_404(self):
@@ -256,20 +262,24 @@ class GetRoutes(BaseHTTPRequestHandler):
                         # Se o token for válido, permite o acesso à página de posts
                         if decoded_token.get('name_user'):
                             # Busca todos os posts no banco de dados
-                            posts = select_all_posts()
+                            posts = select_all_posts_ordered()
+                        
                             # Compila o template Handlebars
                             compiler = Compiler()
                             with open(os.path.join('templates', 'render-posts.hbs'), 'r') as file:
                                 source = file.read()
                             template = compiler.compile(source)
+
                             # Renderiza o template com os dados dos posts
                             self.send_response(200)
                             self.send_header('Content-type', 'text/html')
                             self.end_headers()
-                            # Remover o prefixo 'b' dos bytes das imagens
+                            # Remover o prefixo 'b' dos bytes das imagens e vídeos
                             for post in posts:
                                 if 'post_image' in post and post['post_image'] is not None:
-                                    post['post_image'] = str(post['post_image'])[2:-1]  # Remove o prefixo 'b' e as aspas
+                                    post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
+                                elif 'post_video' in post and post['post_video'] is not None:
+                                    post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
                             self.wfile.write(template({'posts': posts}).encode())
                         else:
                             # Token inválido
@@ -289,5 +299,4 @@ class GetRoutes(BaseHTTPRequestHandler):
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
-
 

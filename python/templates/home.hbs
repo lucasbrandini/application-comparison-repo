@@ -43,13 +43,15 @@
                             <h4 class="postTime">H {{post_date}}</h4>
                         </div>
                         <div class="endTop">
-                            <h4 class="comentarios">(146)comentários</h4>
+                            <h4 class="comentarios">(146)coment&aacuterios</h4>
                         </div>
                     </div>
                     <h5 class="cardText">{{post}}</h5>
                     {{#if post_image}}
                         <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
-                        <video src="data:video/mp4;base64,{{post_image}}" width="400" height="200" controls></video>
+                    {{/if}}
+                    {{#if post_video}}
+                        <video src="data:video/mp4;base64,{{post_video}}" width="400" height="200" controls></video>
                     {{/if}}
                     <div class="cardBottom">
                         <div class="voteStyle">

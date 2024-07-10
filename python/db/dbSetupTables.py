@@ -35,6 +35,7 @@ def create_tables():
             p_id_user INT,
             post VARCHAR(1024) NOT NULL,
             post_image LONGBLOB,
+            post_video LONGBLOB,
             post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (p_id_user) REFERENCES users(id_user)
             """

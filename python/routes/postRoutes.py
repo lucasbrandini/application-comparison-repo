@@ -184,6 +184,10 @@ class PostRoutes(BaseHTTPRequestHandler):
                         self.send_error_response(401, "Unauthorized: Token expired")
                     except jwt.InvalidTokenError:
                         self.send_error_response(401, "Unauthorized: Invalid token")
+                else:
+                    self.send_error_response(401, "Unauthorized: Missing token")
+            else:
+                self.send_error_response(401, "Unauthorized: No cookies")
         except Exception as e:
             print(f"Exception: {e}")
             self.send_error_response(500, f"Server Error: {e}")

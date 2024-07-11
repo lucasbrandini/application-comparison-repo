@@ -33,7 +33,7 @@ def create_tables():
             "columns": """
             id_posts INT AUTO_INCREMENT PRIMARY KEY,
             p_id_user INT,
-            post VARCHAR(1024) NOT NULL,
+            post VARCHAR(1024),
             post_image LONGBLOB,
             post_video LONGBLOB,
             post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -116,6 +116,8 @@ class PostRoutes(BaseHTTPRequestHandler):
                             if 'multipart/form-data' in content_type:
                                 fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': content_type})
                                 post_content = {}
+                                
+                                
                                 for key in fields:
                                     post_content[key] = fields[key].value
 
@@ -146,15 +148,22 @@ class PostRoutes(BaseHTTPRequestHandler):
                                         elif file_type in video_types and file_size <= max_video_size:
                                             file_base64 = base64.b64encode(file_data).decode('utf-8')
                                             is_image = False
+                                        elif file_size == 0:
+                                            file_base64 = None
+                                            is_image = True
                                         else:
                                             self.send_error_response(400, "Invalid file type or size")
                                             return
 
                                         user_name = decoded_token.get('name_user')
                                         user = select_user_by_name(user_name)
+                                        
+                                        print(user, "user")
 
                                         if user:
                                             if is_image:
+                                                print(post_content.get('content', ''), "meu pau")
+                                                
                                                 insert_post_image(user['id_user'], post_content.get('content', ''), file_base64)
                                             else:
                                                 insert_post_video(user['id_user'], post_content.get('content', ''), file_base64)

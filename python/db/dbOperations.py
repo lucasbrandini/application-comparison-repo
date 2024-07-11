@@ -127,7 +127,7 @@ def insert_post(user_id, post):
         connection.close()
 #insert post with image
 def insert_post_image(user_id, post, image):
-    if not user_id or not post:
+    if not user_id:
         raise ValueError("User ID or post cannot be null")
 
     connection = get_connection()
@@ -142,7 +142,7 @@ def insert_post_image(user_id, post, image):
         connection.close()
 #insert post with video
 def insert_post_video(user_id, post, video):
-    if not user_id or not post:
+    if not user_id:
         raise ValueError("User ID or post cannot be null")
 
     connection = get_connection()

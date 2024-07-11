@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/public/style-home.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <title>Homepage</title>
 </head>
 <body>
@@ -20,17 +18,15 @@
             <div class="bannerTxt"> 
                 <span>Pessoas unidas<br></span>
                 <span>Uma boa comunidade<br></span>
-                <span>Tudo esta por aqui<br></span>
+                <span>Tudo está por aqui<br></span>
             </div>
             <div class="subBanner">
                 <h2 class="subText">Conecte-se com uma <strong>comunidade vibrante e unida.</strong></h2>
-                <h2 class="subText">Descubra tudo o que voc&ecirc; precisa <strong>em um s&oacute; lugar.</strong></h2>
-                <h2 class="subText">Junte-se a n&oacute;s e <strong>fa&ccedil;a parte da experi&ecirc;ncia!</strong></h2>
+                <h2 class="subText">Descubra tudo o que você precisa <strong>em um só lugar.</strong></h2>
+                <h2 class="subText">Junte-se a nós e <strong>faça parte da experiência!</strong></h2>
             </div>
-            <button class="btnPost"><a href="/commits">Commmits page</a></button>
-            <a href="/create-post">
-                <button class="btnPost">Crie sua postagem aqui!</button>
-            </a>
+            <button class="btnPost" id="openModal">Crie sua postagem aqui!</button>
+            
         </section>
 
         <section class="cardBox">
@@ -43,7 +39,7 @@
                             <h4 class="postTime">H {{post_date}}</h4>
                         </div>
                         <div class="endTop">
-                            <h4 class="comentarios">(146)coment&aacuterios</h4>
+                            <h4 class="comentarios">(146)comentários</h4>
                         </div>
                     </div>
                     <h5 class="cardText">{{post}}</h5>
@@ -63,5 +59,41 @@
             {{/each}}   
         </section>
     </main>
+
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="/create-post" method="POST" enctype="multipart/form-data">
+                <label for="content">Content</label>
+                <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                <label for="file">File</label>
+                <input type="file" name="file" id="file" accept="image/*,video/mp4">
+                <button type="submit">enter</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+
+        var btn = document.getElementById("openModal");
+
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>

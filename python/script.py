@@ -3,6 +3,10 @@ from routes.getRoutes import GetRoutes
 from routes.postRoutes import PostRoutes
 from db.dbSetupTables import create_tables
 
+import os
+
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 # Cria as tabelas
 create_tables()
 

@@ -1,0 +1,10 @@
+@media (max-width: 900px) {
+    main {
+        flex-direction: row;
+        width: 428px;
+    }
+
+    .text-center{
+        flex-direction: column;
+    }
+}

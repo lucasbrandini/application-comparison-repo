@@ -192,9 +192,43 @@ header div a {
     height: 1.75rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     main {
         flex-direction: column;
-        gap: 2rem;
+        width: 100%;
+        align-items: center;
+        gap: 0rem;
+        margin: 0rem 0;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    #main-image {
+        width: 80%;
+        margin-top: 0px;
+    }
+
+    header {
+        justify-content: center;
+        margin: 1.25rem 0;
+    }
+
+    header p {
+        font-size: 1rem;
+        margin-left: .625rem;
+    }
+
+    header div {
+        width: 4rem;
+        height: 2rem;
+        margin-right: .625rem;
+    }
+
+    header div a p {
+        font-size: .825rem;
+        margin-top: .375rem; 
+        margin-left: .125rem; 
     }
 }

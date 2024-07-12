@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/style-commits.css">
+    {{head}}
+    <link rel="stylesheet" href="/public/styles/stylesCommits.css">
     <title>Commits</title>
 </head>
 <body>
@@ -23,16 +19,6 @@
         {{/each}}
     </ul>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const formattedDate = document.querySelectorAll('.formatDate');
-
-            formattedDate.forEach(dateElement => {
-                const originalDate = dateElement.textContent; 
-                const formattedDate = new Date(originalDate).toLocaleDateString('pt-BR'); 
-                dateElement.textContent = formattedDate; 
-            });
-        });
-    </script>
+    <script src="../public/scripts/scriptsCommits.js"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@ def datetime_converter(o):
     if isinstance(o, datetime.datetime):
         return o.isoformat()
 
-class GetRoutes(BaseHTTPRequestHandler):
+class routesGet(BaseHTTPRequestHandler):
 
     def do_GET(self):
         routes = {

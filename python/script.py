@@ -1,17 +1,13 @@
 from http.server import HTTPServer
-from routes.getRoutes import GetRoutes
-from routes.postRoutes import PostRoutes
+from routes.routesGet import routesGet
+from routes.routesPost import routesPost
 from db.dbSetupTables import create_tables
-
-import os
-
-os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 # Cria as tabelas
 create_tables()
 
 # Cria uma nova classe que herda de PostRoutes e GetRoutes
-class CombinedRoutes(PostRoutes, GetRoutes):
+class CombinedRoutes(routesPost, routesGet):
     pass
 
 # Configura e inicia o servidor

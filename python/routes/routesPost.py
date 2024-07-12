@@ -11,7 +11,7 @@ from db.dbOperations import insert_user, select_user_by_name, insert_post, inser
 # Defina o número de salt rounds
 saltRounds = 10
 
-class PostRoutes(BaseHTTPRequestHandler):
+class routesPost(BaseHTTPRequestHandler):
 
     def do_POST(self):
         routes = {

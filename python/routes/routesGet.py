@@ -114,7 +114,6 @@ class routesGet(BaseHTTPRequestHandler):
         except Exception as e:
             self.send_error_response(500, "Server Error: " + str(e))
 
-
     def render_404(self):
         self.send_error_response(404, "Rota nao encontrada.")
 
@@ -196,7 +195,6 @@ class routesGet(BaseHTTPRequestHandler):
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
 
-
     def render_commits(self):
         try:
             # Verifica se o token JWT está presente nos cookies
@@ -261,7 +259,6 @@ class routesGet(BaseHTTPRequestHandler):
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))    
 
-    # Render posts page
     def render_posts(self):
         try:
             # Verifica se o token JWT está presente nos cookies

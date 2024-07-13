@@ -72,6 +72,10 @@ class routesGet(BaseHTTPRequestHandler):
                             with open(os.path.join('templates', 'home.hbs'), 'r') as file:
                                 source = file.read()
                             template = compiler.compile(source)
+
+                            with open(os.path.join('templates', 'head.hbs'), 'r') as file:
+                                head_source = file.read()
+                            head_template = compiler.compile(head_source)
                             
                             # Compila o template para o cabeçalho da página
                             with open(os.path.join('templates', 'header.hbs'), 'r') as file:
@@ -91,7 +95,7 @@ class routesGet(BaseHTTPRequestHandler):
                                     post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
                             
                             # Escreve a resposta com o template renderizado
-                            self.wfile.write(template({'posts': posts, 'header': header_template}).encode())
+                            self.wfile.write(template({'posts': posts, 'header': header_template, 'head' : head_template}).encode())
                         else:
                             # Token inválido
                             self.send_error_response(401, "Unauthorized: Invalid token")
@@ -119,15 +123,19 @@ class routesGet(BaseHTTPRequestHandler):
 
     def render_login(self):
         compiler = Compiler()
-        print(os.getcwd())
+
         with open(os.path.join('templates', 'login.hbs'), 'r') as file:
             source = file.read()
-            
         template = compiler.compile(source)
+
+        with open(os.path.join('templates', 'head.hbs'), 'r') as file:
+            head_source = file.read()
+        head_template = compiler.compile(head_source)
+
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(template({}).encode())
+        self.wfile.write(template({'head': head_template}).encode())
 
     def render_register(self):
         compiler = Compiler()
@@ -135,10 +143,15 @@ class routesGet(BaseHTTPRequestHandler):
         with open(os.path.join('templates', 'register.hbs'), 'r') as file:
             source = file.read()
         template = compiler.compile(source)
+
+        with open(os.path.join('templates', 'head.hbs'), 'r') as file:
+            head_source = file.read()
+        head_template = compiler.compile(head_source)
+
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
-        self.wfile.write(template({}).encode())
+        self.wfile.write(template({'head' : head_template}).encode())
 
     def render_create_post(self):
         try:

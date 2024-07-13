@@ -88,7 +88,7 @@ def select_post(post_id):
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT * FROM Posts WHERE id_posts = %s"
+        sql = "SELECT * FROM posts WHERE id_posts = %s"
         cursor.execute(sql, (post_id,))
         results = cursor.fetchall()
         return results
@@ -118,7 +118,7 @@ def insert_post(user_id, post):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO Posts (p_id_user, post) VALUES (%s, %s)"
+        sql = "INSERT INTO posts (p_id_user, post) VALUES (%s, %s)"
         cursor.execute(sql, (user_id, post))
         connection.commit()
         return cursor.lastrowid
@@ -133,7 +133,7 @@ def insert_post_image(user_id, post, image):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO Posts (p_id_user, post, post_image) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO posts (p_id_user, post, post_image) VALUES (%s, %s, %s)"
         cursor.execute(sql, (user_id, post, image))
         connection.commit()
         return cursor.lastrowid
@@ -148,7 +148,7 @@ def insert_post_video(user_id, post, video):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO Posts (p_id_user, post, post_video) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO posts (p_id_user, post, post_video) VALUES (%s, %s, %s)"
         cursor.execute(sql, (user_id, post, video))
         connection.commit()
         return cursor.lastrowid
@@ -164,7 +164,7 @@ def update_post(post_id, user_id, post):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "UPDATE Posts SET p_id_user = %s, post = %s WHERE id_posts = %s"
+        sql = "UPDATE posts SET p_id_user = %s, post = %s WHERE id_posts = %s"
         cursor.execute(sql, (user_id, post, post_id))
         connection.commit()
     finally:
@@ -179,7 +179,7 @@ def delete_post(post_id):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "DELETE FROM Posts WHERE id_posts = %s"
+        sql = "DELETE FROM posts WHERE id_posts = %s"
         cursor.execute(sql, (post_id,))
         connection.commit()
     finally:

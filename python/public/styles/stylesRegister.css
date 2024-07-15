@@ -192,9 +192,55 @@ header div a {
     height: 1.75rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     main {
         flex-direction: column;
-        gap: 2rem;
+        justify-content: center;
+        width: 100%;
+        gap: 0rem;
+        margin: 0rem;
+        align-items: center;
+    }
+
+    #main-image {
+        width: 80%;
+        margin-top: 0px;
+    }
+
+    header {
+        justify-content: center;
+        margin: 1.25rem 0;
+    }
+    
+    header p {
+        font-size: .9375rem;
+        margin-left: .625rem;
+    }
+    
+    header div {
+        width: 4rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+    }
+
+    header div a {
+        text-decoration: none;
+    }
+    
+    header div a p {
+        width: 4rem;
+        line-height: 1.25rem;
+        font-size: .825rem;
+        margin: 0rem;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    .usernameField, .passwordField, #submit {
+        width: 100%;
     }
 }

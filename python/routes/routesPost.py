@@ -4,9 +4,10 @@ import base64
 import cgi
 import http.cookies
 import jwt
+import json
 import bcrypt
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image, insert_post_video
+from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image, insert_post_video, upvote, downvote
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -22,6 +23,8 @@ class routesPost(BaseHTTPRequestHandler):
             '/register': self.handle_register,
             '/login': self.handle_login,
             '/create-post': self.handle_create_post,
+            '/upvote': self.handle_upvote,
+            '/downvote': self.handle_downvote
         }
 
         if self.path in routes:
@@ -159,3 +162,52 @@ class routesPost(BaseHTTPRequestHandler):
         self.send_response(302)
         self.send_header('Location', location)
         self.end_headers()
+        
+    @verify_jwt
+    def handle_upvote(self):
+        try:
+            content_length = int(self.headers['Content-Length'])
+            post_data = json.loads(self.rfile.read(content_length).decode('utf-8'))
+            post_id = post_data.get('post_id')
+
+            user_name = self.decoded_token.get('name_user')
+            user = select_user_by_name(user_name)
+            if user:
+                upvote(post_id)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+            else:
+                self.send_error(404, "User not found")
+        except Exception as e:
+            logger.error(f"Exception during upvote: {e}")
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
+
+    @verify_jwt
+    def handle_downvote(self):
+        try:
+            content_length = int(self.headers['Content-Length'])
+            post_data = json.loads(self.rfile.read(content_length).decode('utf-8'))
+            post_id = post_data.get('post_id')
+
+            user_name = self.decoded_token.get('name_user')
+            user = select_user_by_name(user_name)
+            if user:
+                downvote(post_id)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+            else:
+                self.send_error(404, "User not found")
+        except Exception as e:
+            logger.error(f"Exception during downvote: {e}")
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
+

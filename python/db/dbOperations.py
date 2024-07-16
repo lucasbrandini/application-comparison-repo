@@ -265,12 +265,59 @@ def delete_comment(comment_id):
         connection.close()
 
 
+def upvote(post_id):
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE posts SET post_votes = post_votes + 1 WHERE id_posts = %s"
+        cursor.execute(sql, (post_id,))
+        connection.commit()
+    finally:
+        cursor.close()
+        connection.close()
+        
+def downvote(post_id):
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE posts SET post_votes = post_votes - 1 WHERE id_posts = %s"
+        cursor.execute(sql, (post_id,))
+        connection.commit()
+    finally:
+        cursor.close()
+        connection.close()
+
+
 #! select to get all (users, posts, images, date) to display on the home page ordered by date posted
 def select_all_posts_ordered():
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        sql = "SELECT u.name_user, p.post, p.post_image, p.post_video, CASE WHEN TIMESTAMPDIFF(SECOND, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, p.post_date, NOW()), 's') WHEN TIMESTAMPDIFF(MINUTE, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, p.post_date, NOW()), 'min') WHEN TIMESTAMPDIFF(HOUR, p.post_date, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, p.post_date, NOW()), 'h') WHEN TIMESTAMPDIFF(DAY, p.post_date, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(DAY, p.post_date, NOW()), 'd') WHEN TIMESTAMPDIFF(WEEK, p.post_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, p.post_date, NOW()), 'w') ELSE CONCAT(TIMESTAMPDIFF(MONTH, p.post_date, NOW()), 'm') END AS post_date FROM posts p JOIN users u ON p.p_id_user = u.id_user ORDER BY p.post_date DESC"
+        sql = """
+            SELECT 
+                u.name_user, 
+                p.id_posts,
+                p.post, 
+                p.post_image, 
+                p.post_video, 
+                p.post_votes,
+                CASE 
+                    WHEN TIMESTAMPDIFF(SECOND, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, p.post_date, NOW()), 's') 
+                    WHEN TIMESTAMPDIFF(MINUTE, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, p.post_date, NOW()), 'min') 
+                    WHEN TIMESTAMPDIFF(HOUR, p.post_date, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, p.post_date, NOW()), 'h') 
+                    WHEN TIMESTAMPDIFF(DAY, p.post_date, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(DAY, p.post_date, NOW()), 'd') 
+                    WHEN TIMESTAMPDIFF(WEEK, p.post_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, p.post_date, NOW()), 'w') 
+                    ELSE CONCAT(TIMESTAMPDIFF(MONTH, p.post_date, NOW()), 'm') 
+                END AS post_date 
+            FROM 
+                posts p 
+            JOIN 
+                users u 
+            ON 
+                p.p_id_user = u.id_user 
+            ORDER BY 
+                p.post_date DESC
+        """
         cursor.execute(sql)
         results = cursor.fetchall()
         return results

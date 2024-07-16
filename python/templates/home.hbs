@@ -46,8 +46,13 @@
                     {{/if}}
                     <div class="cardBottom">
                         <div class="voteStyle">
-                            <button class="upvote"><img class="upvoteImg" src="/public/assets/upvote.svg" alt="upvote">6.8k</button>
-                            <button class="downvote"><img class="downvoteImg" src="/public/assets/downvote.svg" alt="downvote"></button>
+                            <button id="upvote" class="upvote" data-post-id="{{id_posts}}">
+                                <img class="upvoteImg" src="/public/assets/upvote.svg" alt="upvote">
+                                {{post_votes}} | {{id_posts}}
+                            </button>
+                            <button id="downvote" class="downvote" data-post-id="{{id_posts}}">
+                                <img class="downvoteImg" src="/public/assets/downvote.svg" alt="downvote">
+                            </button>
                         </div>
                     </div>
                 </div>    

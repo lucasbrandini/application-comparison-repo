@@ -37,6 +37,7 @@ def create_tables():
             post_image LONGBLOB,
             post_video LONGBLOB,
             post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            post_votes INT DEFAULT 0,
             FOREIGN KEY (p_id_user) REFERENCES users(id_user)
             """
         },
@@ -51,7 +52,7 @@ def create_tables():
             FOREIGN KEY (p_id_user) REFERENCES users(id_user),
             FOREIGN KEY (p_id_post) REFERENCES posts(id_posts)
             """
-        },
+        }
     ]
 
     try:

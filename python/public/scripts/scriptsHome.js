@@ -33,46 +33,51 @@ window.onclick = function(event) {
 var upvote = document.getElementById('upvote');
 var downvote = document.getElementById('downvote');
 
-upvote.addEventListener('click', function() {
-    var postId = this.getAttribute('data-post-id');
-    fetch('/upvote', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming you store JWT token in localStorage
-        },
-        body: JSON.stringify({ post_id: postId })
-    }).then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Upvoted successfully');
-            window.location.href = '/home'; // Redirect to home after upvote
-        } else {
-            console.error('Failed to upvote:', data.message);
-        }
-    }).catch(error => {
-        console.error('Error during upvote:', error);
+document.querySelectorAll('.upvote').forEach(button => {
+    button.addEventListener('click', function() {
+        var postId = this.getAttribute('data-post-id');
+        fetch('/upvote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming you store JWT token in localStorage
+            },
+            body: JSON.stringify({ post_id: postId })
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Upvoted successfully');
+                window.location.href = '/home'; // Redirect to home after upvote
+            } else {
+                console.error('Failed to upvote:', data.message);
+            }
+        }).catch(error => {
+            console.error('Error during upvote:', error);
+        });
     });
 });
 
-downvote.addEventListener('click', function() {
-    var postId = this.getAttribute('data-post-id');
-    fetch('/downvote', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming you store JWT token in localStorage
-        },
-        body: JSON.stringify({ post_id: postId })
-    }).then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Downvoted successfully');
-            window.location.href = '/home'; // Redirect to home after downvote
-        } else {
-            console.error('Failed to downvote:', data.message);
-        }
-    }).catch(error => {
-        console.error('Error during downvote:', error);
+document.querySelectorAll('.downvote').forEach(button => {
+    button.addEventListener('click', function() {
+        var postId = this.getAttribute('data-post-id');
+        fetch('/downvote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming you store JWT token in localStorage
+            },
+            body: JSON.stringify({ post_id: postId })
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Downvoted successfully');
+                window.location.href = '/home'; // Redirect to home after downvote
+            } else {
+                console.error('Failed to downvote:', data.message);
+            }
+        }).catch(error => {
+            console.error('Error during downvote:', error);
+        });
     });
 });
+

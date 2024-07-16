@@ -1,12 +1,13 @@
 document.getElementById('postForm').addEventListener('submit', function(event) {
     var content = document.getElementById('content').value.trim();
     var file = document.getElementById('file').files.length > 0;
-    
-if (!content && !file) {
+
+    if (!content && !file) {
         event.preventDefault();
         alert('BOTA ALGUMA COISA AI MEU NOBRE');
     }
 });
+
 var modal = document.getElementById("myModal");
 
 var btn = document.getElementById("openModal");
@@ -14,7 +15,6 @@ var btn = document.getElementById("openModal");
 var span = document.getElementsByClassName("close")[0];
 
 var textarea = document.getElementById("content");
-
 
 btn.onclick = function() {
     modal.style.display = "block";
@@ -46,6 +46,7 @@ upvote.addEventListener('click', function() {
     .then(data => {
         if (data.success) {
             console.log('Upvoted successfully');
+            window.location.href = '/home'; // Redirect to home after upvote
         } else {
             console.error('Failed to upvote:', data.message);
         }
@@ -67,6 +68,7 @@ downvote.addEventListener('click', function() {
     .then(data => {
         if (data.success) {
             console.log('Downvoted successfully');
+            window.location.href = '/home'; // Redirect to home after downvote
         } else {
             console.error('Failed to downvote:', data.message);
         }
@@ -74,4 +76,3 @@ downvote.addEventListener('click', function() {
         console.error('Error during downvote:', error);
     });
 });
-

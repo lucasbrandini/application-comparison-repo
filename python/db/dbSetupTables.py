@@ -52,6 +52,19 @@ def create_tables():
             FOREIGN KEY (p_id_user) REFERENCES users(id_user),
             FOREIGN KEY (p_id_post) REFERENCES posts(id_posts)
             """
+        },
+        {
+            "tableName": "votes",
+            "columns": """
+            id_vote INT AUTO_INCREMENT PRIMARY KEY,
+            id_user INT,
+            id_post INT,
+            vote_type ENUM('upvote', 'downvote'),
+            vote_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (id_user) REFERENCES users(id_user),
+            FOREIGN KEY (id_post) REFERENCES posts(id_posts),
+            UNIQUE KEY unique_vote (id_user, id_post)
+            """
         }
     ]
 

@@ -173,13 +173,14 @@ class routesPost(BaseHTTPRequestHandler):
             user_name = self.decoded_token.get('name_user')
             user = select_user_by_name(user_name)
             if user:
-                upvote(post_id)
+                user_id = user['id_user']
+                message = upvote(post_id, user_id)
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
-                self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+                self.wfile.write(json.dumps({'success': True, 'message': message}).encode('utf-8'))
             else:
-                self.send_error(404, "User not found")
+                self.send_error_response(404, "User not found")
         except Exception as e:
             logger.error(f"Exception during upvote: {e}")
             self.send_response(500)
@@ -197,17 +198,17 @@ class routesPost(BaseHTTPRequestHandler):
             user_name = self.decoded_token.get('name_user')
             user = select_user_by_name(user_name)
             if user:
-                downvote(post_id)
+                user_id = user['id_user']
+                message = downvote(post_id, user_id)
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
-                self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+                self.wfile.write(json.dumps({'success': True, 'message': message}).encode('utf-8'))
             else:
-                self.send_error(404, "User not found")
+                self.send_error_response(404, "User not found")
         except Exception as e:
             logger.error(f"Exception during downvote: {e}")
             self.send_response(500)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
-

@@ -265,30 +265,73 @@ def delete_comment(comment_id):
         connection.close()
 
 
-def upvote(post_id):
+def upvote(post_id, user_id):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "UPDATE posts SET post_votes = post_votes + 1 WHERE id_posts = %s"
-        cursor.execute(sql, (post_id,))
+
+        # Verificar se o usuário já votou no post
+        sql_check = "SELECT vote_type FROM votes WHERE id_user = %s AND id_post = %s"
+        cursor.execute(sql_check, (user_id, post_id))
+        vote = cursor.fetchone()
+
+        if vote:
+            if vote[0] == 'upvote':
+                return "You have already upvoted this post."
+            else:
+                # Alterar downvote para upvote
+                sql_update_vote = "UPDATE votes SET vote_type = 'upvote' WHERE id_user = %s AND id_post = %s"
+                cursor.execute(sql_update_vote, (user_id, post_id))
+                sql_update_post = "UPDATE posts SET post_votes = post_votes + 2 WHERE id_posts = %s"
+                cursor.execute(sql_update_post, (post_id,))
+        else:
+            # Inserir novo upvote
+            sql_insert_vote = "INSERT INTO votes (id_user, id_post, vote_type) VALUES (%s, %s, 'upvote')"
+            cursor.execute(sql_insert_vote, (user_id, post_id))
+            sql_update_post = "UPDATE posts SET post_votes = post_votes + 1 WHERE id_posts = %s"
+            cursor.execute(sql_update_post, (post_id,))
+
         connection.commit()
+        return "Upvoted successfully."
+    finally:
+        cursor.close()
+        connection.close()
+
+def downvote(post_id, user_id):
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+
+        # Verificar se o usuário já votou no post
+        sql_check = "SELECT vote_type FROM votes WHERE id_user = %s AND id_post = %s"
+        cursor.execute(sql_check, (user_id, post_id))
+        vote = cursor.fetchone()
+
+        if vote:
+            if vote[0] == 'downvote':
+                return "You have already downvoted this post."
+            else:
+                # Alterar upvote para downvote
+                sql_update_vote = "UPDATE votes SET vote_type = 'downvote' WHERE id_user = %s AND id_post = %s"
+                cursor.execute(sql_update_vote, (user_id, post_id))
+                sql_update_post = "UPDATE posts SET post_votes = post_votes - 2 WHERE id_posts = %s"
+                cursor.execute(sql_update_post, (post_id,))
+        else:
+            # Inserir novo downvote
+            sql_insert_vote = "INSERT INTO votes (id_user, id_post, vote_type) VALUES (%s, %s, 'downvote')"
+            cursor.execute(sql_insert_vote, (user_id, post_id))
+            sql_update_post = "UPDATE posts SET post_votes = post_votes - 1 WHERE id_posts = %s"
+            cursor.execute(sql_update_post, (post_id,))
+
+        connection.commit()
+        return "Downvoted successfully."
     finally:
         cursor.close()
         connection.close()
         
-def downvote(post_id):
-    connection = get_connection()
-    try:
-        cursor = connection.cursor()
-        sql = "UPDATE posts SET post_votes = post_votes - 1 WHERE id_posts = %s"
-        cursor.execute(sql, (post_id,))
-        connection.commit()
-    finally:
-        cursor.close()
-        connection.close()
 
 
-#! select to get all (users, posts, images, date) to display on the home page ordered by date posted
+
 def select_all_posts_ordered():
     connection = get_connection()
     try:
@@ -316,7 +359,7 @@ def select_all_posts_ordered():
             ON 
                 p.p_id_user = u.id_user 
             ORDER BY 
-                p.post_date DESC
+                p.post_votes DESC, p.post_date DESC
         """
         cursor.execute(sql)
         results = cursor.fetchall()

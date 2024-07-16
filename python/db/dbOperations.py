@@ -277,7 +277,11 @@ def upvote(post_id, user_id):
 
         if vote:
             if vote[0] == 'upvote':
-                return "You have already upvoted this post."
+                # Remover upvote
+                sql_delete_vote = "DELETE FROM votes WHERE id_user = %s AND id_post = %s"
+                cursor.execute(sql_delete_vote, (user_id, post_id))
+                sql_update_post = "UPDATE posts SET post_votes = post_votes - 1 WHERE id_posts = %s"
+                cursor.execute(sql_update_post, (post_id,))
             else:
                 # Alterar downvote para upvote
                 sql_update_vote = "UPDATE votes SET vote_type = 'upvote' WHERE id_user = %s AND id_post = %s"
@@ -309,7 +313,11 @@ def downvote(post_id, user_id):
 
         if vote:
             if vote[0] == 'downvote':
-                return "You have already downvoted this post."
+                # Remover downvote
+                sql_delete_vote = "DELETE FROM votes WHERE id_user = %s AND id_post = %s"
+                cursor.execute(sql_delete_vote, (user_id, post_id))
+                sql_update_post = "UPDATE posts SET post_votes = post_votes + 1 WHERE id_posts = %s"
+                cursor.execute(sql_update_post, (post_id,))
             else:
                 # Alterar upvote para downvote
                 sql_update_vote = "UPDATE votes SET vote_type = 'downvote' WHERE id_user = %s AND id_post = %s"
@@ -328,6 +336,7 @@ def downvote(post_id, user_id):
     finally:
         cursor.close()
         connection.close()
+
         
 
 

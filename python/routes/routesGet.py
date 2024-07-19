@@ -2,7 +2,7 @@ import io
 import sys
 
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_all_posts_ordered
+from db.dbOperations import select_all_posts_ordered, find_vote, select_user_by_name
 import json
 import datetime
 from pybars import Compiler
@@ -57,6 +57,29 @@ class routesGet(BaseHTTPRequestHandler):
     def render_home(self):
         try:
             posts = select_all_posts_ordered()
+            
+            id_user = self.decoded_token.get('name_user')
+            user = select_user_by_name(id_user)
+            
+            user_vote = user['id_user']
+            
+            finds = find_vote(user_vote)
+            
+            # Debugging prints
+            print("User Votes:", finds)
+            print("Posts:", posts)
+            
+            # Crie um dicionário para mapear os votos do usuário pelos id_posts
+            votes_map = {find['id_posts']: find['user_vote'] for find in finds}
+            
+            for post in posts:
+                post_id = post['id_posts']
+                post['user_vote'] = votes_map.get(post_id, 'no vote')
+                if 'post_image' in post and post['post_image'] is not None:
+                    post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
+                elif 'post_video' in post and post['post_video'] is not None:
+                    post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
+            
             compiler = Compiler()
             with open(os.path.join('templates', 'home.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
@@ -70,11 +93,7 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
-            for post in posts:
-                if 'post_image' in post and post['post_image'] is not None:
-                    post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
-                elif 'post_video' in post and post['post_video'] is not None:
-                    post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
+            
             self.wfile.write(template({'posts': posts, 'header': header_template, 'head': head_template}).encode('utf-8'))
         except Exception as e:
             self.send_error_response(500, "Server Error: " + str(e))
@@ -158,27 +177,6 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
             self.wfile.write(template({'commits': commits}).encode('utf-8'))
-        except Exception as e:
-            print(e)
-            self.send_error_response(500, "Server Error: " + str(e))
-
-    @verify_jwt
-    def render_posts(self):
-        try:
-            posts = select_all_posts_ordered()
-            compiler = Compiler()
-            with open(os.path.join('templates', 'render-posts.hbs'), 'r', encoding='utf-8') as file:
-                source = file.read()
-            template = compiler.compile(source)
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html; charset=utf-8')
-            self.end_headers()
-            for post in posts:
-                if 'post_image' in post and post['post_image'] is not None:
-                    post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
-                elif 'post_video' in post and post['post_video'] is not None:
-                    post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
-            self.wfile.write(template({'posts': posts}).encode('utf-8'))
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))

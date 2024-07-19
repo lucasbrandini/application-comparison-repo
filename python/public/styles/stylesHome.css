@@ -188,6 +188,10 @@ strong {
     height: 100%;
 }
 
+#userVote {
+    display: none;
+}
+
 .upvoteImg {
     height: 1.25rem;
     width: 1.25rem;

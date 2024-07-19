@@ -337,9 +337,34 @@ def downvote(post_id, user_id):
         cursor.close()
         connection.close()
 
-        
-
-
+def find_vote(user_id):
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql_find_vote = """
+            SELECT 
+                p.id_posts, 
+                p.post, 
+                p.post_date, 
+                p.post_votes, 
+                COALESCE(v.vote_type, 'no vote') AS user_vote 
+            FROM 
+                posts p 
+            LEFT JOIN 
+                (SELECT * FROM votes WHERE id_user = %s) v 
+            ON 
+                p.id_posts = v.id_post 
+            ORDER BY 
+                p.post_date
+        """
+        cursor.execute(sql_find_vote, (user_id,))
+        results = cursor.fetchall()
+        return results
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        connection.close()
 
 def select_all_posts_ordered():
     connection = get_connection()

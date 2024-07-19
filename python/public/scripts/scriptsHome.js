@@ -16,6 +16,12 @@ var span = document.getElementsByClassName("close")[0];
 
 var textarea = document.getElementById("content");
 
+var userVote = document.querySelectorAll('.userVoteText');
+
+userVote.forEach(function (userVoteElement) {
+    console.log(userVoteElement.innerHTML);
+});
+
 btn.onclick = function() {
     modal.style.display = "block";
 }

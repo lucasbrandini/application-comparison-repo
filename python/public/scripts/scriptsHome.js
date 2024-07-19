@@ -16,10 +16,30 @@ var span = document.getElementsByClassName("close")[0];
 
 var textarea = document.getElementById("content");
 
-var userVote = document.querySelectorAll('.userVoteText');
+var voteReceive = document.querySelectorAll('.voteText');
 
-userVote.forEach(function (userVoteElement) {
-    console.log(userVoteElement.innerHTML);
+var upvoteVote = document.querySelectorAll('.upvotePath');
+
+var downvoteVote = document.querySelectorAll('.downvotePath');
+
+upvoteVote.forEach(function (userVoteElement, index) {
+    var vote = voteReceive[index].innerText;   
+    
+    if (vote == 'upvote') {
+        userVoteElement.style.fill = '#d1d8ff';
+    } else {
+        userVoteElement.style.fill = '';
+    }
+});
+
+downvoteVote.forEach(function (userVoteElement, index) {
+    var vote = voteReceive[index].innerText;
+    
+    if (vote == 'downvote') {
+        userVoteElement.style.fill = '#d1d8ff';
+    } else {
+        userVoteElement.style.fill = '';
+    }
 });
 
 btn.onclick = function() {

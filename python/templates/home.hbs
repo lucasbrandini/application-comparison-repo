@@ -47,7 +47,8 @@
                             <h4 class="comentarios">(146)comentários</h4>
                         </div>
                     </div>
-                    <h5 class="cardText">{{post}}</h5>
+                    <h4 class="cardText">titulo: {{post_title}}</h4>
+                    <h5 class="cardText">post: {{post}}</h5>
                     {{#if post_image}}
                         <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
                     {{/if}}
@@ -82,16 +83,20 @@
     </main>
 
     <div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <form id="postForm" action="/create-post" method="POST" enctype="multipart/form-data">
-            <label for="content">Content</label>
-            <textarea name="content" id="content" cols="30" rows="10"></textarea>
-            <label for="file">File</label>
-            <input type="file" name="file" id="file" accept="image/*,video/mp4">
-            <button type="submit">Enter</button>
-        </form>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="postForm" action="/create-post" method="POST" enctype="multipart/form-data">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title">
+                <label for="content">Content</label>
+                <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                <label for="file">File</label>
+                <input type="file" name="file" id="file" accept="image/*,video/mp4">
+                <button type="submit">Enter</button>
+            </form>
+        </div>
     </div>
+
 </div>
 <script src="../public/scripts/scriptsHome.js"></script>
 </body>

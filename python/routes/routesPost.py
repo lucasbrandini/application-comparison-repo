@@ -96,6 +96,8 @@ class routesPost(BaseHTTPRequestHandler):
                 fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': content_type})
                 post_content = {key: fields[key].value for key in fields if fields[key].value}
 
+                post_title = post_content.get('title')  # Adicionando o título do post
+
                 if 'file' in fields:
                     file_field = fields['file']
                     if self.is_valid_file_field(file_field):
@@ -106,9 +108,9 @@ class routesPost(BaseHTTPRequestHandler):
                         user = select_user_by_name(user_name)
                         if user:
                             if is_image:
-                                insert_post_image(user['id_user'], post_content.get('content', ''), file_base64)
+                                insert_post_image(user['id_user'], post_title, post_content.get('content', ''), file_base64)
                             else:
-                                insert_post_video(user['id_user'], post_content.get('content', ''), file_base64)
+                                insert_post_video(user['id_user'], post_title, post_content.get('content', ''), file_base64)
 
                             self.redirect_to('/home')
                         else:
@@ -119,7 +121,7 @@ class routesPost(BaseHTTPRequestHandler):
                     user_name = self.decoded_token.get('name_user')
                     user = select_user_by_name(user_name)
                     if user:
-                        insert_post(user['id_user'], post_content.get('content', ''))
+                        insert_post(user['id_user'], post_title, post_content.get('content', ''))
                         self.redirect_to('/home')
                     else:
                         self.send_error_response(404, "User not found")
@@ -129,6 +131,7 @@ class routesPost(BaseHTTPRequestHandler):
             logger.error(f"Exception during post creation: {e}")
             self.send_error_response(500, f"Server Error: {e}")
 
+    
     def is_valid_file_field(self, file_field):
         return isinstance(file_field, cgi.FieldStorage) and hasattr(file_field, 'file') and hasattr(file_field, 'filename') and hasattr(file_field, 'type')
 

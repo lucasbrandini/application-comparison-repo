@@ -13,6 +13,7 @@ var modal = document.getElementById("myModal");
 
 var btn = document.getElementById("openModal");
 
+
 var span = document.getElementsByClassName("close")[0];
 
 var textarea = document.getElementById("content");
@@ -56,6 +57,33 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    var openButton = document.getElementById('openModal');
+  
+    openButton.onclick = function() {
+      modal.classList.remove('hide');
+      modal.classList.add('show');
+    }
+  
+    modal.onclick = function(event) {
+      if (event.target == modal) {
+        modal.classList.remove('show');
+        modal.classList.add('hide');
+      }
+    }
+  });
 
 var upvote = document.getElementById('upvote');
 var downvote = document.getElementById('downvote');
@@ -123,19 +151,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function toggleDropdown() {
-  var dropdown = document.getElementById("myDropdown");
-  var icon = document.getElementById("toggleIcon");
-
-  dropdown.classList.toggle("show");
-
-  if (dropdown.classList.contains("show")) {
-    icon.src = "/public/assets/setaup.svg"; // Ícone para cima
-  } else {
-    icon.src = "/public/assets/setaright.svg"; // Ícone para a direita
-  }
-}
-
-function toggleDropdown() {
     var dropdown = document.getElementById("myDropdown");
     var icon = document.getElementById("toggleIcon");
   
@@ -147,6 +162,9 @@ function toggleDropdown() {
       icon.classList.remove("rotate"); // Remove a rotação
     }
   }
+
+ 
+  
   
 
 // Close the dropdown if the user clicks outside of it

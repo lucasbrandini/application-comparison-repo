@@ -188,7 +188,7 @@ strong {
     height: 100%;
 }
 
-.voteText {
+#userVote {
     display: none;
 }
 
@@ -240,4 +240,87 @@ strong {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.dropdown {
+    display: flex;
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+}
+
+.dropbtn {
+    background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px; 
+    display: flex; /* Para alinhar o ícone e o texto */
+    align-items: center; /* Para centralizar o ícone verticalmente */
+    justify-content: space-between; /* Espaçar o texto e o ícone */
+}
+
+.dropbtn img {
+    width: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+    height: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+    margin-left: 8px; /* Espaço entre o texto e o ícone */
+}
+
+.dropbtn span {
+    margin-left: 5px; /* Espaço entre o texto e o ícone */
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #555;
+}
+
+.dropdown-content {
+    display: block; /* Necessário para permitir transições */
+    position: absolute;
+    background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
+    width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 8px; 
+    margin-top: 3.0rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dropdown-content a {   
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+}
+
+.dropdown-content a img {
+    margin-right: 8px; 
+    width: 20px; 
+    height: 20px; 
+}
+
+.dropdown-content a:hover {
+    background-color: #5e6fce7a;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilo inicial do ícone */
+#toggleIcon {
+    transition: transform 0.4s ease;
+}
+
+/* Estilo do ícone quando o dropdown está aberto */
+#toggleIcon.rotate {
+    transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
 }

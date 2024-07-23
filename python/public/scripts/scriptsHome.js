@@ -107,3 +107,58 @@ document.querySelectorAll('.downvote').forEach(button => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", (event) => {
+  document.getElementById("settings").addEventListener("click", function () {
+    // Redirecionar para a página de configurações
+    window.location.href = "configurations.html"; // Substitua 'configurations.html' pelo caminho correto
+  });
+
+  document.getElementById("logout").addEventListener("click", function () {
+    // Excluir o cookie e redirecionar para a página de login
+    document.cookie =
+      "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "login"; // Substitua 'login.html' pelo caminho correto
+  });
+});
+
+function toggleDropdown() {
+  var dropdown = document.getElementById("myDropdown");
+  var icon = document.getElementById("toggleIcon");
+
+  dropdown.classList.toggle("show");
+
+  if (dropdown.classList.contains("show")) {
+    icon.src = "/public/assets/setaup.svg"; // Ícone para cima
+  } else {
+    icon.src = "/public/assets/setaright.svg"; // Ícone para a direita
+  }
+}
+
+function toggleDropdown() {
+    var dropdown = document.getElementById("myDropdown");
+    var icon = document.getElementById("toggleIcon");
+  
+    dropdown.classList.toggle("show");
+  
+    if (dropdown.classList.contains("show")) {
+      icon.classList.add("rotate"); // Adiciona a rotação
+    } else {
+      icon.classList.remove("rotate"); // Remove a rotação
+    }
+  }
+  
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function (event) {
+  if (!event.target.matches(".dropbtn") && !event.target.closest(".dropdown")) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var icon = document.getElementById("toggleIcon");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains("show")) {
+        openDropdown.classList.remove("show");
+        icon.src = "/public/assets/setaright.svg"; // Ícone para a direita
+      }
+    }
+  }
+};

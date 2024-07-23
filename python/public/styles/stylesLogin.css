@@ -188,6 +188,7 @@ header div a {
 .imgButton {
     width: 1.75rem;
     height: 1.75rem;
+    justify-content: center;
 }
 
 @media (max-width: 900px) {

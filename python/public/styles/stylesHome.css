@@ -202,7 +202,6 @@ strong {
     width: 1.25rem;
 }
 
-/* Modal container */
 .modal {
     display: none;
     position: fixed;
@@ -212,12 +211,12 @@ strong {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.0);
     padding-top: 60px;
-}
-
-/* Modal content */
-.modal-content {
+    transform: scale(0);
+  }
+  
+  .modal-content {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 20px;
@@ -226,7 +225,66 @@ strong {
     border-radius: 10px;
     display: flex;
     gap: 10px; /* Espaçamento entre os itens */
-}
+  }
+  
+  .modal-background {
+    display: table-cell;
+    background: rgba(0, 0, 0, .0);
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      background: rgba(0, 0, 0, .0);
+    }
+    100% {
+      background: rgba(0, 0, 0, .0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    0% {
+      background: rgba(0, 0, 0, .0);
+    }
+    100% {
+      background: rgba(0, 0, 0, .0);
+    }
+  }
+  
+  @keyframes scaleUp {
+    0% {
+      transform: scale(.3) translateY(1000px);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleDown {
+    0% {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(.8) translateY(1000px);
+      opacity: 0;
+    }
+  }
+  
+  .modal.show {
+    display: block;
+    transform: scale(1);
+    animation: scaleUp 0.5s ease forwards, fadeIn 0.5s ease forwards;
+  }
+  
+  .modal.hide {
+    display: block;
+    transform: scale(1);
+    animation: scaleDown 0.5s ease forwards, fadeOut 0.5s ease forwards;
+  } 
 
 /* Form elements */
 .modal-content label {

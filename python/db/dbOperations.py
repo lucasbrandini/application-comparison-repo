@@ -111,65 +111,53 @@ def select_all_posts():
 
 
 # Insert
-def insert_post(user_id, post):
+def insert_post(user_id, post_title, post):
     if not user_id or not post:
         raise ValueError("User ID or post cannot be null")
 
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO posts (p_id_user, post) VALUES (%s, %s)"
-        cursor.execute(sql, (user_id, post))
+        sql = "INSERT INTO posts (p_id_user, post_title, post) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (user_id, post_title, post))
         connection.commit()
         return cursor.lastrowid
     finally:
         cursor.close()
         connection.close()
-#insert post with image
-def insert_post_image(user_id, post, image):
+
+# Insert post with image
+def insert_post_image(user_id, post_title, post, image):
     if not user_id:
         raise ValueError("User ID or post cannot be null")
 
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO posts (p_id_user, post, post_image) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (user_id, post, image))
+        sql = "INSERT INTO posts (p_id_user, post_title, post, post_image) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, (user_id, post_title, post, image))
         connection.commit()
         return cursor.lastrowid
     finally:
         cursor.close()
         connection.close()
-#insert post with video
-def insert_post_video(user_id, post, video):
+
+# Insert post with video
+def insert_post_video(user_id, post_title, post, video):
     if not user_id:
         raise ValueError("User ID or post cannot be null")
 
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO posts (p_id_user, post, post_video) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (user_id, post, video))
+        sql = "INSERT INTO posts (p_id_user, post_title, post, post_video) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, (user_id, post_title, post, video))
         connection.commit()
         return cursor.lastrowid
     finally:
         cursor.close()
         connection.close()
 
-# Update
-def update_post(post_id, user_id, post):
-    if not post_id or not user_id or not post:
-        raise ValueError("Post ID, user ID or post cannot be null")
-
-    connection = get_connection()
-    try:
-        cursor = connection.cursor()
-        sql = "UPDATE posts SET p_id_user = %s, post = %s WHERE id_posts = %s"
-        cursor.execute(sql, (user_id, post, post_id))
-        connection.commit()
-    finally:
-        cursor.close()
-        connection.close()  
 
 # Delete
 def delete_post(post_id):
@@ -374,6 +362,7 @@ def select_all_posts_ordered():
             SELECT 
                 u.name_user, 
                 p.id_posts,
+                p.post_title,
                 p.post, 
                 p.post_image, 
                 p.post_video, 

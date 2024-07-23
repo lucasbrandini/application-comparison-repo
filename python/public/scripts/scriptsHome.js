@@ -1,8 +1,9 @@
 document.getElementById('postForm').addEventListener('submit', function(event) {
+    var title = document.getElementById('title').value.trim();
     var content = document.getElementById('content').value.trim();
     var file = document.getElementById('file').files.length > 0;
 
-    if (!content && !file) {
+    if (!content && !file && !title) {
         event.preventDefault();
         alert('BOTA ALGUMA COISA AI MEU NOBRE');
     }

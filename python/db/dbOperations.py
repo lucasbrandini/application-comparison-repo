@@ -353,6 +353,30 @@ def find_vote(user_id):
     finally:
         cursor.close()
         connection.close()
+        
+def change_username(user_id, new_name):
+    if not user_id or not new_name:
+        raise ValueError("User ID or new name cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        # Verifica se o novo nome já existe
+        sql_check = "SELECT * FROM users WHERE name_user = %s"
+        cursor.execute(sql_check, (new_name,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return "Username already exists."
+
+        # Atualiza o nome do usuário
+        sql_update = "UPDATE users SET name_user = %s WHERE id_user = %s"
+        cursor.execute(sql_update, (new_name, user_id))
+        connection.commit()
+        return "Username updated successfully."
+    finally:
+        cursor.close()
+        connection.close()
 
 def select_all_posts_ordered():
     connection = get_connection()

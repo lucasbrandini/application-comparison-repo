@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+    text-decoration: none;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+    background-color: #111427;
+    color: #FFFFFF;
+}
+
+.title {
+    text-align: center;
+    margin-top: 3.125rem;
+    color: #FFFFFF;
+}
+
+.container {
+    display: flex;
+    margin: 0 auto;
+    width: 500px;
+    flex-direction: column;
+
+    align-items: center;
+
+    font-size: 30px;
+    color: white;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    margin: 1.5625rem 1.5625rem 0 1.5625rem;
+    gap: .625rem;
+    background: #21274A;
+    border-radius: .75rem;
+    padding: 1.25rem;
+}
+
+.message {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.author {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #FFFFFF8F;
+}
+
+.date {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #FFFFFF8F;
+}

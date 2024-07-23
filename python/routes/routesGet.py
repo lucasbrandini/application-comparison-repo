@@ -24,6 +24,8 @@ class routesGet(BaseHTTPRequestHandler):
             '/404': self.render_404,
             '/commits': self.render_commits,
             '/create-post': self.render_create_post,
+            '/configuration': self.render_configuration,
+            '/change-username': self.render_change_username
         }
         if self.path in routes:
             routes[self.path]()
@@ -61,6 +63,8 @@ class routesGet(BaseHTTPRequestHandler):
             id_user = self.decoded_token.get('name_user')
             user = select_user_by_name(id_user)
             
+            login_user = user['name_user']
+            
             user_vote = user['id_user']
             
             finds = find_vote(user_vote)
@@ -94,9 +98,18 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
             
-            self.wfile.write(template({'posts': posts, 'header': header_template, 'head': head_template}).encode('utf-8'))
+            context = {
+                'posts': posts,
+                'user': user,
+                'header': header_template,
+                'head': head_template,
+                'name_user': login_user  # Adiciona o nome do usuário ao contexto
+            }
+            
+            self.wfile.write(template(context).encode('utf-8'))
         except Exception as e:
             self.send_error_response(500, "Server Error: " + str(e))
+
 
     def render_404(self):
         self.send_error_response(404, "Rota não encontrada.")
@@ -148,6 +161,42 @@ class routesGet(BaseHTTPRequestHandler):
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
+            
+    @verify_jwt
+    def render_configuration(self):
+        try: 
+            compiler = Compiler()
+            with open(os.path.join('templates', 'configuration.hbs'), 'r', encoding='utf-8') as file:
+                source = file.read()
+            template = compiler.compile(source)
+            with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
+                head_source = file.read()
+            head_template = compiler.compile(head_source)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(template({'head': head_template}).encode('utf-8'))
+        except Exception as e:
+                print(e)
+                self.send_error_response(500, "Server Error: " + str(e))
+                
+    @verify_jwt
+    def render_change_username(self):
+        try: 
+            compiler = Compiler()
+            with open(os.path.join('templates', 'username.hbs'), 'r', encoding='utf-8') as file:
+                source = file.read()
+            template = compiler.compile(source)
+            with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
+                head_source = file.read()
+            head_template = compiler.compile(head_source)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(template({'head': head_template}).encode('utf-8'))
+        except Exception as e:
+                print(e)
+                self.send_error_response(500, "Server Error: " + str(e))
 
     @verify_jwt
     def render_commits(self):

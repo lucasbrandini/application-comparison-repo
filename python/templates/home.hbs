@@ -84,20 +84,23 @@
 
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="postForm" action="/create-post" method="POST" enctype="multipart/form-data">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title">
-                <label for="content">Content</label>
-                <textarea name="content" id="content" cols="30" rows="10"></textarea>
-                <label for="file">File</label>
-                <input type="file" name="file" id="file" accept="image/*,video/mp4">
-                <button type="submit">Enter</button>
-            </form>
+            <div class="diviser1">
+                <form id="postForm" action="/create-post" method="POST" enctype="multipart/form-data">
+                    <label for="title">Título</label>
+                    <input type="text" name="title" id="title">
+                    <label for="content">Descrição</label>
+                    <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                    <label for="file">Arquivos (mp4, jpeg até 5mb)</label>
+                    <input type="file" name="file" id="file" accept="image/*,video/mp4">
+            </div>
+            <div class="diviser2">
+                    <span class="close">&times;</span>
+                    <button type="submit" class="btnSubmit" form="postForm">Criar</button>
+                </form>
+            </div>     
         </div>
-    </div>
+    </div>  
 
-</div>
 <script src="../public/scripts/scriptsHome.js"></script>
 </body>
 </html>

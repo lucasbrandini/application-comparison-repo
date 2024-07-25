@@ -5,27 +5,59 @@ document.getElementById('postForm').addEventListener('submit', function(event) {
 
     if (!content && !file && !title) {
         event.preventDefault();
-        alert('BOTA ALGUMA COISA AI MEU NOBRE');
+        alert('A postagem deve conter um título, conteúdo ou arquivo.');
     }
 });
 
-var modal = document.getElementById("myModal");
+const modal = document.getElementById("myModal");
 
-var btn = document.getElementById("openModal");
+const btn = document.getElementById("openModal");
 
+const span = document.getElementById("close");
 
-var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+    modal.style.display = "block";
+}
 
-var textarea = document.getElementById("content");
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const openButton = document.getElementById('openModal');
+  
+    openButton.onclick = function() {
+      modal.classList.remove('hide');
+      modal.classList.add('show');
+    }
+  
+    modal.onclick = function(event) {
+      if (event.target == span || event.target == modal) {
+        modal.classList.remove('show');
+        modal.classList.add('hide');
+        console.log('fechou1');
+      }
+    }
 
-var voteReceive = document.querySelectorAll('.voteText');
+    document.getElementById("settings").addEventListener("click", function () {
+        // Redirecionar para a página de configurações
+        window.location.href = "configurations.html"; // Substitua 'configurations.html' pelo caminho correto
+    });
+    
+    document.getElementById("logout").addEventListener("click", function () {
+        // Excluir o cookie e redirecionar para a página de login
+        document.cookie =
+          "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "login"; // Substitua 'login.html' pelo caminho correto
+    });
+});
+  
 
-var upvoteVote = document.querySelectorAll('.upvotePath');
+const voteReceive = document.querySelectorAll('.voteText');
 
-var downvoteVote = document.querySelectorAll('.downvotePath');
-
+const upvoteVote = document.querySelectorAll('.upvotePath');
+  
+const downvoteVote = document.querySelectorAll('.downvotePath');
+  
 upvoteVote.forEach(function (userVoteElement, index) {
-    var vote = voteReceive[index].innerText;   
+    const vote = voteReceive[index].innerText;   
     
     if (vote == 'upvote') {
         userVoteElement.style.fill = '#d1d8ff';
@@ -33,9 +65,9 @@ upvoteVote.forEach(function (userVoteElement, index) {
         userVoteElement.style.fill = '';
     }
 });
-
+  
 downvoteVote.forEach(function (userVoteElement, index) {
-    var vote = voteReceive[index].innerText;
+    const vote = voteReceive[index].innerText;
     
     if (vote == 'downvote') {
         userVoteElement.style.fill = '#d1d8ff';
@@ -44,53 +76,9 @@ downvoteVote.forEach(function (userVoteElement, index) {
     }
 });
 
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    
-    var openButton = document.getElementById('openModal');
-  
-    openButton.onclick = function() {
-      modal.classList.remove('hide');
-      modal.classList.add('show');
-    }
-  
-    modal.onclick = function(event) {
-      if (event.target == modal) {
-        modal.classList.remove('show');
-        modal.classList.add('hide');
-      }
-    }
-  });
-
-var upvote = document.getElementById('upvote');
-var downvote = document.getElementById('downvote');
-
 document.querySelectorAll('.upvote').forEach(button => {
     button.addEventListener('click', function() {
-        var postId = this.getAttribute('data-post-id');
+        const postId = this.getAttribute('data-post-id');
         fetch('/upvote', {
             method: 'POST',
             headers: {
@@ -114,7 +102,7 @@ document.querySelectorAll('.upvote').forEach(button => {
 
 document.querySelectorAll('.downvote').forEach(button => {
     button.addEventListener('click', function() {
-        var postId = this.getAttribute('data-post-id');
+        const postId = this.getAttribute('data-post-id');
         fetch('/downvote', {
             method: 'POST',
             headers: {
@@ -136,23 +124,9 @@ document.querySelectorAll('.downvote').forEach(button => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", (event) => {
-  document.getElementById("settings").addEventListener("click", function () {
-    // Redirecionar para a página de configurações
-    window.location.href = "configurations.html"; // Substitua 'configurations.html' pelo caminho correto
-  });
-
-  document.getElementById("logout").addEventListener("click", function () {
-    // Excluir o cookie e redirecionar para a página de login
-    document.cookie =
-      "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "login"; // Substitua 'login.html' pelo caminho correto
-  });
-});
-
 function toggleDropdown() {
-    var dropdown = document.getElementById("myDropdown");
-    var icon = document.getElementById("toggleIcon");
+    const dropdown = document.getElementById("myDropdown");
+    const icon = document.getElementById("toggleIcon");
   
     dropdown.classList.toggle("show");
   
@@ -163,17 +137,12 @@ function toggleDropdown() {
     }
   }
 
- 
-  
-  
-
-// Close the dropdown if the user clicks outside of it
 window.onclick = function (event) {
   if (!event.target.matches(".dropbtn") && !event.target.closest(".dropdown")) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
-    var icon = document.getElementById("toggleIcon");
+    const icon = document.getElementById("toggleIcon");
     for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
+      const openDropdown = dropdowns[i];
       if (openDropdown.classList.contains("show")) {
         openDropdown.classList.remove("show");
         icon.src = "/public/assets/setaright.svg"; // Ícone para a direita

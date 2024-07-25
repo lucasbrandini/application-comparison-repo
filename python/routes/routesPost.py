@@ -208,10 +208,18 @@ class routesPost(BaseHTTPRequestHandler):
                 user_id = user['id_user']
                 message = change_username(user_id, new_name)
                 if message == "Username updated successfully.":
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'application/json')
+                    # Regenerar o token JWT com o novo nome de usuário
+                    token = jwt.encode({'name_user': new_name}, os.getenv('JWT_SECRET'), algorithm='HS256')
+                    
+                    # Enviar o novo token JWT no cookie de resposta
+                    cookie = http.cookies.SimpleCookie()
+                    cookie['jwt_token'] = token
+                    cookie['jwt_token']['path'] = '/'
+                    
+                    self.send_response(302)
+                    self.send_header('Location', '/home')
+                    self.send_header('Set-Cookie', cookie.output(header=''))
                     self.end_headers()
-                    self.wfile.write(json.dumps({'success': True, 'message': message}).encode('utf-8'))
                 else:
                     self.send_response(400)
                     self.send_header('Content-Type', 'application/json')
@@ -225,6 +233,7 @@ class routesPost(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
+
 
 
     @verify_jwt

@@ -234,27 +234,9 @@ strong {
     vertical-align: middle;
   }
   
-  @keyframes fadeIn {
-    0% {
-      background: rgba(0, 0, 0, .0);
-    }
-    100% {
-      background: rgba(0, 0, 0, .0);
-    }
-  }
-  
-  @keyframes fadeOut {
-    0% {
-      background: rgba(0, 0, 0, .0);
-    }
-    100% {
-      background: rgba(0, 0, 0, .0);
-    }
-  }
-  
   @keyframes scaleUp {
     0% {
-      transform: scale(.3) translateY(1000px);
+      transform: scale(.8) translateY(1000px);
       opacity: 0;
     }
     100% {
@@ -277,13 +259,13 @@ strong {
   .modal.show {
     display: block;
     transform: scale(1);
-    animation: scaleUp 0.5s ease forwards, fadeIn 0.5s ease forwards;
+    animation: scaleUp 0.5s ease forwards;
   }
   
   .modal.hide {
     display: block;
     transform: scale(1);
-    animation: scaleDown 0.5s ease forwards, fadeOut 0.5s ease forwards;
+    animation: scaleDown 0.5s ease forwards;
   } 
 
 /* Form elements */

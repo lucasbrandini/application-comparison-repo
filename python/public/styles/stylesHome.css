@@ -208,19 +208,21 @@ strong {
     z-index: 1;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 1200px;
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.0);
     padding-top: 60px;
     transform: scale(0);
+    margin: 0 auto;
   }
   
   .modal-content {
-    background-color: #fefefe;
+    background-color: #111427;
+    color: #FFFFFF;
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 4px solid #31396B;
     width: 80%;
     border-radius: 10px;
     display: flex;
@@ -270,26 +272,53 @@ strong {
 
 /* Form elements */
 .modal-content label {
-    margin-top: 10px; /* Espaçamento superior para os labels */
+    margin-top: 50px; /* Espaçamento superior para os labels */
+    width: 73px;
+    height: 33px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 34px;
+    color: #FFFFFF;
 }
 
 .modal-content input,
-.modal-content textarea,
-.modal-content button {
+.modal-content textarea{
     width: 100%;
     padding: 10px;
-    margin-top: 5px; /* Espaçamento superior para os campos de entrada */
-    border: 1px solid #ccc;
+    margin-top: 10px; /*Espaçamento superior para os campos de entrada */
+    margin-bottom: 15px;
+    border: none;
     border-radius: 5px;
     box-sizing: border-box;
+    resize: none;
+    background-color: #21274A;
+    color: #4A569C;
+    height: 49px;
+    padding-left: 40px; /* Ajuste conforme necessário */
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 29px;
+    text-align: justify;
+}
+
+.titleModal {
+    width: 196px;
+    height: 34px;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 34px;
+    color: #FFFFFF;
 }
 
 .diviser1 {
     width: 50%;
     display: flex;
     flex-direction: column;
+    gap: 20px;
     padding: 20px;
-    border: 2px solid red;
+    border: none;
 }
 
 .diviser2 {
@@ -298,12 +327,67 @@ strong {
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    border: 2px solid red;
 }
 
+.diviserIcon {
+    width: 3%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: none;
+}
+
+/* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
 .btnSubmit {
     height: 49px;
-    width: 222px; 
+    width: 222px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6272D6;
+    color: #111427;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 23px;
+}
+
+.btnIcon {
+    fill: #111427;
+}
+
+.btnSubmit:hover .btnIcon,
+.btnSubmit:hover {
+    color: #FFFFFF;
+    fill: #FFFFFF; /* Cor do ícone ao passar o mouse sobre o botão */
+}
+
+.styleInput {
+    position: relative;
+    align-items: center;
+    width: 100%;
+}
+
+.iconInput {
+    position: absolute;
+    top: 30%;
+    left: 3%;
+    width: 20px;
+    height: 20px;
+    fill: #ccc;
+}
+
+#title::placeholder,
+#content::placeholder {
+
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 29px;
+    color: #4A569C;
+
 }
 
 /* Close button */

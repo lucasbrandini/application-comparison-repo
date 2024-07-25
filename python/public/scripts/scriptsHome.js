@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   
     modal.onclick = function(event) {
+      console.log(span, modal) ;
       if (event.target == span || event.target == modal) {
         modal.classList.remove('show');
         modal.classList.add('hide');
@@ -36,11 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    document.getElementById("settings").addEventListener("click", function () {
-        // Redirecionar para a página de configurações
-        window.location.href = "configurations.html"; // Substitua 'configurations.html' pelo caminho correto
-    });
-    
     document.getElementById("logout").addEventListener("click", function () {
         // Excluir o cookie e redirecionar para a página de login
         document.cookie =

@@ -223,7 +223,7 @@ strong {
     padding: 20px;
     border: 4px solid #31396B;
     width: 950px; 
-    border-radius: 10px;
+    border-radius: 40px;
     display: flex;
     justify-content: center;
     gap: 10px; /* Espaçamento entre os itens */
@@ -282,7 +282,7 @@ strong {
 }
 
 .modal-content input,
-.modal-content textarea{
+.modal-content textarea {
     width: 100%;
     padding: 10px;
     margin-top: 10px; /*Espaçamento superior para os campos de entrada */
@@ -341,7 +341,7 @@ strong {
 .btnSubmit {
     height: 49px;
     width: 222px;
-    margin: 0 auto 15px;
+    margin: 280px 0 15px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -380,6 +380,27 @@ strong {
     fill: #ccc;
 }
 
+.styleFileInput {
+    display: flex;
+    width: 100%;
+    height: 49px;
+    background-color: #21274A;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.iconFile {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    align-self: center;
+}
+
+#file {
+    display: none;
+}
+
 #title::placeholder,
 #content::placeholder {
 
@@ -388,6 +409,18 @@ strong {
     line-height: 29px;
     color: #4A569C;
 
+}
+
+.styleFileInput label {
+    align-self: center;
+    margin-left: 41px;
+    width: 100%;
+    color: #4A569C;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 33px;
+    color: #4A569C;
+    margin-top: 0;
 }
 
 /* Close button */

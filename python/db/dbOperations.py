@@ -386,6 +386,7 @@ def select_all_posts_ordered():
             SELECT 
                 u.name_user, 
                 p.id_posts,
+                p.p_id_user,
                 p.post_title,
                 p.post, 
                 p.post_image, 

@@ -219,14 +219,14 @@ strong {
   .modal-content {
     background-color: #111427;
     color: #FFFFFF;
-    margin: 20px auto;
-    padding: 20px;
+    margin: 1.25rem auto;
+    padding: 1.25rem;
     border: 4px solid #31396B;
-    width: 950px; 
-    border-radius: 40px;
+    width: 59.375rem; 
+    border-radius: 2.5rem;
     display: flex;
     justify-content: center;
-    gap: 10px; /* Espaçamento entre os itens */
+    gap: .625rem; /* Espaçamento entre os itens */
   }
   
   .modal-background {
@@ -301,6 +301,7 @@ strong {
     font-size: 18px;
     line-height: 29px;
     text-align: justify;
+    outline: none;
 }
 
 .titleModal {
@@ -339,8 +340,8 @@ strong {
 
 /* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
 .btnSubmit {
-    height: 49px;
-    width: 222px;
+    height: 45px;
+    width: 200px;
     margin: 280px 0 15px auto;
     display: flex;
     align-items: center;
@@ -352,7 +353,7 @@ strong {
     color: #111427;
     cursor: pointer;
     font-weight: 600;
-    font-size: 23px;
+    font-size: 20px;
 }
 
 .btnIcon {
@@ -425,17 +426,16 @@ strong {
 
 /* Close button */
 .close {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
     align-self: flex-end;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
+}
+
+.activeClose {
+    stroke: white;
 }
 
 .dropdown {

@@ -2,26 +2,11 @@
 <html lang="en">
 <head>
     {{{head}}}
-    <link rel="stylesheet" type="text/css" href="">
+    {{!-- <link rel="stylesheet" type="text/css" href="/public/styles/stylesEdit.css"> --}}
     <title>Homepage</title>
 </head>
 <body>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="diviser1">
-                <form id="postForm" action="/create-post" method="POST" enctype="multipart/form-data">
-                    <label for="title">Título</label>
-                    <input type="text" name="title" id="title">
-                    <label for="content">Descrição</label>
-                    <textarea name="content" id="content" cols="30" rows="10"></textarea>
-                    <label for="file">Arquivos (mp4, jpeg até 5mb)</label>
-                    <input type="file" name="file" id="file" accept="image/*,video/mp4">
-            </div>
-            <div class="diviser2">
-                    <button type="submit" class="btnSubmit" form="postForm">Criar</button>
-                </form>
-            </div>     
-        </div>
-    </div>
+    <p>informações do post</p>
+    {{post}}
 </body>
 </html>

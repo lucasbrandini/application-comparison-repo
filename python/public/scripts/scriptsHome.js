@@ -89,6 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // preciso para editar o post
+    document.querySelectorAll('.editPost').forEach(button => {
+        button.addEventListener('click', async () => {
+            const postId = button.getAttribute('data-post-id');
+            window.location.href = `/edit-post?post_id=${postId}`;
+        });
+    });
 });
   
 

@@ -520,3 +520,7 @@ strong {
 #toggleIcon.rotate {
     transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
 }
+
+.pfpImg {
+    border-radius: 5px; /* Torna a imagem circular */
+}

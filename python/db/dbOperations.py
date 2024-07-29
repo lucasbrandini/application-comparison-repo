@@ -411,6 +411,7 @@ def select_all_posts_ordered():
         sql = """
             SELECT 
                 u.name_user, 
+                uv.avatar_image,
                 p.id_posts,
                 p.p_id_user,
                 p.post_title,
@@ -432,12 +433,33 @@ def select_all_posts_ordered():
                 users u 
             ON 
                 p.p_id_user = u.id_user 
+            JOIN
+				users_avatar uv
+			ON
+				uv.id_user = u.id_user
+			
             ORDER BY 
-                p.post_votes DESC, p.post_date DESC
+                p.post_date DESC
         """
         cursor.execute(sql)
         results = cursor.fetchall()
         return results
+    finally:
+        cursor.close()
+        connection.close()
+
+#insert users_avatar
+def insert_avatar(user_id, avatar_image):
+    if not user_id or not avatar_image:
+        raise ValueError("User ID or avatar image cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "INSERT INTO users_avatar (id_user, avatar_image) VALUES (%s, %s)"
+        cursor.execute(sql, (user_id, avatar_image))
+        connection.commit()
+        return cursor.lastrowid
     finally:
         cursor.close()
         connection.close()

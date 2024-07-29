@@ -41,9 +41,9 @@
                 <div class="card">
                     <div class="cardTop">
                         <div class="initTop">
-                            <img class="pfpImg" src="/public/assets/pfp.svg">                
+                            <img class="pfpImg" src="data:image/jpeg;base64,{{avatar_image}}" width="50" height="50" alt="Avatar">                
                             <h3 class="username">{{name_user}}</h3>
-                            <h4 class="postTime">H {{post_date}}</h4>
+                            <h4 class="postTime">Há {{post_date}}</h4>
                         </div>
                         <div class="endTop">
                             <h4 class="comentarios">(146)comentários</h4>
@@ -55,7 +55,7 @@
                         <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
                     {{/if}}
                     {{#if post_video}}
-                        <video src="data:video/mp4;base64,{{post_video}}" width="400" height="200" controls></video>
+                        <video src="data:video/mp4;base64,{{post_video}}" width="400" height="200" alt="Post Video" controls></video>
                     {{/if}}
                     <div class="cardBottom">
                         <div class="voteStyle">

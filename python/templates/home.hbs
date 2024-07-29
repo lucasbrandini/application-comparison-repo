@@ -49,8 +49,12 @@
                             <h4 class="comentarios">(146)comentários</h4>
                         </div>
                     </div>
-                    <h4 class="cardText">titulo: {{post_title}}</h4>
-                    <h5 class="cardText">post: {{post}}</h5>
+                    {{#if post_title}}
+                        <h4 class="cardText">titulo: {{post_title}}</h4>
+                    {{/if}}
+                    {{#if post}}
+                        <h5 class="cardText">post: {{post}}</h5>
+                    {{/if}}
                     {{#if post_image}}
                         <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
                     {{/if}}

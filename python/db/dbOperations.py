@@ -158,7 +158,6 @@ def insert_post_video(user_id, post_title, post, video):
         cursor.close()
         connection.close()
 
-
 # Delete
 def delete_post(post_id):
     if not post_id:
@@ -321,6 +320,21 @@ def downvote(post_id, user_id):
 
         connection.commit()
         return "Downvoted successfully."
+    finally:
+        cursor.close()
+        connection.close()
+        
+def edit_post(post_id, post):
+    if not post_id or not post:
+        raise ValueError("Post ID or post cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE posts SET post = %s WHERE id_posts = %s"
+        cursor.execute(sql, (post, post_id))
+        connection.commit()
+        return "Post updated successfully."
     finally:
         cursor.close()
         connection.close()

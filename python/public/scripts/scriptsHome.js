@@ -47,6 +47,34 @@ document.addEventListener('DOMContentLoaded', function() {
           "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href = "login"; // Substitua 'login.html' pelo caminho correto
     });
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    document.querySelectorAll('.deletePost').forEach(button => {
+        button.addEventListener('click', async () => {
+            const postId = button.getAttribute('data-post-id');
+            const response = await fetch('/delete-post', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${getCookie('token')}`
+                },
+                body: `post_id=${postId}`
+            });
+
+            if (response.ok) {
+                alert('Post deleted successfully');
+                location.reload();
+            } else {
+                const result = await response.json();
+                alert(`Error: ${result.error}`);
+            }
+        });
+    });
 });
   
 

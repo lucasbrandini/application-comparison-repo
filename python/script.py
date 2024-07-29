@@ -1,13 +1,15 @@
 from http.server import HTTPServer
 from routes.routesGet import routesGet
 from routes.routesPost import routesPost
+from routes.routesDelete import routesDelete
+from routes.routesPut import routesPut
 from db.dbSetupTables import create_tables
 
 # Cria as tabelas
 create_tables()
 
 # Cria uma nova classe que herda de PostRoutes e GetRoutes
-class CombinedRoutes(routesPost, routesGet):
+class CombinedRoutes(routesPost, routesGet, routesDelete, routesPut):
     pass
 
 # Configura e inicia o servidor

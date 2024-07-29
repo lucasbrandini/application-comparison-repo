@@ -192,48 +192,7 @@ class routesPost(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
             
-    @verify_jwt
-    def handle_change_username(self):
-        try:
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length).decode('utf-8')
-            logger.info(f"Received post_data: {post_data}")
-
-            user_data = dict(data.split('=') for data in post_data.split('&'))
-            new_name = user_data.get('username')
-
-            user_name = self.decoded_token.get('name_user')
-            user = select_user_by_name(user_name)
-            if user:
-                user_id = user['id_user']
-                message = change_username(user_id, new_name)
-                if message == "Username updated successfully.":
-                    # Regenerar o token JWT com o novo nome de usuário
-                    token = jwt.encode({'name_user': new_name}, os.getenv('JWT_SECRET'), algorithm='HS256')
-                    
-                    # Enviar o novo token JWT no cookie de resposta
-                    cookie = http.cookies.SimpleCookie()
-                    cookie['jwt_token'] = token
-                    cookie['jwt_token']['path'] = '/'
-                    
-                    self.send_response(302)
-                    self.send_header('Location', '/home')
-                    self.send_header('Set-Cookie', cookie.output(header=''))
-                    self.end_headers()
-                else:
-                    self.send_response(400)
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({'success': False, 'message': message}).encode('utf-8'))
-            else:
-                self.send_error_response(404, "User not found")
-        except Exception as e:
-            logger.error(f"Exception during change username: {e}")
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
-
+    
 
 
     @verify_jwt

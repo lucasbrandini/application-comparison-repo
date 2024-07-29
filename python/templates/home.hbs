@@ -73,13 +73,25 @@
                             </button>
                         </div>
                         
-                        {{!-- <p>id_posts, variavel ´para puxar o id_posts</p> --}}
                         <p class="voteText">{{user_vote}}</p>
-                          
+
+                        {{#if is_owner}}
+                            <button id="deletePost" class="deletePost" data-post-id="{{id_posts}}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path class="deletePath" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5c-5.238 0-9.5-4.262-9.5-9.5S6.762 3.5 12 3.5s9.5 4.262 9.5 9.5-4.262 9.5-9.5 9.5zm3.536-14.464c.39.39.39 1.024 0 1.414-.39.39-1.024.39-1.414 0L12 13.414l-2.122 2.122c-.39.39-1.024.39-1.414 0-.39-.39-.39-1.024 0-1.414L10.586 12 8.464 9.878c-.39-.39-.39-1.024 0-1.414.39-.39 1.024-.39 1.414 0L12 10.586l2.122-2.122c.39-.39 1.024-.39 1.414 0 .39.39.39 1.024 0 1.414L13.414 12l2.122 2.122z" fill="#6272D6"/>
+                                </svg>
+                            </button>
+                            <button id="editPost" class="editPost" data-post-id="{{id_posts}}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path class="editPath" d="M21.707 2.293c-.39-.39-1.024-.39-1.414 0L 3.707 19.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L21.707 3.707c.39-.39.39-1.024 0-1.414zM5 18.414V20h1.586l9.793-9.793-1.586-1.586L5 18.414zm12.793-10.207l-1.586-1.586L14 8.414l1.586 1.586 1.207-1.207z" fill="#6272D6"/>
+                                </svg>
+                            </button>
+                        {{/if}}
                     </div>
                 </div>    
             {{/each}}   
         </section>
+
 
 
     </main>

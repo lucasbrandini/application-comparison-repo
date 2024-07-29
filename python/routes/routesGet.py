@@ -25,7 +25,8 @@ class routesGet(BaseHTTPRequestHandler):
             '/commits': self.render_commits,
             '/create-post': self.render_create_post,
             '/configuration': self.render_configuration,
-            '/change-username': self.render_change_username
+            '/change-username': self.render_change_username,
+            '/edit-post': self.render_edit_post
         }
         if self.path in routes:
             routes[self.path]()
@@ -76,6 +77,8 @@ class routesGet(BaseHTTPRequestHandler):
             # Crie um dicionário para mapear os votos do usuário pelos id_posts
             votes_map = {find['id_posts']: find['user_vote'] for find in finds}
             
+            is_owner = False
+            
             for post in posts:
                 post_id = post['id_posts']
                 post['user_vote'] = votes_map.get(post_id, 'no vote')
@@ -83,6 +86,8 @@ class routesGet(BaseHTTPRequestHandler):
                     post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
                 elif 'post_video' in post and post['post_video'] is not None:
                     post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
+            
+                post['is_owner'] = post['p_id_user'] == user['id_user']  
             
             compiler = Compiler()
             with open(os.path.join('templates', 'home.hbs'), 'r', encoding='utf-8') as file:
@@ -97,6 +102,9 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
+            
+            # 
+            
             
             context = {
                 'posts': posts,
@@ -226,6 +234,24 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
             self.wfile.write(template({'commits': commits}).encode('utf-8'))
+        except Exception as e:
+            print(e)
+            self.send_error_response(500, "Server Error: " + str(e))
+            
+    @verify_jwt
+    def render_edit_post(self):
+        try:
+            compiler = Compiler()
+            with open(os.path.join('templates', 'edit.hbs'), 'r', encoding='utf-8') as file:
+                source = file.read()
+            template = compiler.compile(source)
+            with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
+                head_source = file.read()
+            head_template = compiler.compile(head_source)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(template({}).encode('utf-8'))
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))

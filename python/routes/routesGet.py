@@ -64,14 +64,8 @@ class routesGet(BaseHTTPRequestHandler):
             user = select_user_by_name(id_user)
             
             login_user = user['name_user']
-            
             user_vote = user['id_user']
-            
             finds = find_vote(user_vote)
-            
-            # Debugging prints
-            print("User Votes:", finds)
-            print("Posts:", posts)
             
             # Crie um dicionário para mapear os votos do usuário pelos id_posts
             votes_map = {find['id_posts']: find['user_vote'] for find in finds}
@@ -79,21 +73,31 @@ class routesGet(BaseHTTPRequestHandler):
             for post in posts:
                 post_id = post['id_posts']
                 post['user_vote'] = votes_map.get(post_id, 'no vote')
+                
                 if 'post_image' in post and post['post_image'] is not None:
                     post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
-                elif 'post_video' in post and post['post_video'] is not None:
+                
+                if 'post_video' in post and post['post_video'] is not None:
                     post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
+                
+                if 'avatar_image' in post and post['avatar_image'] is not None:
+                    post['avatar_image'] = post['avatar_image'].decode('utf-8') if isinstance(post['avatar_image'], bytes) else post['avatar_image']
             
             compiler = Compiler()
+            
+            # Use gerenciadores de contexto para abrir e ler os arquivos
             with open(os.path.join('templates', 'home.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
             template = compiler.compile(source)
+            
             with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
                 head_source = file.read()
             head_template = compiler.compile(head_source)
+            
             with open(os.path.join('templates', 'header.hbs'), 'r', encoding='utf-8') as file:
                 header_source = file.read()
             header_template = compiler.compile(header_source)
+            
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()

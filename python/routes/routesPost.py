@@ -6,8 +6,9 @@ import http.cookies
 import jwt
 import json
 import bcrypt
+import random
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image, insert_post_video, upvote, downvote, change_username
+from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image, insert_post_video, upvote, downvote, change_username, insert_avatar
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -16,6 +17,24 @@ logger = logging.getLogger(__name__)
 
 saltRounds = 10
 
+def get_avatar_dir():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.abspath(os.path.join(script_dir, '..', '..'))  
+    return os.path.join(base_dir, 'python', 'public', 'img', 'users')
+
+def generate_random_avatar():
+    avatar_dir = get_avatar_dir()
+    if not os.path.exists(avatar_dir):
+        raise FileNotFoundError(f"Directory not found: {avatar_dir}")
+    
+    avatars = os.listdir(avatar_dir)
+    if not avatars:
+        raise FileNotFoundError("No avatars found in the directory.")
+    
+    selected_avatar = random.choice(avatars)
+    with open(os.path.join(avatar_dir, selected_avatar), 'rb') as image_file:
+        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+    return encoded_image
 class routesPost(BaseHTTPRequestHandler):
 
     def do_POST(self):
@@ -71,8 +90,16 @@ class routesPost(BaseHTTPRequestHandler):
                 self.end_headers()
                 return
 
-            hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt(saltRounds)).decode('utf-8')
-            insert_user(user_data['name'], hashed_password)
+            hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            
+            # Inserir o usuário e obter o id do usuário inserido
+            user_id = insert_user(user_data['name'], hashed_password)
+
+            # Gerar ou selecionar uma imagem aleatória para o avatar
+            avatar_image = generate_random_avatar()
+
+            # Inserir o avatar na tabela users_avatar
+            insert_avatar(user_id, avatar_image)
 
             self.send_response(302)
             self.send_header('Location', '/login')

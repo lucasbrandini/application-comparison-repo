@@ -324,6 +324,18 @@ def downvote(post_id, user_id):
         cursor.close()
         connection.close()
         
+def get_post(post_id):
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = "SELECT * FROM posts WHERE id_posts = %s"
+        cursor.execute(sql, (post_id,))
+        result = cursor.fetchone()
+        return result
+    finally:
+        cursor.close()
+        connection.close()
+        
 def edit_post(post_id, post):
     if not post_id or not post:
         raise ValueError("Post ID or post cannot be null")

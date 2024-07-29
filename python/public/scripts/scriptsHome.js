@@ -15,9 +15,21 @@ const btn = document.getElementById("openModal");
 
 const span = document.getElementById("close");
 
+const path = document.getElementById("closeIcon")
+
 btn.onclick = function() {
     modal.style.display = "block";
 }
+
+span.addEventListener('mouseover', () => {
+    path.style.stroke = "white";
+    console.log('Overzou');
+}) 
+
+span.addEventListener('mouseout', () => {
+    path.style.stroke = "#6272D6";
+    console.log('Overzou pra fora');
+}) 
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -27,20 +39,22 @@ document.addEventListener('DOMContentLoaded', function() {
       modal.classList.remove('hide');
       modal.classList.add('show');
     }
-  
+    
     modal.onclick = function(event) {
-      if (event.target == span || event.target == modal) {
+        console.log(span, modal) ;
+      if (event.target == modal) {
         modal.classList.remove('show');
         modal.classList.add('hide');
         console.log('fechou1');
       }
     }
 
-    document.getElementById("settings").addEventListener("click", function () {
-        // Redirecionar para a página de configurações
-        window.location.href = "configurations.html"; // Substitua 'configurations.html' pelo caminho correto
-    });
-    
+    span.onclick = function(event) {
+        event.stopPropagation();
+        modal.classList.remove('show');
+        modal.classList.add('hide');
+    }
+
     document.getElementById("logout").addEventListener("click", function () {
         // Excluir o cookie e redirecionar para a página de login
         document.cookie =

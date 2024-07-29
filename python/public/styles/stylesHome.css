@@ -204,12 +204,12 @@ strong {
 
 .modal {
     display: none;
-    position: fixed;
     z-index: 1;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.0);
     padding-top: 60px;
@@ -217,14 +217,16 @@ strong {
   }
   
   .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 10px;
+    background-color: #111427;
+    color: #FFFFFF;
+    margin: 1.25rem auto;
+    padding: 1.25rem;
+    border: 4px solid #31396B;
+    width: 59.375rem; 
+    border-radius: 2.5rem;
     display: flex;
-    gap: 10px; /* Espaçamento entre os itens */
+    justify-content: center;
+    gap: .625rem; /* Espaçamento entre os itens */
   }
   
   .modal-background {
@@ -270,26 +272,54 @@ strong {
 
 /* Form elements */
 .modal-content label {
-    margin-top: 10px; /* Espaçamento superior para os labels */
+    margin-top: 50px; /* Espaçamento superior para os labels */
+    width: 73px;
+    height: 33px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 34px;
+    color: #FFFFFF;
 }
 
 .modal-content input,
-.modal-content textarea,
-.modal-content button {
+.modal-content textarea {
     width: 100%;
     padding: 10px;
-    margin-top: 5px; /* Espaçamento superior para os campos de entrada */
-    border: 1px solid #ccc;
+    margin-top: 10px; /*Espaçamento superior para os campos de entrada */
+    margin-bottom: 15px;
+    border: none;
     border-radius: 5px;
     box-sizing: border-box;
+    resize: none;
+    background-color: #21274A;
+    color: #4A569C;
+    height: 49px;
+    padding-left: 40px; /* Ajuste conforme necessário */
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 29px;
+    text-align: justify;
+    outline: none;
+}
+
+.titleModal {
+    width: 196px;
+    height: 34px;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 34px;
+    color: #FFFFFF;
 }
 
 .diviser1 {
     width: 50%;
     display: flex;
     flex-direction: column;
+    gap: 20px;
     padding: 20px;
-    border: 2px solid red;
+    border: none;
 }
 
 .diviser2 {
@@ -298,27 +328,114 @@ strong {
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    border: 2px solid red;
 }
 
+.diviserIcon {
+    width: 3%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: none;
+}
+
+/* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
 .btnSubmit {
+    height: 45px;
+    width: 200px;
+    margin: 280px 0 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6272D6;
+    color: #111427;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.btnIcon {
+    fill: #111427;
+}
+
+.btnSubmit:hover .btnIcon,
+.btnSubmit:hover {
+    color: #FFFFFF;
+    fill: #FFFFFF; /* Cor do ícone ao passar o mouse sobre o botão */
+}
+
+.styleInput {
+    position: relative;
+    align-items: center;
+    width: 100%;
+}
+
+.iconInput {
+    position: absolute;
+    top: 30%;
+    left: 3%;
+    width: 20px;
+    height: 20px;
+    fill: #ccc;
+}
+
+.styleFileInput {
+    display: flex;
+    width: 100%;
     height: 49px;
-    width: 222px; 
+    background-color: #21274A;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.iconFile {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    align-self: center;
+}
+
+#file {
+    display: none;
+}
+
+#title::placeholder,
+#content::placeholder {
+
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 29px;
+    color: #4A569C;
+
+}
+
+.styleFileInput label {
+    align-self: center;
+    margin-left: 41px;
+    width: 100%;
+    color: #4A569C;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 33px;
+    color: #4A569C;
+    margin-top: 0;
 }
 
 /* Close button */
 .close {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
     align-self: flex-end;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
+}
+
+.activeClose {
+    stroke: white;
 }
 
 .dropdown {

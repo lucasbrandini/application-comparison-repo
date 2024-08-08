@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {{{head}}}
     <link rel="stylesheet" type="text/css" href="/public/styles/stylesConfiguration.css">
     <title>Homepage</title>
 </head>
 <body>
     <div class="container">
         <p>ola mundo</p>
-        <a href="/change-username">ALTERA AI TEU NOME PARCERO</a>
+
+        <form id="change-username-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <button type="submit">Alterar</button>
+        </form>
     </div>
+
+    <script src="../public/scripts/scriptsConfiguration.js"></script>
 </body>
+</html>

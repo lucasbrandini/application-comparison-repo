@@ -56,3 +56,47 @@ body {
     font-weight: 500;
     color: #FFFFFF8F;
 }
+
+.main {
+    display: flex;
+    justify-content: center;
+
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.config {
+    margin-bottom: 50px;
+    display: flex;
+    gap: 30px;
+}
+
+/* Estilo para a lista lateral */
+.list-config {
+    position: fixed; /* Fixa o elemento na tela */
+    top: 0; /* Alinha ao topo da tela */
+    left: 0; /* Alinha à esquerda da tela */
+    width: 300px; /* Largura fixa */
+    height: 100vh; /* Altura total da tela */
+    overflow-y: auto; /* Adiciona rolagem vertical se necessário */
+    background: #21274A; /* Fundo para a lista */
+    padding: 10px; /* Adicione um pouco de espaçamento interno */
+    border-radius: .75rem; /* Adicione bordas arredondadas se desejar */
+    color: #FFFFFF; /* Cor do texto */
+    font-size: 1rem; /* Tamanho da fonte */
+}
+
+/* Ajuste o conteúdo principal para que ele não fique sobreposto pela lista fixa */
+.main {
+    margin-left: 320px; /* Adiciona uma margem à esquerda para dar espaço para a lista fixa */
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.list-config li {
+    padding: 10px;
+    border-radius: 4px;
+}
+

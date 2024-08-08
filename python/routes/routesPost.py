@@ -44,7 +44,6 @@ class routesPost(BaseHTTPRequestHandler):
             '/create-post': self.handle_create_post,
             '/upvote': self.handle_upvote,
             '/downvote': self.handle_downvote,
-            '/change-username-post': self.handle_change_username
         }
 
         if self.path in routes:
@@ -177,8 +176,8 @@ class routesPost(BaseHTTPRequestHandler):
     def handle_file_upload(self, file_data, file_size, file_type):
         image_types = ['image/gif', 'image/jpeg', 'image/png']
         video_types = ['video/mp4']
-        max_image_size = 20 * 1024 * 1024  # 20 MB
-        max_video_size = 50 * 1024 * 1024  # 50 MB
+        max_image_size = 10 * 1024 * 1024  # 10 MB
+        max_video_size = 10 * 1024 * 1024  # 10 MB
 
         if file_type in image_types and file_size <= max_image_size:
             return True, base64.b64encode(file_data).decode('utf-8')
@@ -214,46 +213,6 @@ class routesPost(BaseHTTPRequestHandler):
                 self.send_error_response(404, "User not found")
         except Exception as e:
             logger.error(f"Exception during upvote: {e}")
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
-            
-    @verify_jwt
-    def handle_change_username(self):
-        try:
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length).decode('utf-8')
-            logger.info(f"Received post_data: {post_data}")
-
-            user_data = dict(data.split('=') for data in post_data.split('&'))
-            new_name = user_data.get('username')
-
-            user_name = self.decoded_token.get('name_user')
-            user = select_user_by_name(user_name)
-            if user:
-                user_id = user['id_user']
-                message = change_username(user_id, new_name)
-                if message == "Username updated successfully.":
-                    token = jwt.encode({'name_user': new_name}, os.getenv('JWT_SECRET'), algorithm='HS256')
-
-                    cookie = http.cookies.SimpleCookie()
-                    cookie['jwt_token'] = token
-                    cookie['jwt_token']['path'] = '/'
-                    
-                    self.send_response(302)
-                    self.send_header('Location', '/home')
-                    self.send_header('Set-Cookie', cookie.output(header=''))
-                    self.end_headers()
-                else:
-                    self.send_response(400)
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({'success': False, 'message': message}).encode('utf-8'))
-            else:
-                self.send_error_response(404, "User not found")
-        except Exception as e:
-            logger.error(f"Exception during change username: {e}")
             self.send_response(500)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()

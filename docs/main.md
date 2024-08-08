@@ -61,7 +61,7 @@ Depois crie um arquivo chamando .env
 ## Instalações Python
 
 ```bash
-  pip install pybars3 requests sqlalchemy mysql-connector-python python-dotenv bcrypt pyjwt ssl
+  pip install pybars3 requests sqlalchemy mysql-connector-python python-dotenv bcrypt pyjwt
 ```
 
 Depois crie um arquivo chamando .env 

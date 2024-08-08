@@ -26,8 +26,7 @@ class routesGet(BaseHTTPRequestHandler):
             '/404': self.render_404,
             '/commits': self.render_commits,
             '/create-post': self.render_create_post,
-            '/configuration': self.render_configuration,
-            '/change-username': self.render_change_username
+            '/configuration': self.render_configuration
         }
         
         # Verificação de rotas dinâmicas
@@ -184,24 +183,6 @@ class routesGet(BaseHTTPRequestHandler):
         try: 
             compiler = Compiler()
             with open(os.path.join('templates', 'configuration.hbs'), 'r', encoding='utf-8') as file:
-                source = file.read()
-            template = compiler.compile(source)
-            with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
-                head_source = file.read()
-            head_template = compiler.compile(head_source)
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html; charset=utf-8')
-            self.end_headers()
-            self.wfile.write(template({'head': head_template}).encode('utf-8'))
-        except Exception as e:
-                print(e)
-                self.send_error_response(500, "Server Error: " + str(e))
-                
-    @verify_jwt
-    def render_change_username(self):
-        try: 
-            compiler = Compiler()
-            with open(os.path.join('templates', 'username.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
             template = compiler.compile(source)
             with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:

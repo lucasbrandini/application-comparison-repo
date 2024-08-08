@@ -46,13 +46,15 @@ class routesPut(BaseHTTPRequestHandler):
         try:
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
-            logger.info(f"Received post_data: {post_data}")
 
-            user_data = dict(data.split('=') for data in post_data.split('&'))
+            user_data = json.loads(post_data)
             new_name = user_data.get('username')
 
             user_name = self.decoded_token.get('name_user')
             user = select_user_by_name(user_name)
+
+            print(user, "user")
+            print(user_name, "user_name")
             if user:
                 user_id = user['id_user']
                 message = change_username(user_id, new_name)

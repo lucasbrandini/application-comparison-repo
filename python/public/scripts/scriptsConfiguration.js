@@ -9,13 +9,19 @@ document.getElementById('change-username-form').addEventListener('submit', funct
         },
         body: JSON.stringify({ username: username })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = '/home';
-        } else {
-            alert('Erro: ' + data.message);
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(error => { throw error });
         }
+        return response.json();
     })
-    .catch(error => console.error('Error:', error));
+    .then(data => {
+        console.log(data);
+        // Handle success response
+        window.location.href = '/home';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle error response
+    });
 });

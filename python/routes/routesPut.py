@@ -26,8 +26,6 @@ class routesPut(BaseHTTPRequestHandler):
         else:
             self.handle_404()
 
-    
-
     def handle_404(self):
         self.send_response(404)
         self.send_header('Content-type', 'application/json')
@@ -39,7 +37,6 @@ class routesPut(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps({"error": message}).encode('utf-8'))
-
 
     @verify_jwt
     def handle_change_username(self):
@@ -53,8 +50,6 @@ class routesPut(BaseHTTPRequestHandler):
             user_name = self.decoded_token.get('name_user')
             user = select_user_by_name(user_name)
 
-            print(user, "user")
-            print(user_name, "user_name")
             if user:
                 user_id = user['id_user']
                 message = change_username(user_id, new_name)
@@ -67,10 +62,11 @@ class routesPut(BaseHTTPRequestHandler):
                     cookie['jwt_token'] = token
                     cookie['jwt_token']['path'] = '/'
                     
-                    self.send_response(302)
-                    self.send_header('Location', '/home')
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
                     self.send_header('Set-Cookie', cookie.output(header=''))
                     self.end_headers()
+                    self.wfile.write(json.dumps({'success': True, 'message': message}).encode('utf-8'))
                 else:
                     self.send_response(400)
                     self.send_header('Content-Type', 'application/json')

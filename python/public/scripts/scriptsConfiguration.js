@@ -16,7 +16,6 @@ document.getElementById('change-username-form').addEventListener('submit', funct
         return response.json();
     })
     .then(data => {
-        console.log(data);
         // Handle success response
         window.location.href = '/home';
     })

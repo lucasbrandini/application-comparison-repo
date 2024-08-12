@@ -18,8 +18,7 @@ class routesDelete(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         routes = {
-            '/delete-post': self.handle_delete_post,
-            '/delete-user': self.handle_delete_user
+            '/delete-post': self.handle_delete_post
         }
 
         if self.path in routes:
@@ -27,6 +26,7 @@ class routesDelete(BaseHTTPRequestHandler):
         else:
             self.handle_404()
 
+    @verify_jwt
     def handle_delete_post(self):
         try:
             # Verificar o JWT e obter o payload
@@ -56,37 +56,6 @@ class routesDelete(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"message": "Post deleted successfully"}).encode('utf-8'))
         except Exception as e:
             logger.error(f"Error during post deletion: {str(e)}")
-            self.send_error_response(500, f"Server error: {str(e)}")
-
-    def handle_delete_user(self):
-        try:
-            # Verificar o JWT e obter o payload
-            auth_header = self.headers.get('Authorization')
-            if not auth_header:
-                self.send_error_response(401, "Unauthorized: No token provided")
-                return
-
-            token = auth_header.split(" ")[1]
-            payload = verify_jwt(token)
-
-            # Extrair dados da requisição
-            content_length = int(self.headers['Content-Length'])
-            delete_data = self.rfile.read(content_length).decode('utf-8')
-            delete_data = dict(data.split('=') for data in delete_data.split('&'))
-
-            user_id = delete_data.get('user_id')
-            if not user_id:
-                self.send_error_response(400, "Bad Request: User ID not provided")
-                return
-
-            # Deletar o usuário
-            delete_user(user_id)
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({"message": "User deleted successfully"}).encode('utf-8'))
-        except Exception as e:
-            logger.error(f"Error during user deletion: {str(e)}")
             self.send_error_response(500, f"Server error: {str(e)}")
 
     def handle_404(self):

@@ -7,7 +7,7 @@ import jwt
 import json
 import bcrypt
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user_by_name, change_username
+from db.dbOperations import select_user_by_name, change_username, update_post
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -18,7 +18,8 @@ class routesPut(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         routes = {
-            '/change-username': self.handle_change_username
+            '/change-username': self.handle_change_username ,
+            '/editpost': self.handle_editpost
         }
 
         if self.path in routes:
@@ -80,3 +81,32 @@ class routesPut(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
+
+    @verify_jwt
+    def handle_editpost(self):
+        try:
+            content_type = self.headers.get('Content-Type')
+            
+            if content_type == 'application/json':
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length).decode('utf-8')
+
+                # Decodifica os dados JSON
+                post_data = json.loads(post_data)
+                post_id = post_data.get('post_id')
+                title = post_data.get('title')
+                content = post_data.get('content')
+
+                # Atualiza o post no banco de dados
+                update_post(post_id, title, content)
+
+                # Envia uma resposta de sucesso
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': True, 'message': 'Post atualizado com sucesso'}).encode('utf-8'))
+            else:
+                self.send_error_response(400, "Bad Request: Content-Type inválido")
+        except Exception as e:
+            logger.error(f"Exception during update post: {e}")
+            self.send_error_response(500, f"Erro interno: {str(e)}")

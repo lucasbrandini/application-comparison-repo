@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `post_id=${postId}`
             });
-
+    
             if (response.ok) {
                 alert('Post deleted successfully');
                 location.reload();
@@ -89,12 +89,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
+    
     // preciso para editar o post
     document.querySelectorAll('.editPost').forEach(button => {
         button.addEventListener('click', async () => {
             const postId = button.getAttribute('data-post-id');
-            window.location.href = `/edit-post?post_id=${postId}`;
+            window.location.href = `/edit-post?post_id=${postId}`; //
         });
     });
 });

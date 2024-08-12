@@ -404,6 +404,30 @@ def change_username(user_id, new_name):
         cursor.close()
         connection.close()
 
+# Update post
+def update_post(post_id, title, content): #(file_path=None)
+    if not post_id or not title or not content:
+        raise ValueError("Post ID, title, or content cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = "UPDATE posts SET post_title = %s, post = %s"
+        params = [title, content]
+
+        #if file_path:
+           # sql += ", post_image = %s"
+           # params.append(file_path)
+        
+        sql += " WHERE id_posts = %s"
+        params.append(post_id)
+
+        cursor.execute(sql, tuple(params))
+        connection.commit()
+    finally:
+        cursor.close()
+        connection.close()
+
 def select_all_posts_ordered():
     connection = get_connection()
     try:

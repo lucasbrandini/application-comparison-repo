@@ -25,4 +25,42 @@ document.getElementById('change-username-form').addEventListener('submit', funct
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('.list-config a');
+    const sections = document.querySelectorAll('.content-item');
+
+    // Scroll suave ao clicar nos links
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            window.scrollTo({
+                top: targetElement.offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    window.addEventListener('scroll', function() {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 60) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        links.forEach(link => {
+            link.parentElement.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.parentElement.classList.add('active');
+            }
+        });
+    });
+});
+
+
+
+
 

@@ -109,10 +109,7 @@ class routesGet(BaseHTTPRequestHandler):
             
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
-            self.end_headers()
-            
-            # 
-            
+            self.end_headers()       
             
             context = {
                 'posts': posts,
@@ -244,8 +241,6 @@ class routesGet(BaseHTTPRequestHandler):
             # Pega o post pelo id
             post = get_post(post_id)
             
-            print(post)
-            
             # Verifica se o post existe
             if post is None:
                 self.send_error_response(404, "Post não encontrado")
@@ -260,9 +255,13 @@ class routesGet(BaseHTTPRequestHandler):
                 self.send_error_response(403, "Você não tem permissão para editar este post")
                 return
             
-            # Verifica se o usuário é o dono do post
-            is_owner = post['p_id_user'] == user['id_user']
-
+            # Formata as imagens e vídeos
+            if 'post_image' in post and post['post_image'] is not None:
+                post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
+            
+            if 'post_video' in post and post['post_video'] is not None:
+                post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
+            
             # Compila o template
             compiler = Compiler()
             with open(os.path.join('templates', 'edit.hbs'), 'r', encoding='utf-8') as file:
@@ -276,7 +275,7 @@ class routesGet(BaseHTTPRequestHandler):
             context = {
                 'post': post,
                 'head': head_template,
-                'is_owner': is_owner
+                'is_owner': post['p_id_user'] == user['id_user']
             }
 
             self.send_response(200)

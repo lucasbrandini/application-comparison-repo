@@ -7,7 +7,7 @@ import jwt
 import json
 import bcrypt
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user_by_name, change_username, update_post
+from db.dbOperations import select_user_by_name, change_username, update_post_image, update_post_video
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -86,27 +86,39 @@ class routesPut(BaseHTTPRequestHandler):
     def handle_editpost(self):
         try:
             content_type = self.headers.get('Content-Type')
-            
-            if content_type == 'application/json':
-                content_length = int(self.headers['Content-Length'])
-                post_data = self.rfile.read(content_length).decode('utf-8')
+            content_length = int(self.headers['Content-Length'])
 
-                # Decodifica os dados JSON
-                post_data = json.loads(post_data)
-                post_id = post_data.get('post_id')
-                title = post_data.get('title')
-                content = post_data.get('content')
+            if 'multipart/form-data' in content_type:
+                fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': content_type})
+                post_content = {key: fields[key].value for key in fields if fields[key].value}
+
+                post_id = post_content.get('post_id')
+                title = post_content.get('title')
+                content = post_content.get('content')
 
                 # Atualiza o post no banco de dados
-                update_post(post_id, title, content)
 
-                # Envia uma resposta de sucesso
+                if 'file' in fields:
+                    file_field = fields['file']
+                    if self.is_valid_file_field(file_field):
+                        file_data, file_name, file_size, file_type = self.read_file_field(file_field)
+                        is_image, file_base64 = self.handle_file_upload(file_data, file_size, file_type)
+
+                        if is_image:
+                            update_post_image(post_id, title, content, file_base64)
+                        else:
+                            update_post_video(post_id, title, content, file_base64)
+
+                    else:
+                        self.send_error_response(400, "File field is empty or invalid")
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
                 self.wfile.write(json.dumps({'success': True, 'message': 'Post atualizado com sucesso'}).encode('utf-8'))
+
             else:
-                self.send_error_response(400, "Bad Request: Content-Type inválido")
+                self.send_error_response(400, "Invalid content type")
         except Exception as e:
             logger.error(f"Exception during update post: {e}")
-            self.send_error_response(500, f"Erro interno: {str(e)}")
+            self.send_error_response(500, f"Server Error: {e}")

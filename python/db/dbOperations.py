@@ -404,30 +404,6 @@ def change_username(user_id, new_name):
         cursor.close()
         connection.close()
 
-# Update post
-def update_post(post_id, title, content): #(file_path=None)
-    if not post_id or not title or not content:
-        raise ValueError("Post ID, title, or content cannot be null")
-
-    connection = get_connection()
-    try:
-        cursor = connection.cursor(dictionary=True)
-        sql = "UPDATE posts SET post_title = %s, post = %s"
-        params = [title, content]
-
-        #if file_path:
-           # sql += ", post_image = %s"
-           # params.append(file_path)
-        
-        sql += " WHERE id_posts = %s"
-        params.append(post_id)
-
-        cursor.execute(sql, tuple(params))
-        connection.commit()
-    finally:
-        cursor.close()
-        connection.close()
-
 def select_all_posts_ordered():
     connection = get_connection()
     try:
@@ -487,3 +463,33 @@ def insert_avatar(user_id, avatar_image):
     finally:
         cursor.close()
         connection.close()
+
+#update post with image
+def update_post_image(post_id, post_title, post, image):
+    if not post_id:
+        raise ValueError("Post ID cannot be null")
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE posts SET post_title = %s, post = %s, post_image = %s WHERE id_posts = %s"
+        cursor.execute(sql, (post_title, post, image, post_id))
+        connection.commit()
+        return "Post updated successfully."
+    finally:
+        cursor.close()
+        connection.close()
+#update post with video
+def update_post_video(post_id, post_title, post, video):
+    if not post_id:
+        raise ValueError("Post ID cannot be null")
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE posts SET post_title = %s, post = %s, post_video = %s WHERE id_posts = %s"
+        cursor.execute(sql, (post_title, post, video, post_id))
+        connection.commit()
+        return "Post updated successfully."
+    finally:
+        cursor.close()
+        connection.close()
+

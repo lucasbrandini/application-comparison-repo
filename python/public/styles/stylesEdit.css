@@ -210,6 +210,15 @@ body {
     cursor: pointer;
 }
 
+.cancel:hover {
+    color: white;
+    fill: white;
+}
+
+.cancel:hover svg path {
+    stroke: white;
+}
+
 #preview {
     display: flex;
     justify-content: center;
@@ -239,4 +248,9 @@ body {
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
+}
+
+#clearButton:hover {
+    color: white;
+    background-color: red;
 }

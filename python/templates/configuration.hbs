@@ -12,21 +12,30 @@
         <ul>
             <li><a href="#item1">Item 1</a></li>
             <li><a href="#item2">Item 2</a></li>
-            <li><a href="#item3">Item 3</a></li>
+            <li><a href="#item3">Trocar o avatar</a></li>
             <li><a href="#item4">Trocar o nome</a></li>
         </ul>
     </div>
     <div class="main">
         <div id="item1" class="content-item">Conteúdo do Item 1</div>
         <div id="item2" class="content-item">Conteúdo do Item 2</div>
-        <div id="item3" class="content-item">Conteúdo do Item 3</div>
-        <div id="item4" class="content-item">Conteúdo do Item 4</div>
+        <div id="item3" class="content-item">
+            <form id="change-avatar">
+                <img src="" alt="Tras a imagem do avatar atual" srcset="">
+                <br>
+                <br>
+                <label for="avatar">TROCA O AVATAR:</label>
+                <input type="text" id="avatar" name="TROCA O AVATAR" required>
+                <button type="submit">Alterar o avatar</button>
+            </form>
+        </div>
         <div id="item4" class="content-item">
             <form id="change-username-form">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
                 <button type="submit">Alterar</button>
             </form>
+        </div>
         </div>
     </div>
     <script src="../public/scripts/scriptsConfiguration.js" defer></script>

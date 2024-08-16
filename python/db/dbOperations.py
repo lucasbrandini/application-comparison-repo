@@ -471,7 +471,7 @@ def update_post_image(post_id, post_title, post, image):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "UPDATE posts SET post_title = %s, post = %s, post_image = %s WHERE id_posts = %s"
+        sql = "UPDATE posts SET post_title = %s, post = %s, post_image = %s, post_video = null WHERE id_posts = %s"
         cursor.execute(sql, (post_title, post, image, post_id))
         connection.commit()
         return "Post updated successfully."
@@ -485,7 +485,7 @@ def update_post_video(post_id, post_title, post, video):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "UPDATE posts SET post_title = %s, post = %s, post_video = %s WHERE id_posts = %s"
+        sql = "UPDATE posts SET post_title = %s, post = %s,post_image = null , post_video = %s WHERE id_posts = %s"
         cursor.execute(sql, (post_title, post, video, post_id))
         connection.commit()
         return "Post updated successfully."

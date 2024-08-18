@@ -493,3 +493,76 @@ def update_post_video(post_id, post_title, post, video):
         cursor.close()
         connection.close()
 
+def get_comments_by_post_id(post_id):
+    if not post_id:
+        raise ValueError("Post ID cannot be null")
+    
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "SELECT * FROM comments WHERE p_id_post = %s"
+        cursor.execute(sql, (post_id,))
+        comments = cursor.fetchall()
+        return comments
+    finally:
+        cursor.close()
+        connection.close()
+        
+def insert_comment(user_id, post_id, comment):
+    if not user_id or not post_id or not comment:
+        raise ValueError("User ID, post ID or comment cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "INSERT INTO comments (p_id_user, p_id_post, comment) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (user_id, post_id, comment))
+        connection.commit()
+        return cursor.lastrowid
+    finally:
+        cursor.close()
+        connection.close()
+        
+def edit_comment_by_author(comment, user_id, post_id, comment_id):
+    print(comment, user_id, post_id, comment_id, "edit_comment_by_author")
+    
+    try:
+        comment_id = int(comment_id)
+        user_id = int(user_id)
+        post_id = int(post_id)
+    except ValueError:
+        raise ValueError("Comment ID, user ID e post ID devem ser números inteiros")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = """
+        UPDATE comments 
+        SET comment = %s,
+            p_id_user = %s,
+            p_id_post = %s 
+        WHERE id_comment = %s 
+        """
+        cursor.execute(sql, (comment, user_id, post_id, comment_id))  # Ordem corrigida
+        connection.commit()
+        return "Comment updated successfully."
+    except Exception as e:
+        connection.rollback()
+        raise e  # Relevante para o log de erros
+    finally:
+        cursor.close()
+        connection.close()
+        
+def delete_comment_by_author(comment_id):
+    if not comment_id:
+        raise ValueError("Comment ID cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "DELETE FROM comments WHERE id_comment = %s"
+        cursor.execute(sql, (comment_id,))
+        connection.commit()
+    finally:
+        cursor.close()
+        connection.close()

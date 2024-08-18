@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{{head}}}
+    <link rel="stylesheet" type="text/css" href="/public/styles/stylesComments.css">
+    <title>Comentários</title>
+</head>
+<body>
+    <form id="commentForm" action="/create-comment" method="POST">
+        <label for="post_id">ID do Post:</label>
+        <input type="text" id="post_id" name="post_id" value="{{post_id}}" required readonly>
+        <label for="comment">Comentário:</label>
+        <input type="text" id="comment" name="comment" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <h1>Comentários</h1>
+    {{#each comments}}
+        <div class="comment" id="comment-{{id_comment}}">
+            <p>Autor do Comentário: {{p_id_user}}</p>
+            <p>Comentário: <span id="comment-text-{{id_comment}}">{{comment}}</span></p>
+            <p>Data do Comentário: {{comment_date}}</p>
+            <p>Numero do post: {{p_id_post}}</p>
+
+            {{#if is_author}}
+                <button class="edit-comment-button" data-comment-id="{{id_comment}}">Editar</button>
+                <button class="delete-comment-button" data-comment-id="{{id_comment}}">Deletar</button> 
+            {{/if}}
+
+            <form id="editCommentForm-{{id_comment}}" class="edit-comment-form" data-comment-id="{{id_comment}}" data-post-id="{{p_id_post}}" style="display: none;">
+                <input type="hidden" name="p_id_user" value="{{p_id_user}}">
+                <input type="hidden" name="id_comment" value="{{id_comment}}">
+                <textarea name="comment">{{comment}}</textarea>
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+        <hr>
+    {{/each}}
+
+
+    <script src="/public/scripts/scriptsComment.js"></script>
+</body>
+</html>

@@ -97,6 +97,13 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = `/edit-post?post_id=${postId}`; //
         });
     });
+
+    document.querySelectorAll('.commentPost').forEach(button => {
+        button.addEventListener('click', async () => {
+            const postId = button.getAttribute('data-post-id');
+            window.location.href = `/comments?post_id=${postId}`; //
+        });
+    });
 });
   
 

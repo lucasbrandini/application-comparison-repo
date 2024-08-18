@@ -7,7 +7,7 @@ import jwt
 import json
 import bcrypt
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import delete_post, delete_user
+from db.dbOperations import delete_post, delete_user, delete_comment
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -18,7 +18,8 @@ class routesDelete(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         routes = {
-            '/delete-post': self.handle_delete_post
+            '/delete-post': self.handle_delete_post,
+            '/delete-comment': self.handle_delete_comment
         }
 
         if self.path in routes:
@@ -69,3 +70,35 @@ class routesDelete(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps({"error": message}).encode('utf-8'))
+        
+    @verify_jwt
+    def handle_delete_comment(self):
+        try:
+            # Verificar o JWT e obter o payload
+            auth_header = self.headers.get('Authorization')
+            if not auth_header:
+                self.send_error_response(401, "Unauthorized: No token provided")
+                return
+
+            token = auth_header.split(" ")[1]
+            payload = verify_jwt(token)
+
+            # Extrair dados da requisição
+            content_length = int(self.headers['Content-Length'])
+            delete_data = self.rfile.read(content_length).decode('utf-8')
+            delete_data = dict(data.split('=') for data in delete_data.split('&'))
+
+            comment_id = delete_data.get('comment_id')
+            if not comment_id:
+                self.send_error_response(400, "Bad Request: Comment ID not provided")
+                return
+
+            # Deletar o comentário
+            delete_comment(comment_id)
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"message": "Comment deleted successfully"}).encode('utf-8'))
+        except Exception as e:
+            logger.error(f"Error during comment deletion: {str(e)}")
+            self.send_error_response(500, f"Server error: {str(e)}")

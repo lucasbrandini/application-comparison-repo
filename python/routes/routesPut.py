@@ -6,8 +6,9 @@ import http.cookies
 import jwt
 import json
 import bcrypt
+import urllib.parse
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user_by_name, change_username, update_post_image, update_post_video
+from db.dbOperations import select_user_by_name, change_username, update_post_image, update_post_video, edit_comment_by_author
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -18,8 +19,9 @@ class routesPut(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         routes = {
-            '/change-username': self.handle_change_username ,
-            '/editpost': self.handle_editpost
+            '/change-username': self.handle_change_username,
+            '/editpost': self.handle_editpost,
+            '/edit-comment': self.handle_edit_comment
         }
 
         if self.path in routes:
@@ -122,3 +124,35 @@ class routesPut(BaseHTTPRequestHandler):
         except Exception as e:
             logger.error(f"Exception during update post: {e}")
             self.send_error_response(500, f"Server Error: {e}")
+            
+    @verify_jwt
+    def handle_edit_comment(self):
+        try:
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+
+            comment_data = json.loads(post_data)
+            
+            comment = comment_data.get('comment')
+            user_id = comment_data.get('user_id')
+            post_id = int(comment_data.get('post_id'))
+            id_comment = comment_data.get('id_comment')
+
+            message = edit_comment_by_author(comment, user_id, post_id, id_comment)
+
+            if message == "Comment updated successfully.":
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': True, 'message': message}).encode('utf-8'))
+            else:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': False, 'message': message}).encode('utf-8'))
+        except Exception as e:
+            logger.error(f"Exception during edit comment: {e}")
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))

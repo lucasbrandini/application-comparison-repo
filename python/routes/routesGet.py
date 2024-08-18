@@ -2,7 +2,7 @@ import io
 import sys
 
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_all_posts_ordered, find_vote, select_user_by_name, get_post
+from db.dbOperations import select_all_posts_ordered, find_vote, select_user_by_name, get_post, get_comments_by_post_id
 import json
 import datetime
 from pybars import Compiler
@@ -36,6 +36,8 @@ class routesGet(BaseHTTPRequestHandler):
             self.serve_static_file(self.path)
         elif self.path.startswith('/edit-post'):
             self.render_edit_post()
+        elif self.path.startswith('/comments'):
+            self.render_comments()
         else:
             self.render_404()
 
@@ -286,3 +288,46 @@ class routesGet(BaseHTTPRequestHandler):
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
+
+    @verify_jwt
+    def render_comments(self):
+        try:
+            url = urlparse(self.path)
+            query_params = parse_qs(url.query)
+            post_id = int(query_params.get('post_id', [None])[0])
+
+            # Pega o usuário logado
+            id_user = self.decoded_token.get('name_user')
+            user = select_user_by_name(id_user)
+
+            raw_comments = get_comments_by_post_id(post_id)
+
+            comments = [{
+                'id_comment': comment[0],
+                'p_id_user': comment[1],
+                'p_id_post': comment[2],
+                'comment': comment[3],
+                'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
+                'is_author': comment[1] == user['id_user']  # Verifica se o usuário logado é o autor do comentário
+            } for comment in raw_comments]
+
+            compiler = Compiler()
+            with open(os.path.join('templates', 'comments.hbs'), 'r', encoding='utf-8') as file:
+                source = file.read()
+            template = compiler.compile(source)
+
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.end_headers()
+
+            context = {
+                'comments': comments,
+                'post_id': post_id
+            }
+
+            self.wfile.write(template(context).encode('utf-8'))
+        except Exception as e:
+            print(e)
+            self.send_error_response(500, "Server Error: " + str(e))
+
+

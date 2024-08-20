@@ -566,3 +566,33 @@ def delete_comment_by_author(comment_id):
     finally:
         cursor.close()
         connection.close()
+#Select avatar by user_id
+def select_avatar(user_id):
+    if not user_id:
+        raise ValueError("User ID cannot be null")
+    
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = "SELECT * FROM users_avatar WHERE id_user = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result
+    finally:
+        cursor.close()
+        connection.close()
+#update avatar by user_id
+def update_avatar(user_id, avatar_image):
+    if not user_id or not avatar_image:
+        raise ValueError("User ID or avatar image cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE users_avatar SET avatar_image = %s WHERE id_user = %s"
+        cursor.execute(sql, (avatar_image, user_id))
+        connection.commit()
+        return "Avatar updated successfully."
+    finally:
+        cursor.close()
+        connection.close()

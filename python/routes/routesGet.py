@@ -2,7 +2,7 @@ import io
 import sys
 
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_all_posts_ordered, find_vote, select_user_by_name, get_post, get_comments_by_post_id
+from db.dbOperations import select_all_posts_ordered, find_vote, select_user_by_name, get_post, get_comments_by_post_id, select_avatar
 import json
 import datetime
 from pybars import Compiler
@@ -179,18 +179,37 @@ class routesGet(BaseHTTPRequestHandler):
             
     @verify_jwt
     def render_configuration(self):
-        try: 
+        try:            
+            name_user = self.decoded_token.get('name_user')
+            user = select_user_by_name(name_user)
+
+            user_id = user['id_user']
+
+            avatar = select_avatar(user_id)
+
+            if 'avatar_image' in avatar and avatar['avatar_image'] is not None:
+                avatar['avatar_image'] = avatar['avatar_image'].decode('utf-8') if isinstance(avatar['avatar_image'], bytes) else avatar['avatar_image']
+
             compiler = Compiler()
+
             with open(os.path.join('templates', 'configuration.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
             template = compiler.compile(source)
             with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
                 head_source = file.read()
             head_template = compiler.compile(head_source)
+
+            context = {
+                'user': user,
+                'avatar': avatar,
+                'head': head_template
+            }
+
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
-            self.wfile.write(template({'head': head_template}).encode('utf-8'))
+
+            self.wfile.write(template(context).encode('utf-8'))
         except Exception as e:
                 print(e)
                 self.send_error_response(500, "Server Error: " + str(e))

@@ -8,7 +8,7 @@ import json
 import bcrypt
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_user_by_name, change_username, update_post_image, update_post_video, edit_comment_by_author
+from db.dbOperations import select_user_by_name, change_username, update_post_image, update_post_video, edit_comment_by_author, update_avatar
 from middleware.jwt import verify_jwt
 
 # Configuração do logging
@@ -21,7 +21,8 @@ class routesPut(BaseHTTPRequestHandler):
         routes = {
             '/change-username': self.handle_change_username,
             '/editpost': self.handle_editpost,
-            '/edit-comment': self.handle_edit_comment
+            '/edit-comment': self.handle_edit_comment,
+            '/update-avatar': self.handle_update_avatar
         }
 
         if self.path in routes:
@@ -156,3 +157,37 @@ class routesPut(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
+    @verify_jwt
+    def handle_update_avatar(self):
+        try:
+            content_type = self.headers.get('Content-Type')
+            content_length = int(self.headers['Content-Length'])
+            user_name = self.decoded_token.get('name_user')
+            user = select_user_by_name(user_name)
+            user_id = user['id_user']
+
+            if 'multipart/form-data' in content_type:
+                fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'PUT', 'CONTENT_TYPE': content_type})
+                if 'avatar' in fields:
+                    file_field = fields['avatar']
+                    if self.is_valid_file_field(file_field):
+                        file_data, file_name, file_size, file_type = self.read_file_field(file_field)
+                        is_image, file_base64 = self.handle_file_upload(file_data, file_size, file_type)
+
+                        if is_image:
+                            update_avatar(user_id, file_base64)
+                            self.send_response(200)
+                            self.send_header('Content-Type', 'application/json')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({'success': True, 'message': 'Avatar atualizado com sucesso'}).encode('utf-8'))
+                        else:
+                            self.send_error_response(400, "Invalid file type. Please upload an image file.")
+                    else:
+                        self.send_error_response(400, "File field is empty or invalid")
+                else:
+                    self.send_error_response(400, "File field is empty or invalid")
+            else:
+                self.send_error_response(400, "Invalid content type")
+        except Exception as e:
+            logger.error(f"Exception during update avatar: {e}")
+            self.send_error_response(500, f"Server Error: {e}")

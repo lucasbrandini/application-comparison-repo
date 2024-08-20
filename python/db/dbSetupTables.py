@@ -70,10 +70,24 @@ def create_tables():
     ]
 
     try:
+        # Create tables
         for table in table_definitions:
             sql = f"CREATE TABLE IF NOT EXISTS {table['tableName']} ({table['columns']})"
             cursor.execute(sql)
             print(f"Table {table['tableName']} created successfully.")
+        
+        # Create trigger
+        trigger_sql = """
+        CREATE TRIGGER before_post_delete
+        BEFORE DELETE ON posts
+        FOR EACH ROW
+        BEGIN
+            DELETE FROM comments WHERE p_id_post = OLD.id_posts;
+        END
+        """
+        cursor.execute(trigger_sql)
+        print("Trigger before_post_delete created successfully.")
+        
         connection.commit()
     except Exception as e:
         print(f"An error occurred: {e}")

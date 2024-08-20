@@ -419,6 +419,7 @@ def select_all_posts_ordered():
                 p.post_image, 
                 p.post_video, 
                 p.post_votes,
+                COUNT(c.id_comment) AS comment_count,
                 CASE 
                     WHEN TIMESTAMPDIFF(SECOND, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, p.post_date, NOW()), 's') 
                     WHEN TIMESTAMPDIFF(MINUTE, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, p.post_date, NOW()), 'min') 
@@ -427,17 +428,23 @@ def select_all_posts_ordered():
                     WHEN TIMESTAMPDIFF(WEEK, p.post_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, p.post_date, NOW()), 'w') 
                     ELSE CONCAT(TIMESTAMPDIFF(MONTH, p.post_date, NOW()), 'm') 
                 END AS post_date 
-            FROM 
-                posts p 
-            JOIN 
-                users u 
-            ON 
-                p.p_id_user = u.id_user 
-            JOIN
-				users_avatar uv
-			ON
-				uv.id_user = u.id_user
-			
+            FROM posts p 
+            JOIN users u 
+            ON p.p_id_user = u.id_user 
+            JOIN users_avatar uv
+            ON uv.id_user = u.id_user
+            LEFT JOIN comments c
+            ON c.p_id_post = p.id_posts
+            GROUP BY 
+                p.id_posts,
+                u.name_user, 
+                uv.avatar_image,
+                p.p_id_user,
+                p.post_title,
+                p.post, 
+                p.post_image, 
+                p.post_video, 
+                p.post_votes
             ORDER BY 
                 p.post_date DESC
         """

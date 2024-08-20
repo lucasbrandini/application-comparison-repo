@@ -25,14 +25,14 @@
                 <label for="avatar">TROCA O AVATAR:</label>
                 <br>
                 <br>
-                <div class="avatar-container" style="position: relative; display: inline-block;">
+                <div class="avatar-container">
                     <img class="avatar-image" src="data:image/jpeg;base64,{{avatar.avatar_image}}" width="200" height="200" alt="Avatar">
                     <img class="edit-icon" src="/public/assets/pencil.svg" alt="Edit" width="30" height="30">
                 </div>
                 <input type="file" id="avatar" name="avatar" accept="image/jpeg, image/png, image/gif" style="display: none;" required>
                 <br>
                 <br>
-                <button type="submit">Alterar o avatar</button>
+                <button type="submit" id="save-button">Salvar</button>
             </form>
         </div>
         <div id="item4" class="content-item">

@@ -46,7 +46,9 @@
                             <h4 class="postTime">Há {{post_date}}</h4>
                         </div>
                         <div class="endTop">
-                            <h4 class="comentarios">(146)comentários</h4>
+                            {{#if comment_count}}
+                            <h4 class="comentarios">({{comment_count}}) Comentários</h4>
+                            {{/if}}
                         </div>
                     </div>
                     {{#if post_title}}

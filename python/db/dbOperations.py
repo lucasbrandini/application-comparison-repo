@@ -419,6 +419,7 @@ def select_all_posts_ordered():
                 p.post_image, 
                 p.post_video, 
                 p.post_votes,
+                COUNT(c.id_comment) AS comment_count,
                 CASE 
                     WHEN TIMESTAMPDIFF(SECOND, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, p.post_date, NOW()), 's') 
                     WHEN TIMESTAMPDIFF(MINUTE, p.post_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, p.post_date, NOW()), 'min') 
@@ -427,17 +428,23 @@ def select_all_posts_ordered():
                     WHEN TIMESTAMPDIFF(WEEK, p.post_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, p.post_date, NOW()), 'w') 
                     ELSE CONCAT(TIMESTAMPDIFF(MONTH, p.post_date, NOW()), 'm') 
                 END AS post_date 
-            FROM 
-                posts p 
-            JOIN 
-                users u 
-            ON 
-                p.p_id_user = u.id_user 
-            JOIN
-				users_avatar uv
-			ON
-				uv.id_user = u.id_user
-			
+            FROM posts p 
+            JOIN users u 
+            ON p.p_id_user = u.id_user 
+            JOIN users_avatar uv
+            ON uv.id_user = u.id_user
+            LEFT JOIN comments c
+            ON c.p_id_post = p.id_posts
+            GROUP BY 
+                p.id_posts,
+                u.name_user, 
+                uv.avatar_image,
+                p.p_id_user,
+                p.post_title,
+                p.post, 
+                p.post_image, 
+                p.post_video, 
+                p.post_votes
             ORDER BY 
                 p.post_date DESC
         """
@@ -563,6 +570,36 @@ def delete_comment_by_author(comment_id):
         sql = "DELETE FROM comments WHERE id_comment = %s"
         cursor.execute(sql, (comment_id,))
         connection.commit()
+    finally:
+        cursor.close()
+        connection.close()
+#Select avatar by user_id
+def select_avatar(user_id):
+    if not user_id:
+        raise ValueError("User ID cannot be null")
+    
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = "SELECT * FROM users_avatar WHERE id_user = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result
+    finally:
+        cursor.close()
+        connection.close()
+#update avatar by user_id
+def update_avatar(user_id, avatar_image):
+    if not user_id or not avatar_image:
+        raise ValueError("User ID or avatar image cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor()
+        sql = "UPDATE users_avatar SET avatar_image = %s WHERE id_user = %s"
+        cursor.execute(sql, (avatar_image, user_id))
+        connection.commit()
+        return "Avatar updated successfully."
     finally:
         cursor.close()
         connection.close()

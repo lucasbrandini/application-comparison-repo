@@ -10,6 +10,7 @@ import random
 from http.server import BaseHTTPRequestHandler
 from db.dbOperations import insert_user, select_user_by_name, insert_post, insert_post_image, insert_post_video, upvote, downvote, change_username, insert_avatar, update_post_image, update_post_video, insert_comment
 from middleware.jwt import verify_jwt
+import urllib.parse
 
 # Configuração do logging
 logging.basicConfig(level=logging.INFO)
@@ -91,6 +92,8 @@ class routesPost(BaseHTTPRequestHandler):
         user_data = dict(data.split('=') for data in post_data.split('&'))
 
         try:
+            user_data['email'] = urllib.parse.unquote(user_data['email'])
+
             user = select_user_by_name(user_data['name'])
             if user:
                 self.send_response(302)
@@ -101,7 +104,7 @@ class routesPost(BaseHTTPRequestHandler):
             hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
             # Inserir o usuário e obter o id do usuário inserido
-            user_id = insert_user(user_data['name'], hashed_password)
+            user_id = insert_user(user_data['name'], user_data['email'], hashed_password)
 
             # Gerar ou selecionar uma imagem aleatória para o avatar
             avatar_image = generate_random_avatar()

@@ -14,6 +14,7 @@ def create_tables():
             "columns": """
             id_user INT AUTO_INCREMENT PRIMARY KEY,
             name_user VARCHAR(255) UNIQUE NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
             create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             """
@@ -74,19 +75,26 @@ def create_tables():
         for table in table_definitions:
             sql = f"CREATE TABLE IF NOT EXISTS {table['tableName']} ({table['columns']})"
             cursor.execute(sql)
-            print(f"Table {table['tableName']} created successfully.")
+            print(f"\u001b[33mTable {table['tableName']} created successfully.\u001b[0m")
         
-        # Create trigger
-        trigger_sql = """
-        CREATE TRIGGER before_post_delete
-        BEFORE DELETE ON posts
-        FOR EACH ROW
-        BEGIN
-            DELETE FROM comments WHERE p_id_post = OLD.id_posts;
-        END
-        """
-        cursor.execute(trigger_sql)
-        print("Trigger before_post_delete created successfully.")
+        # Check if trigger exists
+        cursor.execute("SHOW TRIGGERS LIKE 'posts'")
+        triggers = cursor.fetchall()
+        
+        if not any(trigger[0] == 'before_post_delete' for trigger in triggers):
+            # Create trigger if it doesn't exist
+            trigger_sql = """
+            CREATE TRIGGER before_post_delete
+            BEFORE DELETE ON posts
+            FOR EACH ROW
+            BEGIN
+                DELETE FROM comments WHERE p_id_post = OLD.id_posts;
+            END
+            """
+            cursor.execute(trigger_sql)
+            print("\u001b[34mTrigger before_post_delete created successfully.\u001b[0m")
+        else:
+            print("\u001b[31mTrigger before_post_delete already exists.\u001b[0m")
         
         connection.commit()
     except Exception as e:
@@ -95,7 +103,7 @@ def create_tables():
         if connection.is_connected():
             cursor.close()
             connection.close()
-            print("MySQL connection is closed")
+            print("\u001b[31mMySQL connection is closed\u001b[0m")
 
 if __name__ == "__main__":
     create_tables()

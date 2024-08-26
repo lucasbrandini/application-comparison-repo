@@ -16,7 +16,7 @@ pool = pooling.MySQLConnectionPool(
     database=os.getenv("DB_NAME")
 )
 
-print("Connected to the database.")
+print("\u001b[32mConnected to the database.\u001b[0m")
 
 def get_connection():
     try:

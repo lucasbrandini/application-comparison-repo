@@ -14,7 +14,7 @@ class CombinedRoutes(routesPost, routesGet, routesDelete, routesPut):
 
 # Configura e inicia o servidor
 httpd = HTTPServer(('localhost', 8000), CombinedRoutes)
-print("Serving at port 8000, access http://localhost:8000/register")
+print("\u001b[36;1mServing at port 8000, access http://localhost:8000/register\u001b[0m")
 
 try:
     httpd.serve_forever()

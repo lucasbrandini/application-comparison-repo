@@ -12,9 +12,10 @@ body {
 }
 
 main {
-    margin: 10.8rem auto 0 auto;
+    margin: 20px 0 0 0;
     display: flex;
-    width: 52rem;
+    justify-content: center;
+    /* width: 52rem; */
     gap: 3.5rem;    
 }
 
@@ -54,35 +55,58 @@ header div a {
 }
 
 .container {
-    width: 386px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo-img {
+    width: 79px;
+    height: 79px;
+    margin-bottom: 20px;
 }
 
 .container h1 {
-    line-height: 36.54px;
-    color: #FFFFFF;
+    font-style: normal;
     font-weight: 800;
-    font-size: 1.8125rem;
+    font-size: 29px;
+    line-height: 37px;
+    color: #FFFFFF;
+    margin-bottom: 20px;
 }
 
 .container p {
-    margin-top: .625rem;
-    font-size: 1.5625rem;
-    color: #9B9CA4;
+    font-style: normal;
     font-weight: 600;
+    font-size: 25px;
+    line-height: 32px;
+    color: #9B9CA4;
+    margin-bottom: 35px;
+}
 
-    margin-bottom: 2.3125rem;
+.form-content {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px 0 0;
+    width: 361px;
 }
 
 #name {
     font-size: 1.5625rem;
     font-weight: bold;
     color: #FFFFFF;
-
+    margin-left: 0px;
 }
 
 #name-input {
-    margin-top: 4px;
-    
+    margin-top: 4px;    
     width: 100%;
     background: transparent;
     color: #9B9CA4;
@@ -91,21 +115,21 @@ header div a {
     margin-bottom: 5px;
 }
 
-#name-input::placeholder {
+#name-input::placeholder,
+#password-input::placeholder {
     color: #4A569C;
     font-size: 1.25rem;
     font-weight: 600;
 }
 
 .usernameField {
-    margin-top: .625rem;
+    margin: 15px 0 0 0px;
     display: flex;
     gap: .625rem;
     padding: .4375rem;
     background: #21274A;
     border-radius: .375rem;
-    margin-bottom: .9375rem;
-    width: 24.125rem;
+    width: 321px;
     height: 3.0625rem;
 }
 
@@ -124,14 +148,14 @@ header div a {
 }
 
 .passwordField {
-    margin-top: .625rem;
+    margin: 15px 0 0 0px;
     display: flex;
     gap: .625rem;
     padding: .4375rem;
     background: #21274A;
     border-radius: .375rem;
     margin-bottom: .9375rem;
-    width: 24.125rem;
+    width: 321px;
     height: 3.0625rem;
 }
 
@@ -139,11 +163,13 @@ header div a {
     font-size: 1.5625rem;
     font-weight: bold;
     color: #FFFFFF;
+    margin-left: 0px;
+    margin-top: 18px;
+    display: block;
 }
 
 #password-input {
-    margin-top: 4px;
-    
+    margin-top: 4px;    
     width: 100%;
     background: transparent;
     color: #9B9CA4;
@@ -152,18 +178,13 @@ header div a {
     margin-bottom: 5px;
 }
 
-#password-input::placeholder {
-    color: #4A569C;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
 #submit {
     display: flex;
     align-items: center;    
     justify-content: center;
     gap: .625rem;
-    margin-top: 2.5rem;
+    margin-top: 35px;
+    margin-left: 0px;
     padding: 1.25rem;
     font-size: .575rem;
     border: 0;
@@ -171,8 +192,8 @@ header div a {
     font-size: 1.1875rem;
     font-weight: 700;
     border-radius: .375rem;
-    background-color: #4900EB;
-    width: 24.125rem;
+    background-color: #323F8F;
+    width: 321px;
     cursor: pointer; 
     transition: background-color 0.3s ease; 
 }
@@ -182,7 +203,9 @@ header div a {
 }
 
 #main-image {
-    margin-top: .625rem;
+    margin: 15px 0 0 200px;
+    width: 700px;
+    height: 700px;
 }
 
 .imgButton {

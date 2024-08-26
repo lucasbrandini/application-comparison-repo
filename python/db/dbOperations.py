@@ -32,17 +32,16 @@ def select_all_users():
         cursor.close()
         connection.close()
 
-# Insert
-def insert_user(name, password):
-    print(name, password)
-    if not name or not password:
-        raise ValueError("Name or password cannot be null")
+# Insert user with hashed password,email and name
+def insert_user(name, email, password):
+    if not name or not password or not email:
+        raise ValueError("Name or password or email cannot be null")
 
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "INSERT INTO users (name_user, password) VALUES (%s, %s)"
-        cursor.execute(sql, (name, password))
+        sql = "INSERT INTO users (name_user,email, password) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (name, email, password))
         connection.commit()
         return cursor.lastrowid
     finally:

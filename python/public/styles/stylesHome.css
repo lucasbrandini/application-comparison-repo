@@ -374,11 +374,22 @@ strong {
     border: none;
 }
 
+#preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #080a14;
+    border-radius: 7px;
+    width: 250px;
+    height: 250px;
+    margin: 63px 0 0 auto;
+}
+
 /* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
 .btnSubmit {
     height: 45px;
     width: 200px;
-    margin: 280px 0 15px auto;
+    margin: 25px 0 15px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -434,7 +445,7 @@ strong {
     align-self: center;
 }
 
-#file {
+#file-input {
     display: none;
 }
 
@@ -617,4 +628,28 @@ strong {
 
 .section3 {
     width: 120px;
+}
+
+#file-name {
+    font-size: 14px;
+    color: #4A569C;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: inline-block;
+}
+
+#preview img,
+#preview video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#clear-input {
+    color:rgb(184, 50, 50);
+    background-color: Transparent;
+    border: none;
+    cursor: pointer;
 }

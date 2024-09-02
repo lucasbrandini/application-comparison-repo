@@ -104,6 +104,11 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = `/comments?post_id=${postId}`; //
         });
     });
+
+    document.querySelectorAll('.cardTextDescri').forEach(card => {
+        const maxLength = 190;
+        card.innerText = card.innerText.length > maxLength ? card.innerText.substring(0, maxLength) + '...' : card.innerText;
+    });
 });
   
 
@@ -207,3 +212,4 @@ window.onclick = function (event) {
     }
   }
 };
+

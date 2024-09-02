@@ -79,6 +79,12 @@ strong {
     gap: 1.4375rem;
 }
 
+.btnPost:hover {
+    background: #4F00FF;
+    cursor: pointer;
+    transition: 1s;
+}
+
 .cardBox {
     margin: 4.425rem auto;
     width: 56.25rem;
@@ -109,24 +115,51 @@ strong {
     justify-content: center;
 }
 
-.cardText {
-    margin-top: 1.25rem;
-    display: flex;
-    justify-content: center;
-    font-size: 1.25rem;
+.cardTextTitle {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 23px;
+    /* identical to box height, or 34px */
+
+    color: #F7F7F7;
+
+    margin-top: 1rem;
+}
+
+.cardTextDescri {
+    font-style: normal;
     font-weight: 500;
-    line-height: 1.675rem;
-    text-align: left;
-    color: #FFFFFF8F;
-    text-align:left;
+    font-size: 19px;
+    /* or 27px */
+
+    color: #cccccc;
+    margin-top: 0.6rem;
+    margin-bottom: 1rem;
+
+    
+}
+
+.cardTextImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 15px;
 }
 
 .username {
-    font-size: 1.5625rem;
     font-weight: 700;
-    line-height: 2.0938rem;
-    text-align: left;
-    color: #FFFFFF;
+    font-size: 21px;
+    line-height: 134.01%;
+    /* or 28px */
+
+    color: #EAEAEA;
+}
+
+.username span {
+    color: #ACACAC;
+    font-size: 18px;
+    font-weight: semibold;
 }
 
 .postTime {
@@ -530,6 +563,7 @@ strong {
 
 .pfpImg {
     border-radius: 5px; /* Torna a imagem circular */
+    outline: 4px solid #31396B;
 }
 
 .textGithub {

@@ -65,7 +65,6 @@ class routesPost(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
         user_data = dict(data.split('=') for data in post_data.split('&'))
-        
         user_data['name'] = urllib.parse.unquote_plus(user_data['name'])
 
         try:

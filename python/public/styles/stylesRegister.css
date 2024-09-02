@@ -68,9 +68,13 @@ header div a {
     color: #FFFFFF;
 }
 
+.pMobile {
+    display:none;
+}
+
 .container p {
     margin-top: .625rem;
-    font-size: 1.5625rem;
+    font-size:  24px;
     color: #9B9CA4;
     font-weight: 600;
     margin-bottom: 2.3125rem;
@@ -95,7 +99,7 @@ header div a {
 #password,
 #email,
 #confirm-password {
-    font-size: 1.5625rem;
+    font-size: 1.375rem;
     font-weight: bold;
     color: #FFFFFF;
 
@@ -155,7 +159,7 @@ header div a {
     align-items: center;
     justify-content: center;
     gap: .625rem;
-    margin-top: 20px;
+    margin-top: 23px;
     padding: 1.25rem;
     font-size: .575rem;
     border: 0;
@@ -194,55 +198,82 @@ header div a {
     height: 1.75rem;
 }
 
+.container .slogin{
+    display: none;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.container .slogin a{
+    color:white;
+    text-decoration-line: underline;
+}
+
+.container .slogin a:visited{
+    color:white;
+}
+
 @media (max-width: 900px) {
+    header {
+        display: none;
+    }
+
     main {
         flex-direction: column;
         justify-content: center;
         width: 100%;
-        gap: 0rem;
-        margin: 0rem;
+        gap: 0;
+        margin-top: 80px;
         align-items: center;
     }
 
     #main-image {
-        width: 80%;
-        margin-top: 0px;
-    }
-
-    header {
-        justify-content: center;
-        margin: 1.25rem 0;
-    }
-    
-    header p {
-        font-size: .9375rem;
-        margin-left: .625rem;
-    }
-    
-    header div {
-        width: 4rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center; 
-    }
-
-    header div a {
-        text-decoration: none;
-    }
-    
-    header div a p {
-        width: 4rem;
-        line-height: 1.25rem;
-        font-size: .825rem;
-        margin: 0rem;
+        display: none;
     }
 
     .container {
-        width: 90%;
+        width: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
     }
 
-    .usernameField, .passwordField, #submit {
+    .pMobile {
+        display:block;
+    }
+
+    .container p {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-content {
+        display: block;
+        flex-wrap: wrap;
+        text-align: left;
+    }
+
+    #name,
+    #password,
+    #email,
+    #confirm-password {
+        font-size: 20px;
+    }
+
+    .usernameField,
+    .emailField,
+    .passwordField,
+    .confirm-passwordField,
+    #submit {
         width: 100%;
+    }
+
+    .container .slogin{
+        display: block;
     }
 }

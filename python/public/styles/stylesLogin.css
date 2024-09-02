@@ -79,16 +79,16 @@ header div a {
     font-size: 29px;
     line-height: 37px;
     color: #FFFFFF;
-    margin-bottom: 20px;
+    margin-bottom: 13px;
 }
 
 .container p {
     font-style: normal;
     font-weight: 600;
-    font-size: 25px;
+    font-size: 22px;
     line-height: 32px;
     color: #9B9CA4;
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 }
 
 .form-content {
@@ -99,7 +99,7 @@ header div a {
 }
 
 #name {
-    font-size: 1.5625rem;
+    font-size: 1.375rem;
     font-weight: bold;
     color: #FFFFFF;
     margin-left: 0px;
@@ -160,7 +160,7 @@ header div a {
 }
 
 #password {
-    font-size: 1.5625rem;
+    font-size: 1.375rem;
     font-weight: bold;
     color: #FFFFFF;
     margin-left: 0px;
@@ -186,10 +186,9 @@ header div a {
     margin-top: 35px;
     margin-left: 0px;
     padding: 1.25rem;
-    font-size: .575rem;
     border: 0;
     color: #FFFFFF;
-    font-size: 1.1875rem;
+    font-size: 20px;
     font-weight: 700;
     border-radius: .375rem;
     background-color: #323F8F;
@@ -214,55 +213,58 @@ header div a {
     justify-content: center;
 }
 
+.form-content .slogin {
+    display: none;
+    font-size: 17px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+.container .slogin a{
+    color:white;
+    text-decoration-line: underline;
+}
+
+.container .slogin a:visited{
+    color:white;
+}
+
 @media (max-width: 900px) {
     main {
         flex-direction: column;
         justify-content: center;
         width: 100%;
         gap: 0rem;
-        margin: 0rem;
+        margin-top: 140px;
         align-items: center;
     }
 
     #main-image {
-        width: 80%;
-        margin-top: 0px;
+        display:none;
     }
 
     header {
-        justify-content: center;
-        margin: 1.25rem 0;
+        display:none;
     }
-    
-    header p {
-        font-size: .9375rem;
-        margin-left: .625rem;
-    }
-    
-    header div {
-        width: 4rem;
-        height: 2rem;
-        display: flex;
+
+    .content, .form-content{
         align-items: center;
-        justify-content: center; 
+        justify-content: center;
     }
 
-    header div a {
+    .container p{
+        text-align: center;
+    }
+
+    .form-content{
+        width: 321px;
+        margin: 0 auto;
+    }
+
+    .form-content .slogin {
+        display: block;
         text-decoration: none;
-    }
-    
-    header div a p {
-        width: 4rem;
-        line-height: 1.25rem;
-        font-size: .825rem;
-        margin: 0rem;
-    }
-
-    .container {
-        width: 90%;
-    }
-
-    .usernameField, .passwordField, #submit {
-        width: 100%;
+        margin-top: 10px;
     }
 }

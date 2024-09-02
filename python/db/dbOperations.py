@@ -34,6 +34,9 @@ def select_all_users():
 
 # Insert user with hashed password,email and name
 def insert_user(name, email, password):
+    
+    print(name)
+    
     if not name or not password or not email:
         raise ValueError("Name or password or email cannot be null")
 

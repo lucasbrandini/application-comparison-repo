@@ -213,3 +213,55 @@ window.onclick = function (event) {
   }
 };
 
+document.getElementById('file-input').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const fileName = document.getElementById('file-name');
+    const filePreviewDiv = document.getElementById('preview');
+
+    if (file) {
+        // Limitar o nome do arquivo a 20 caracteres, por exemplo
+        const maxLength = 28;
+        let displayName = file.name;
+        if (file.name.length > maxLength) {
+            displayName = file.name.slice(0, maxLength) + '...';
+        }
+
+        // Exibe o nome do arquivo truncado
+        fileName.textContent = displayName;
+
+        // Limpa qualquer preview anterior
+        filePreviewDiv.innerHTML = '';
+
+        // Cria um objeto URL para o arquivo selecionado
+        const fileURL = URL.createObjectURL(file);
+
+        if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            console.log(img)
+            img.src = fileURL;
+            filePreviewDiv.appendChild(img);
+        } else if (file.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = fileURL;
+            video.controls = true;
+            filePreviewDiv.appendChild(video);
+        }
+    } else {
+        // Limpa o nome do arquivo e o preview se nenhum arquivo for selecionado
+        fileName.textContent = '';
+        filePreviewDiv.innerHTML = '';
+    }
+});
+
+document.getElementById('clear-input').addEventListener('click', function() {
+    const fileInput = document.getElementById('file-input');
+    const fileName = document.getElementById('file-name');
+    const filePreviewDiv = document.getElementById('preview');
+
+    // Reseta o campo de arquivo
+    fileInput.value = '';
+
+    // Limpa o nome do arquivo e o preview
+    fileName.textContent = 'Selecione uma imagem/vídeo';
+    filePreviewDiv.innerHTML = '';
+});

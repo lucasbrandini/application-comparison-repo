@@ -213,7 +213,7 @@ window.onclick = function (event) {
   }
 };
 
-document.getElementById('file-input').addEventListener('change', function(event) {
+document.getElementById('file').addEventListener('change', function(event) {
     const file = event.target.files[0];
     const fileName = document.getElementById('file-name');
     const filePreviewDiv = document.getElementById('preview');
@@ -254,7 +254,7 @@ document.getElementById('file-input').addEventListener('change', function(event)
 });
 
 document.getElementById('clear-input').addEventListener('click', function() {
-    const fileInput = document.getElementById('file-input');
+    const fileInput = document.getElementById('file');
     const fileName = document.getElementById('file-name');
     const filePreviewDiv = document.getElementById('preview');
 

@@ -1,4 +1,3 @@
-//! Create the tables in the database
 const db = require("./dbConnection");
 
 const setupTables = () => {
@@ -7,55 +6,79 @@ const setupTables = () => {
       console.error("Failed to get database connection: ", err);
       return;
     }
-    //! Define the tables to be created
+
     const tableDefinitions = [
       {
         tableName: "users",
         columns: `
-        id_user INT AUTO_INCREMENT PRIMARY KEY,
-        name_user VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    `,
+          id_user INT AUTO_INCREMENT PRIMARY KEY,
+          name_user VARCHAR(255) UNIQUE NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        `,
       },
       {
         tableName: "users_avatar",
         columns: `
-        id_avatar INT AUTO_INCREMENT PRIMARY KEY,
-        id_user INT,
-        avatar_image LONGBLOB,
-        date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (id_user) REFERENCES users(id_user)
-    `,
+          id_avatar INT AUTO_INCREMENT PRIMARY KEY,
+          id_user INT,
+          avatar_image LONGBLOB,
+          date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (id_user) REFERENCES users(id_user)
+        `,
       },
       {
         tableName: "posts",
         columns: `
-        id_posts INT AUTO_INCREMENT PRIMARY KEY,
-        p_id_user INT,
-        post VARCHAR(1024) NOT NULL,
-        post_image LONGBLOB,
-        post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (p_id_user) REFERENCES users(id_user)
-    `,
+          id_posts INT AUTO_INCREMENT PRIMARY KEY,
+          p_id_user INT,
+          post_title VARCHAR(196),
+          post VARCHAR(1024),
+          post_image LONGBLOB,
+          post_video LONGBLOB,
+          post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          post_votes INT DEFAULT 0,
+          FOREIGN KEY (p_id_user) REFERENCES users(id_user)
+        `,
       },
       {
         tableName: "comments",
         columns: `
-        id_comment INT AUTO_INCREMENT PRIMARY KEY,
-        p_id_user INT,
-        p_id_post INT,
-        comment VARCHAR(512) NOT NULL,
-        comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (p_id_user) REFERENCES users(id_user),
-        FOREIGN KEY (p_id_post) REFERENCES posts(id_posts)
-    `,
+          id_comment INT AUTO_INCREMENT PRIMARY KEY,
+          p_id_user INT,
+          p_id_post INT,
+          comment VARCHAR(512) NOT NULL,
+          comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (p_id_user) REFERENCES users(id_user),
+          FOREIGN KEY (p_id_post) REFERENCES posts(id_posts)
+        `,
       },
+      {
+        tableName: "votes",
+        columns: `
+          id_vote INT AUTO_INCREMENT PRIMARY KEY,
+          id_user INT,
+          id_post INT,
+          vote_type ENUM('upvote', 'downvote'),
+          vote_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (id_user) REFERENCES users(id_user),
+          FOREIGN KEY (id_post) REFERENCES posts(id_posts),
+          UNIQUE KEY unique_vote (id_user, id_post)
+        `,
+      }
     ];
 
-    //* Create the tables
-    tableDefinitions.forEach((tableDef, index) => {
+    //* Create tables sequentially to avoid issues with foreign key constraints
+    const createTable = (index) => {
+      if (index >= tableDefinitions.length) {
+        createTrigger(); // Proceed to create trigger after all tables are created
+        return;
+      }
+
+      const tableDef = tableDefinitions[index];
       const sql = `CREATE TABLE IF NOT EXISTS ${tableDef.tableName} (${tableDef.columns})`;
+
       connection.query(sql, (err) => {
         if (err) {
           console.error(`Error creating table ${tableDef.tableName}:`, err);
@@ -63,11 +86,48 @@ const setupTables = () => {
           console.log(`Table ${tableDef.tableName} created successfully.`);
         }
 
-        if (index === tableDefinitions.length - 1) {
+        createTable(index + 1);
+      });
+    };
+
+    //* Create trigger after creating all tables
+    const createTrigger = () => {
+      const checkTriggerSql = "SHOW TRIGGERS LIKE 'posts'";
+      connection.query(checkTriggerSql, (err, results) => {
+        if (err) {
+          console.error("Error checking for existing triggers:", err);
+          connection.release();
+          return;
+        }
+
+        const triggerExists = results.some((trigger) => trigger.Trigger === 'before_post_delete');
+
+        if (!triggerExists) {
+          const triggerSql = `
+            CREATE TRIGGER before_post_delete
+            BEFORE DELETE ON posts
+            FOR EACH ROW
+            BEGIN
+              DELETE FROM comments WHERE p_id_post = OLD.id_posts;
+            END
+          `;
+
+          connection.query(triggerSql, (err) => {
+            if (err) {
+              console.error("Error creating trigger before_post_delete:", err);
+            } else {
+              console.log("Trigger before_post_delete created successfully.");
+            }
+            connection.release();
+          });
+        } else {
+          console.log("Trigger before_post_delete already exists.");
           connection.release();
         }
       });
-    });
+    };
+
+    createTable(0); // Start the table creation process
   });
 };
 

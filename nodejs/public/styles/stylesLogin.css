@@ -12,9 +12,10 @@ body {
 }
 
 main {
-    margin: 10.8rem auto 0 auto;
+    margin: 20px 0 0 0;
     display: flex;
-    width: 52rem;
+    justify-content: center;
+    /* width: 52rem; */
     gap: 3.5rem;    
 }
 
@@ -33,7 +34,7 @@ header p {
 }
 
 header div {
-    width: 4.125rem;
+    width: 5.125rem;
     height: 2.5rem;
     border-radius: 20px;
     background-color: #D9D9D9;
@@ -54,35 +55,58 @@ header div a {
 }
 
 .container {
-    width: 386px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo-img {
+    width: 79px;
+    height: 79px;
+    margin-bottom: 20px;
 }
 
 .container h1 {
-    line-height: 36.54px;
-    color: #FFFFFF;
+    font-style: normal;
     font-weight: 800;
-    font-size: 1.8125rem;
+    font-size: 29px;
+    line-height: 37px;
+    color: #FFFFFF;
+    margin-bottom: 13px;
 }
 
 .container p {
-    margin-top: .625rem;
-    font-size: 1.5625rem;
-    color: #9B9CA4;
+    font-style: normal;
     font-weight: 600;
+    font-size: 22px;
+    line-height: 32px;
+    color: #9B9CA4;
+    margin-bottom: 30px;
+}
 
-    margin-bottom: 2.3125rem;
+.form-content {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px 0 0;
+    width: 361px;
 }
 
 #name {
-    font-size: 1.5625rem;
+    font-size: 1.375rem;
     font-weight: bold;
     color: #FFFFFF;
-
+    margin-left: 0px;
 }
 
 #name-input {
-    margin-top: 4px;
-    
+    margin-top: 4px;    
     width: 100%;
     background: transparent;
     color: #9B9CA4;
@@ -91,22 +115,26 @@ header div a {
     margin-bottom: 5px;
 }
 
-#name-input::placeholder {
+#name-input::placeholder,
+#password-input::placeholder {
     color: #4A569C;
     font-size: 1.25rem;
     font-weight: 600;
 }
 
 .usernameField {
-    margin-top: .625rem;
+    margin: 15px 0 0 0px;
     display: flex;
     gap: .625rem;
     padding: .4375rem;
     background: #21274A;
     border-radius: .375rem;
-    margin-bottom: .9375rem;
-    width: 24.125rem;
+    width: 321px;
     height: 3.0625rem;
+}
+
+.usernameField .imgInput {
+    margin-top: .375rem;
 }
 
 .imgInput {
@@ -115,29 +143,33 @@ header div a {
     margin-left: .625rem;
 }
 
-
+.passwordField .imgInput {
+    margin-top: 6px;
+}
 
 .passwordField {
-    margin-top: .625rem;
+    margin: 15px 0 0 0px;
     display: flex;
     gap: .625rem;
     padding: .4375rem;
     background: #21274A;
     border-radius: .375rem;
     margin-bottom: .9375rem;
-    width: 24.125rem;
+    width: 321px;
     height: 3.0625rem;
 }
 
 #password {
-    font-size: 1.5625rem;
+    font-size: 1.375rem;
     font-weight: bold;
     color: #FFFFFF;
+    margin-left: 0px;
+    margin-top: 18px;
+    display: block;
 }
 
 #password-input {
-    margin-top: 4px;
-    
+    margin-top: 4px;    
     width: 100%;
     background: transparent;
     color: #9B9CA4;
@@ -146,50 +178,56 @@ header div a {
     margin-bottom: 5px;
 }
 
-#password-input::placeholder {
-    color: #4A569C;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-#submit-login {
+#submit {
     display: flex;
-    align-items: center;
+    align-items: center;    
     justify-content: center;
     gap: .625rem;
-    margin-top: 2.5rem;
+    margin-top: 35px;
+    margin-left: 0px;
     padding: 1.25rem;
-    font-size: .575rem;
     border: 0;
     color: #FFFFFF;
-    font-size: 1.1875rem;
+    font-size: 20px;
     font-weight: 700;
     border-radius: .375rem;
-    background-color: #4900EB;
-    width: 24.125rem;
+    background-color: #323F8F;
+    width: 321px;
     cursor: pointer; 
     transition: background-color 0.3s ease; 
 }
 
-#submit-login:hover {
+#submit:hover {
     background-color: #470ec2;
 }
 
 #main-image {
-    margin-top: .625rem;
-}
-
-.passwordField .imgInput {
-    margin-top: .375rem;
-}
-
-.usernameField .imgInput {
-    margin-top: .375rem;
+    margin: 15px 0 0 200px;
+    width: 700px;
+    height: 700px;
 }
 
 .imgButton {
     width: 1.75rem;
     height: 1.75rem;
+    justify-content: center;
+}
+
+.form-content .slogin {
+    display: none;
+    font-size: 17px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+.container .slogin a{
+    color:white;
+    text-decoration-line: underline;
+}
+
+.container .slogin a:visited{
+    color:white;
 }
 
 @media (max-width: 900px) {
@@ -198,49 +236,35 @@ header div a {
         justify-content: center;
         width: 100%;
         gap: 0rem;
-        margin: 0rem;
+        margin-top: 140px;
         align-items: center;
     }
 
     #main-image {
-        width: 80%;
-        margin-top: 0px;
+        display:none;
     }
 
     header {
-        justify-content: center;
-        margin: 1.25rem 0;
+        display:none;
     }
-    
-    header p {
-        font-size: .9375rem;
-        margin-left: .625rem;
-    }
-    
-    header div {
-        width: 4rem;
-        height: 2rem;
-        display: flex;
+
+    .content, .form-content{
         align-items: center;
-        justify-content: center; 
+        justify-content: center;
     }
 
-    header div a {
+    .container p{
+        text-align: center;
+    }
+
+    .form-content{
+        width: 321px;
+        margin: 0 auto;
+    }
+
+    .form-content .slogin {
+        display: block;
         text-decoration: none;
-    }
-    
-    header div a p {
-        width: 4rem;
-        line-height: 1.25rem;
-        font-size: .825rem;
-        margin: 0rem;
-    }
-
-    .container {
-        width: 90%;
-    }
-
-    .usernameField, .passwordField, #submit-login {
-        width: 100%;
+        margin-top: 10px;
     }
 }

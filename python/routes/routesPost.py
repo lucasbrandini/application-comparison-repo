@@ -90,13 +90,9 @@ class routesPost(BaseHTTPRequestHandler):
     def handle_register(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
-        
-        
-        
+            
         user_data = dict(data.split('=') for data in post_data.split('&'))
         
-        print(user_data, post_data)
-
         try:
             user_data['email'] = urllib.parse.unquote_plus(user_data['email'])
             user_data['name'] = urllib.parse.unquote_plus(user_data['name'])

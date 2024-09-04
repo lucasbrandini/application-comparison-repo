@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{{head}}}
+    <link rel="stylesheet" href="/public/styles/stylesLogin.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <header>
+        <p>Ainda n&atilde;o tem seu registro? Registre-se!</p>
+        <div>
+            <a href="/register">
+                <p>Registre</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="content">
+                <img class="logo-img" src="/public/assets/logo.svg">
+                <h1>Acessar Conta</h1>
+                <p>
+                    Bem vindo,<br> fa&ccedil;a login para continuar!
+                </p>
+                <div class="form-content">
+                    <form action="/login" method="post">
+                        <label for="name" id="name">Nome de usu&aacute;rio</label>
+                        <div class="usernameField">
+                            <img class="imgInput" src="/public/assets/username.svg">
+                            <input id="name-input" type="text" name="name" placeholder="seu nome">
+                        </div>
+                        <label for="password" id="password">Senha</label>
+                        <div class="passwordField">
+                            <img class="imgInput" src="/public/assets/password.svg">
+                            <input id="password-input" type="password" name="password" placeholder="*****">
+                        </div>
+                        <button id="submit">Acessar!<img class="imgButton" src="/public/assets/login.svg"></button>
+                        <p class="slogin">Ainda n&atilde;o tem seu registro? <a href="/register">Registre</a></p>            
+                    </form>
+                </div>
+            </div>
+            <img id="main-image" src="/public/assets/illustration.svg" alt="tela de boas vindas">
+        </div>
+    </main>
+</body>
+
+</html>

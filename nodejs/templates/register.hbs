@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{{head}}}
+    <link rel="stylesheet" href="/public/styles/stylesRegister.css">
+    <title>Registro</title>
+</head>
+
+<body>
+    <header>
+        <p>J&aacute tem seu registro? Entre por aqui!</p>
+        <div>
+            <a href="/login">
+                <p>Entre</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <img class="logo-img" src="/public/assets/logo.svg">
+            <h1>Crie sua conta!</h1>
+            <p>Novo por aqui? <br class="pMobile"> Registre-se e junte-se a n&oacute;s!</p>
+            <form action="/register" method="post">
+            <div class="form-content">
+                <div class="left-column">
+                    <label for="name" id="name">Nome de usuario</label>
+                    <div class="usernameField">
+                        <img class="imgInput" src="/public/assets/username.svg">
+                        <input id="name-input" type="text" name="name" placeholder="seu nome">
+                    </div>
+                    <label for="email" id="email">E-mail principal</label>
+                    <div class="emailField">
+                        <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.89 1.83014C23.8604 1.81036 23.8256 1.7998 23.79 1.7998C23.7544 1.7998 23.7196 1.81036 23.69 1.83014L13.94 11.5801C13.6857 11.8353 13.3833 12.0374 13.0503 12.1748C12.7172 12.3121 12.3602 12.3819 12 12.3801C11.2704 12.3787 10.5704 12.0915 10.05 11.5801L0.31 1.87014C0.2804 1.85036 0.2456 1.8398 0.21 1.8398C0.1744 1.8398 0.1396 1.85036 0.11 1.87014C0.0823591 1.88104 0.0578479 1.89862 0.038654 1.92131C0.0194601 1.94399 0.00618038 1.97107 0 2.00014L0 14.0001C0 14.5306 0.210714 15.0393 0.585786 15.4144C0.960859 15.7894 1.46957 16.0001 2 16.0001H22C22.5304 16.0001 23.0391 15.7894 23.4142 15.4144C23.7893 15.0393 24 14.5306 24 14.0001V2.00014C24.0008 1.96404 23.9908 1.92852 23.9712 1.8982C23.9516 1.86789 23.9233 1.84417 23.89 1.83014Z" fill="#4A569C"/>
+                            <path d="M11.1101 10.56C11.3471 10.7903 11.6646 10.9191 11.9951 10.9191C12.3256 10.9191 12.6431 10.7903 12.8801 10.56L22.5701 0.87C22.6353 0.804409 22.6811 0.722013 22.7023 0.631976C22.7234 0.541939 22.7192 0.44779 22.6901 0.36C22.5801 1.19209e-07 22.2701 0 22.0001 0H2.00011C1.72011 0 1.42011 1.19209e-07 1.31011 0.36C1.28098 0.44779 1.27677 0.541939 1.29796 0.631976C1.31914 0.722013 1.36489 0.804409 1.43011 0.87L11.1101 10.56Z" fill="#4A569C"/>
+                        </svg>
+                        <input id="email-input" type="email" name="email" placeholder="seu email">
+                    </div>
+                </div>
+                <div class="right-column">
+                    <label for="password" id="password">Senha</label>
+                    <div class="passwordField">
+                        <img class="imgInput" src="/public/assets/password.svg">
+                        <input id="password-input" type="password" name="password" placeholder="*****">
+                    </div>
+                    <label for="confirm-password" id="confirm-password">Confirme sua senha</label>
+                    <div class="confirm-passwordField">
+                        <img class="imgInput" src="/public/assets/password.svg">
+                        <input id="confirm-password-input" type="password" name="confirm-password" placeholder="*****">
+                    </div>
+                </div>
+                <button id="submit">
+                    Registre-se!
+                    <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.5518 0.178334C16.4389 0.105893 16.3108 0.0539018 16.1749 0.0253671C16.039 -0.0031676 15.8981 -0.00768043 15.7602 0.0120895C15.6223 0.0318594 15.4903 0.0755199 15.3717 0.140548C15.2531 0.205575 15.1503 0.29068 15.0692 0.390943L5.11651 12.6285L1.78949 9.69572C1.58777 9.53003 1.32098 9.43983 1.04531 9.44412C0.769639 9.44841 0.50662 9.54685 0.311662 9.7187C0.116704 9.89056 0.00502964 10.1224 0.000165779 10.3654C-0.00469808 10.6084 0.0976283 10.8436 0.285587 11.0214L4.49225 14.7358C4.60325 14.8291 4.73541 14.9005 4.88002 14.9455C5.02463 14.9905 5.17841 15.0079 5.33123 14.9967C5.48404 14.9855 5.63243 14.9458 5.7666 14.8804C5.90077 14.8149 6.01769 14.7252 6.10965 14.617L16.8001 1.48525C16.8819 1.38532 16.9404 1.27206 16.9723 1.15205C17.0041 1.03204 17.0086 0.907656 16.9855 0.786102C16.9624 0.664549 16.9122 0.548241 16.8377 0.443916C16.7633 0.339591 16.6661 0.249321 16.5518 0.178334Z" fill="white"/>
+                    </svg>
+                </button>
+                <p class="slogin">Já tem seu registro?  <a href="/login">Entre</a></p>
+            </div>
+            </form>
+        </div>
+        <img id="main-image" src="/public/assets/illustrationRegister.svg" alt="tela de boas vindas">
+    </main>
+</body>
+</html>

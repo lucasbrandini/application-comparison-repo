@@ -1,0 +1,586 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+    text-decoration: none;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+    background: #111427;
+}
+
+.sectionTop {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5625rem;
+    
+    margin: 2rem;
+}
+
+.banner {
+    margin-top: 3.125rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.bannerTxt {
+    text-align: center;
+    font-size: 2.725rem;
+    font-weight: 800;
+    line-height: 2.535rem;
+    letter-spacing: 0.01em;
+    background: linear-gradient(90deg, #9F00EB 37.96%, #05F2B5 57.73%); 
+    -webkit-text-fill-color: transparent; 
+    -webkit-background-clip: text;
+    height: 9rem;
+}
+
+.subBanner {
+    margin-top: 0.875rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.subText {
+    font-size: 1.4625rem;
+    font-weight: 500;
+    line-height: 2.1938rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.58);
+    opacity: 0.74;
+    width: 38.25rem;
+    margin: 0 auto;
+}
+
+strong {
+    color: #FFFFFF;
+}
+
+.btnPost {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 3.25rem;
+    font-size: 1.5625rem;
+    font-weight: 700;
+    line-height: 2.0938rem;
+    color:#FFFFFF;
+    background: #4900EB;
+    border-radius: .75rem;
+    border: none;
+    width: 31.25rem;
+    height: 5rem;
+    gap: 1.4375rem;
+}
+
+.cardBox {
+    margin: 4.425rem auto;
+    width: 56.25rem;
+    height: 9.375rem;
+}
+
+.card {
+    background: #21274A;
+    border-radius: .75rem;
+    margin-bottom: 1.25rem;
+    padding: 1.25rem;
+}
+
+.cardTop {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.initTop {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem
+}
+
+.endTop {
+    display: flex;
+    justify-content: center;
+}
+
+.cardText {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.675rem;
+    text-align: left;
+    color: #FFFFFF8F;
+    text-align:left;
+}
+
+.username {
+    font-size: 1.5625rem;
+    font-weight: 700;
+    line-height: 2.0938rem;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+.postTime {
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.8425rem;
+    text-align: left;
+    color: #FFFFFF7A;
+}
+
+.comentarios {
+    font-size: 1.375rem;
+    font-weight: 300;
+    line-height: 1.8425rem;
+    text-align: left;
+    color: #FFFFFF7A;
+    text-decoration: underline;
+}
+
+.cardBottom {
+    display: flex;
+    margin-top: .625rem;
+    flex-direction: row-reverse;
+}
+
+.voteStyle {
+    display: flex;
+    align-items: center;
+    width: 7.5rem;
+}
+
+.upvote {
+    width:73%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 5px 0px 0px 5px;
+    border: 1px solid #5E6ECE;
+    background:transparent;
+    color: #5E6ECE;
+
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.5075rem;
+    text-align: center;
+    padding: .3125rem;
+    height: 100%;
+}
+
+.downvote {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 27%;
+    border-radius: 0rem .3125rem .3125rem 0rem;
+    border: 1px solid #5E6ECE;
+    background:transparent;
+    text-align: center;
+    height: 100%;
+}
+
+#userVote {
+    display: none;
+}
+
+.upvoteImg {
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.downvoteImg {
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.modal {
+    display: none;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.0);
+    padding-top: 60px;
+    transform: scale(0);
+  }
+  
+  .modal-content {
+    background-color: #111427;
+    color: #FFFFFF;
+    margin: 1.25rem auto;
+    padding: 1.25rem;
+    border: 4px solid #31396B;
+    width: 59.375rem; 
+    border-radius: 2.5rem;
+    display: flex;
+    justify-content: center;
+    gap: .625rem; /* Espaçamento entre os itens */
+  }
+  
+  .modal-background {
+    display: table-cell;
+    background: rgba(0, 0, 0, .0);
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  @keyframes scaleUp {
+    0% {
+      transform: scale(.8) translateY(1000px);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleDown {
+    0% {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(.8) translateY(1000px);
+      opacity: 0;
+    }
+  }
+  
+  .modal.show {
+    display: block;
+    transform: scale(1);
+    animation: scaleUp 0.5s ease forwards;
+  }
+  
+  .modal.hide {
+    display: block;
+    transform: scale(1);
+    animation: scaleDown 0.5s ease forwards;
+  } 
+
+/* Form elements */
+.modal-content label {
+    margin-top: 50px; /* Espaçamento superior para os labels */
+    width: 73px;
+    height: 33px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 34px;
+    color: #FFFFFF;
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px; /*Espaçamento superior para os campos de entrada */
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+    background-color: #21274A;
+    color: #4A569C;
+    height: 49px;
+    padding-left: 40px; /* Ajuste conforme necessário */
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 29px;
+    text-align: justify;
+    outline: none;
+}
+
+.titleModal {
+    width: 196px;
+    height: 34px;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 34px;
+    color: #FFFFFF;
+}
+
+.diviser1 {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    border: none;
+}
+
+.diviser2 {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.diviserIcon {
+    width: 3%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: none;
+}
+
+/* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
+.btnSubmit {
+    height: 45px;
+    width: 200px;
+    margin: 280px 0 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6272D6;
+    color: #111427;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.btnIcon {
+    fill: #111427;
+}
+
+.btnSubmit:hover .btnIcon,
+.btnSubmit:hover {
+    color: #FFFFFF;
+    fill: #FFFFFF; /* Cor do ícone ao passar o mouse sobre o botão */
+}
+
+.styleInput {
+    position: relative;
+    align-items: center;
+    width: 100%;
+}
+
+.iconInput {
+    position: absolute;
+    top: 30%;
+    left: 3%;
+    width: 20px;
+    height: 20px;
+    fill: #ccc;
+}
+
+.styleFileInput {
+    display: flex;
+    width: 100%;
+    height: 49px;
+    background-color: #21274A;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.iconFile {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    align-self: center;
+}
+
+#file {
+    display: none;
+}
+
+#title::placeholder,
+#content::placeholder {
+
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 29px;
+    color: #4A569C;
+
+}
+
+.styleFileInput label {
+    align-self: center;
+    margin-left: 41px;
+    width: 100%;
+    color: #4A569C;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 33px;
+    color: #4A569C;
+    margin-top: 0;
+}
+
+/* Close button */
+.close {
+    align-self: flex-end;
+}
+
+.close:hover,
+.close:focus {
+    cursor: pointer;
+}
+
+.activeClose {
+    stroke: white;
+}
+
+.dropbtn {
+    background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px; 
+    display: flex; /* Para alinhar o ícone e o texto */
+    align-items: center; /* Para centralizar o ícone verticalmente */
+    justify-content: space-between; /* Espaçar o texto e o ícone */
+    gap: 5px; /* Espaçamento entre o texto e o ícone */
+
+    margin-top: -4.8rem;
+    margin-left: 2rem;
+}
+
+.dropbtn img {
+    width: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+    height: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+    margin-left: 8px; /* Espaço entre o texto e o ícone */
+    font-weight: 600;
+}
+
+.dropbtn span {
+    margin-right: 6px; /* Espaço entre o texto e o ícone */
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #555;
+}
+
+.dropdown-content {
+    display: block; /* Necessário para permitir transições */
+    position: absolute;
+    background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
+    width: 188px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 20px; 
+    margin-top: 0.3rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    margin-left: 2rem;
+}
+
+.dropdown-content a {   
+    color: white;
+    font-size: 18px;
+    padding: 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center;
+}
+
+.dropdown-content a img {
+    margin-right: 8px; 
+    width: 20px; 
+    height: 20px; 
+}
+
+.dropdown-content a:hover {
+    background-color: #5e6fce7a;
+    transition: background-color 0.3s;
+    border-radius: 20px; 
+}
+
+.dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilo inicial do ícone */
+#toggleIcon {
+    transition: transform 0.4s ease;
+}
+
+/* Estilo do ícone quando o dropdown está aberto */
+#toggleIcon.rotate {
+    transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
+}
+
+.pfpImg {
+    border-radius: 5px; /* Torna a imagem circular */
+}
+
+.textGithub {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 21px;
+    line-height: 32px;
+    letter-spacing: 0.04em;
+    text-transform: capitalize;
+
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: -0.3rem;
+}
+
+.logoGithub {
+    margin-bottom: -0.25rem;
+}
+
+.github {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+}
+
+.update {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    line-height: 3px;
+
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.update:hover {
+    text-decoration-line: underline;
+    color: #fff;
+}
+
+.section1 {
+    width: 120px;
+}
+
+.section2 {
+    width: 120px;
+}
+
+.section3 {
+    width: 120px;
+}

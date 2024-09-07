@@ -12,9 +12,10 @@ body {
 }
 
 main {
-    margin: 10.8rem auto 0 auto;
+    margin: 100px auto 0 auto;
     display: flex;
-    width: 52rem;
+    align-items: center;
+    justify-content: center;
     gap: 3.5rem;    
 }
 
@@ -54,33 +55,60 @@ header div a {
 }
 
 .container {
-    width: 386px;
+    width: 702px;
+    margin-left: 80px;
 }
 
 .container h1 {
-    line-height: 36.54px;
-    color: #FFFFFF;
+    height: 37px;
+    font-style: normal;
     font-weight: 800;
-    font-size: 1.8125rem;
+    font-size: 29px;
+    line-height: 37px;
+    color: #FFFFFF;
+}
+
+.pMobile {
+    display:none;
 }
 
 .container p {
     margin-top: .625rem;
-    font-size: 1.5625rem;
+    font-size:  24px;
     color: #9B9CA4;
     font-weight: 600;
-
     margin-bottom: 2.3125rem;
 }
 
-#name {
-    font-size: 1.5625rem;
+.logo-img {
+    margin-bottom: 20px;
+}
+
+.form-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+}
+
+#name,
+#password,
+#email,
+#confirm-password {
+    font-size: 1.375rem;
     font-weight: bold;
     color: #FFFFFF;
 
 }
 
-#name-input {
+#name-input,
+#email-input,
+#password-input,
+#confirm-password-input {
     margin-top: 4px;
     
     width: 100%;
@@ -91,13 +119,19 @@ header div a {
     margin-bottom: 5px;
 }
 
-#name-input::placeholder {
+#name-input::placeholder,
+#email-input::placeholder,
+#password-input::placeholder,
+#confirm-password-input::placeholder {
     color: #4A569C;
     font-size: 1.25rem;
     font-weight: 600;
 }
 
-.usernameField {
+.usernameField,
+.emailField,
+.passwordField,
+.confirm-passwordField    {
     margin-top: .625rem;
     display: flex;
     gap: .625rem;
@@ -105,8 +139,8 @@ header div a {
     background: #21274A;
     border-radius: .375rem;
     margin-bottom: .9375rem;
-    width: 24.125rem;
-    height: 3.0625rem;
+    width: 321px;
+    height: 49px;
 }
 
 .imgInput {
@@ -115,49 +149,17 @@ header div a {
     margin-left: .625rem;
 }
 
-
-
-.passwordField {
-    margin-top: .625rem;
-    display: flex;
-    gap: .625rem;
-    padding: .4375rem;
-    background: #21274A;
-    border-radius: .375rem;
-    margin-bottom: .9375rem;
-    width: 24.125rem;
-    height: 3.0625rem;
+.emailField svg {
+    margin-top: 10px;
+    margin-left: .625rem;
 }
 
-#password {
-    font-size: 1.5625rem;
-    font-weight: bold;
-    color: #FFFFFF;
-}
-
-#password-input {
-    margin-top: 4px;
-    
-    width: 100%;
-    background: transparent;
-    color: #9B9CA4;
-    font-size: 1.225rem;
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-#password-input::placeholder {
-    color: #4A569C;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-#submit-login {
+#submit {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: .625rem;
-    margin-top: 2.5rem;
+    margin-top: 23px;
     padding: 1.25rem;
     font-size: .575rem;
     border: 0;
@@ -165,22 +167,26 @@ header div a {
     font-size: 1.1875rem;
     font-weight: 700;
     border-radius: .375rem;
-    background-color: #4900EB;
-    width: 24.125rem;
+    background-color: #323F8F;
+    width: 680px;
     cursor: pointer; 
     transition: background-color 0.3s ease; 
 }
 
-#submit-login:hover {
+#submit:hover {
     background-color: #470ec2;
 }
 
 #main-image {
     margin-top: .625rem;
+    margin-left: 70px;
+    height: 450px;
+    width: 450px;
 }
 
-.passwordField .imgInput {
-    margin-top: 6px;
+.passwordField .imgInput,
+.confirm-passwordField .imgInput {
+    margin-top: 10px;
 }
 
 .usernameField .imgInput {
@@ -192,55 +198,82 @@ header div a {
     height: 1.75rem;
 }
 
+.container .slogin{
+    display: none;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.container .slogin a{
+    color:white;
+    text-decoration-line: underline;
+}
+
+.container .slogin a:visited{
+    color:white;
+}
+
 @media (max-width: 900px) {
+    header {
+        display: none;
+    }
+
     main {
         flex-direction: column;
         justify-content: center;
         width: 100%;
-        gap: 0rem;
-        margin: 0rem;
+        gap: 0;
+        margin-top: 80px;
         align-items: center;
     }
 
     #main-image {
-        width: 80%;
-        margin-top: 0px;
-    }
-
-    header {
-        justify-content: center;
-        margin: 1.25rem 0;
-    }
-    
-    header p {
-        font-size: .9375rem;
-        margin-left: .625rem;
-    }
-    
-    header div {
-        width: 4rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center; 
-    }
-
-    header div a {
-        text-decoration: none;
-    }
-    
-    header div a p {
-        width: 4rem;
-        line-height: 1.25rem;
-        font-size: .825rem;
-        margin: 0rem;
+        display: none;
     }
 
     .container {
-        width: 90%;
+        width: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
     }
 
-    .usernameField, .passwordField, #submit-login {
+    .pMobile {
+        display:block;
+    }
+
+    .container p {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-content {
+        display: block;
+        flex-wrap: wrap;
+        text-align: left;
+    }
+
+    #name,
+    #password,
+    #email,
+    #confirm-password {
+        font-size: 20px;
+    }
+
+    .usernameField,
+    .emailField,
+    .passwordField,
+    .confirm-passwordField,
+    #submit {
         width: 100%;
+    }
+
+    .container .slogin{
+        display: block;
     }
 }

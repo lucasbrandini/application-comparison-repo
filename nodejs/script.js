@@ -1,7 +1,7 @@
 const http = require("http");
 const setupTables = require("./db/dbSetupTables");
 const renderTemplate = require("./tools/renderTemplate");
-const setupGetRoutes = require("./routes/routesGet");
+const setupGetRoutes = require("./Routes/routesGet");
 const setupPostRoutes = require("./Routes/routesPost");
 require("dotenv").config();
 
@@ -25,5 +25,5 @@ setupTables();
 
 // Iniciando o servidor na porta especificada
 server.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log('\u001b[36m',`Servidor rodando na porta ${PORT}`, '\u001b[0m');
 });

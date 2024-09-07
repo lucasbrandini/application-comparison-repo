@@ -118,6 +118,17 @@ function generateRandomAvatar() {
   return Buffer.from(imageBuffer).toString("base64");
 }
 
+
+// Função para lidar com o logout
+function handleLogout(req, res) {
+  res.writeHead(302, {
+    "Set-Cookie": "jwt_token=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
+    Location: "/login", // Redireciona para a página de login
+  });
+  res.end();
+}
+
+
 // Função principal para lidar com as requisições POST
 function setupPostRoutes(req, res) {
   const parsedUrl = require("url").parse(req.url, true);
@@ -127,6 +138,7 @@ function setupPostRoutes(req, res) {
   const postRoutes = {
     "/register": handleRegister,
     "/login": handleLogin,
+    "/logout": handleLogout,
     // Adicione aqui outras rotas POST e suas funções
   };
 

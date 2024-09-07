@@ -81,9 +81,9 @@ const setupTables = () => {
 
       connection.query(sql, (err) => {
         if (err) {
-          console.error(`Error creating table ${tableDef.tableName}:`, err);
+          console.error('\x1b[31m', 'Error creating table ${tableDef.tableName}:', err, '\x1b[0m');
         } else {
-          console.log(`Table ${tableDef.tableName} created successfully.`);
+          console.log('\x1b[38;5;215m', `Table ${tableDef.tableName} created successfully.`, '\x1b[0m');
         }
 
         createTable(index + 1);
@@ -114,14 +114,14 @@ const setupTables = () => {
 
           connection.query(triggerSql, (err) => {
             if (err) {
-              console.error("Error creating trigger before_post_delete:", err);
+              console.error('\x1b[31m', 'Error creating trigger before_post_delete:', err, '\x1b[0m');
             } else {
-              console.log("Trigger before_post_delete created successfully.");
+              console.log('\x1b[32m', "Trigger before_post_delete created successfully.", '\x1b[0m');
             }
             connection.release();
           });
         } else {
-          console.log("Trigger before_post_delete already exists.");
+          console.error('\x1b[38;5;226m', "Trigger before_post_delete already exists.", '\x1b[0m');
           connection.release();
         }
       });

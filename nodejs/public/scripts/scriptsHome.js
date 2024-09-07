@@ -56,12 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById("logout").addEventListener("click", function () {
-        // Excluir o cookie e redirecionar para a página de login
-        document.cookie =
-          "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.href = "login"; // Substitua 'login.html' pelo caminho correto
+        fetch('/logout', { method: 'POST' }) // Envia uma requisição para o servidor para realizar o logout
+            .then(() => {
+                window.location.href = "login"; // Substitua 'login' pelo caminho correto
+            })
+            .catch(err => console.error("Erro ao realizar logout:", err));
     });
-
+    
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);

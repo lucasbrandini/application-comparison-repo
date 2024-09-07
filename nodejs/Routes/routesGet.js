@@ -91,12 +91,8 @@ function renderHome(req, res) {
                     post.avatar_image = post.avatar_image.toString("utf-8");
                   post.is_owner = post.p_id_user === user.id_user;
                 });
-
-                renderTemplate(
-                  "home",
-                  { posts, user, name_user: user.name_user },
-                  res
-                );
+                
+                renderTemplate("home",{ posts, user, name_user: user[0].name_user },res);
               })
               .catch((err) => {
                 console.error(err);

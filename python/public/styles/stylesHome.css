@@ -258,7 +258,8 @@ strong {
     margin: 1.25rem auto;
     padding: 1.25rem;
     border: 4px solid #31396B;
-    width: 59.375rem; 
+    width: 59.375rem;
+    height: 550px;
     border-radius: 2.5rem;
     display: flex;
     justify-content: center;
@@ -362,7 +363,6 @@ strong {
     width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 20px;
 }
 
@@ -375,13 +375,13 @@ strong {
 }
 
 #preview {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     background-color: #080a14;
     border-radius: 7px;
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 270px;
     margin: 63px 0 0 auto;
 }
 
@@ -389,7 +389,6 @@ strong {
 .btnSubmit {
     height: 45px;
     width: 200px;
-    margin: 25px 0 15px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -401,6 +400,7 @@ strong {
     cursor: pointer;
     font-weight: 600;
     font-size: 20px;
+    position:relative;   
 }
 
 .btnIcon {
@@ -425,7 +425,6 @@ strong {
     left: 3%;
     width: 20px;
     height: 20px;
-    fill: #ccc;
 }
 
 .styleFileInput {
@@ -648,8 +647,50 @@ strong {
 }
 
 #clear-input {
-    color:rgb(184, 50, 50);
-    background-color: Transparent;
     border: none;
     cursor: pointer;
+    margin-top: 13px;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+.cancelSpan {
+    height: 45px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid;
+    border-color: #555;
+    border-radius: 5px;
+    background-color: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 20px;
+    margin-left: 60px;
+}
+
+.cancelSpan:hover{
+    color: #dd5151;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    width: 810px;
+    gap:51px;
+}
+
+.hide-error {
+    display: none;    
+}
+
+#submit-btn:disabled {
+    background-color: #cccccc; /* cor do botão desabilitado */
+    cursor: not-allowed;
 }

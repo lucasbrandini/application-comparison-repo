@@ -116,6 +116,9 @@ def select_all_posts():
 def insert_post(user_id, post_title, post):
     if not user_id or not post:
         raise ValueError("User ID or post cannot be null")
+    
+    if not post_title:
+        raise ValueError("Post title cannot be empty")
 
     connection = get_connection()
     try:

@@ -17,6 +17,20 @@ const span = document.getElementById("close");
 
 const path = document.getElementById("closeIcon")
 
+const cancelSpan = document.getElementById("cancel");
+
+const submitBtn = document.getElementById('submit-btn');
+
+const titleInput = document.getElementById('title');
+
+const titleError = document.getElementById('title-error');
+
+const fileInput = document.getElementById('file');
+
+const fileName = document.getElementById('file-name');
+
+const filePreviewDiv = document.getElementById('preview');
+
 btn.onclick = function() {
     modal.style.display = "block";
 }
@@ -50,6 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     span.onclick = function(event) {
+        event.stopPropagation();
+        modal.classList.remove('show');
+        modal.classList.add('hide');
+    }
+
+    cancelSpan.onclick = function(event) {
         event.stopPropagation();
         modal.classList.remove('show');
         modal.classList.add('hide');
@@ -213,12 +233,15 @@ window.onclick = function (event) {
   }
 };
 
-document.getElementById('file').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    const fileName = document.getElementById('file-name');
-    const filePreviewDiv = document.getElementById('preview');
+const clearInputButton = document.getElementById('clear-input');
+
+fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];    
+    
+    
 
     if (file) {
+        filePreviewDiv.style.display = 'flex';
         // Limitar o nome do arquivo a 20 caracteres, por exemplo
         const maxLength = 28;
         let displayName = file.name;
@@ -237,7 +260,6 @@ document.getElementById('file').addEventListener('change', function(event) {
 
         if (file.type.startsWith('image/')) {
             const img = document.createElement('img');
-            console.log(img)
             img.src = fileURL;
             filePreviewDiv.appendChild(img);
         } else if (file.type.startsWith('video/')) {
@@ -247,21 +269,55 @@ document.getElementById('file').addEventListener('change', function(event) {
             filePreviewDiv.appendChild(video);
         }
     } else {
+        filePreviewDiv.style.display = 'none';
         // Limpa o nome do arquivo e o preview se nenhum arquivo for selecionado
         fileName.textContent = '';
         filePreviewDiv.innerHTML = '';
     }
+
+    if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+        clearInputButton.style.display = 'block'; // Mostra o botão de limpar
+    } else {
+        clearInputButton.style.display = 'none'; // Esconde o botão se não houver arquivo
+    }
 });
 
 document.getElementById('clear-input').addEventListener('click', function() {
-    const fileInput = document.getElementById('file');
     const fileName = document.getElementById('file-name');
-    const filePreviewDiv = document.getElementById('preview');
 
     // Reseta o campo de arquivo
     fileInput.value = '';
 
     // Limpa o nome do arquivo e o preview
+    filePreviewDiv.style.display = 'none';
     fileName.textContent = 'Selecione uma imagem/vídeo';
     filePreviewDiv.innerHTML = '';
+    this.style.display = 'none';
+});
+
+cancelSpan.addEventListener('click', function() {
+
+    document.getElementById('postForm').reset();
+    
+    filePreviewDiv.style.display = 'none';
+
+    filePreviewDiv.innerHTML = '';
+    
+    clearInputButton.style.display = 'none';
+    
+    fileName.innerText = 'Selecione uma imagem/vídeo';
+    submitBtn.disabled = true;
+    titleError.classList.add('hide-error'); 
+});
+
+titleInput.addEventListener('input', function() {    
+
+    if (titleInput.value.trim() === '') {
+      submitBtn.disabled = true;
+      titleError.classList.remove('hide-error');
+    } else {
+      submitBtn.disabled = false;
+      titleError.classList.add('hide-error');
+    }
 });

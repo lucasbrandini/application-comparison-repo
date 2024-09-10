@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(err => console.error("Erro ao realizar logout:", err));
     });
-    
+
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);

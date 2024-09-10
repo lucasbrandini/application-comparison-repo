@@ -18,7 +18,9 @@ function authenticateToken(req, res, next) {
       res.writeHead(302, { Location: "/login" });
       return res.end();
     }
-    req.user = decoded;
+
+    // Certifique-se de que 'name_user' está no payload do token
+    req.user = decoded; 
     next();
   });
 }

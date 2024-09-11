@@ -132,31 +132,54 @@ document.addEventListener('DOMContentLoaded', function() {
 });
   
 
-const voteReceive = document.querySelectorAll('.voteText');
+document.addEventListener('DOMContentLoaded', function() {
+    const voteReceive = document.querySelectorAll('.voteText');
+    const upvoteVote = document.querySelectorAll('.upvotePath');
+    const downvoteVote = document.querySelectorAll('.downvotePath');
+    const voteStyle = document.querySelectorAll('.voteStyle'); // Certifique-se de que os elementos com .voteStyle existem
 
-const upvoteVote = document.querySelectorAll('.upvotePath');
-  
-const downvoteVote = document.querySelectorAll('.downvotePath');
-  
-upvoteVote.forEach(function (userVoteElement, index) {
-    const vote = voteReceive[index].innerText;   
-    
-    if (vote == 'upvote') {
-        userVoteElement.style.fill = '#d1d8ff';
-    } else {
-        userVoteElement.style.fill = '';
-    }
+    upvoteVote.forEach(function (userVoteElement, index) {
+        if (voteReceive[index]) {
+            const vote = voteReceive[index].innerText.trim();
+
+            console.log(vote, "vote");
+
+            if (vote === 'upvote') {
+                userVoteElement.style.fill = '#fff';
+            } else {
+                userVoteElement.style.fill = '';
+            }
+        }
+    });
+
+    downvoteVote.forEach(function (userVoteElement, index) {
+        if (voteReceive[index]) {
+            const vote = voteReceive[index].innerText.trim();
+
+            if (vote === 'downvote') {
+                userVoteElement.style.fill = '#fff';
+            } else {
+                userVoteElement.style.fill = '';
+            }
+        }
+    });
+
+    voteStyle.forEach(function (userVoteElement, index) {
+        if (voteReceive[index]) {
+            const vote = voteReceive[index].innerText.trim();
+
+            if (vote === 'upvote') {
+             
+                userVoteElement.style.backgroundColor = '#75BA5B';
+            } else if (vote === 'downvote') {
+                userVoteElement.style.backgroundColor = '#BA5B5B';
+            } else {
+                userVoteElement.style.backgroundColor = '';
+            }
+        }
+    });
 });
-  
-downvoteVote.forEach(function (userVoteElement, index) {
-    const vote = voteReceive[index].innerText;
-    
-    if (vote == 'downvote') {
-        userVoteElement.style.fill = '#d1d8ff';
-    } else {
-        userVoteElement.style.fill = '';
-    }
-});
+
 
 document.querySelectorAll('.upvote').forEach(button => {
     button.addEventListener('click', function() {
@@ -232,6 +255,81 @@ window.onclick = function (event) {
     }
   }
 };
+
+// Função para alternar o menu de opções
+function toggleOptions(element) {
+    // Obtém o menu subOption relacionado a este botão
+    var subOption = element.parentElement.querySelector('.subOption');
+
+    // Verifica se o menu já está aberto
+    if (subOption.classList.contains('show')) {
+        subOption.classList.remove('show');
+        document.removeEventListener('click', outsideClickListener);
+        document.removeEventListener('keydown', escKeyListener);
+    } else {
+        // Fecha todos os outros menus abertos
+        closeAllMenus();
+
+        // Abre o menu atual
+        subOption.classList.add('show');
+
+        // Adiciona ouvintes de evento para fechar o menu
+        setTimeout(() => { // Timeout para evitar o fechamento imediato após a abertura
+            document.addEventListener('click', outsideClickListener);
+            document.addEventListener('keydown', escKeyListener);
+        }, 0);
+    }
+}
+
+// Função para fechar o menu ao clicar fora
+function outsideClickListener(event) {
+    var openMenus = document.querySelectorAll('.subOption.show');
+    openMenus.forEach(function(menu) {
+        if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+            menu.classList.remove('show');
+        }
+    });
+
+    // Remove os ouvintes se não houver menus abertos
+    if (openMenus.length === 0) {
+        document.removeEventListener('click', outsideClickListener);
+    }
+}
+
+// Função para fechar o menu ao pressionar Esc
+function escKeyListener(event) {
+    if (event.key === "Escape") {
+        closeAllMenus();
+        document.removeEventListener('keydown', escKeyListener);
+    }
+}
+
+// Função para fechar todos os menus abertos
+function closeAllMenus() {
+    var openMenus = document.querySelectorAll('.subOption.show');
+    openMenus.forEach(function(menu) {
+        menu.classList.remove('show');
+    });
+
+    // Esconde todas as confirmações de deletar
+    var confirmBoxes = document.querySelectorAll('.confirmDelete.show');
+    confirmBoxes.forEach(function(box) {
+        box.classList.remove('show');
+    });
+}
+
+// Certifique-se de que o botão de opções chame 'toggleOptions' ao ser clicado
+// <div class="options" onclick="toggleOptions(this)">
+
+function confirmDelete(element) {
+    const confirmBox = element.nextElementSibling; // Pega o próximo elemento .confirmDelete
+    confirmBox.classList.add('show'); // Exibe a confirmação de deletar
+}
+
+function cancelDelete(element) {
+    const confirmBox = element.parentElement; // Pega o elemento pai (o box de confirmação)
+    confirmBox.classList.remove('show'); // Esconde a confirmação de deletar
+}
 
 const clearInputButton = document.getElementById('clear-input');
 

@@ -2,7 +2,7 @@ import io
 import sys
 
 from http.server import BaseHTTPRequestHandler
-from db.dbOperations import select_all_posts_ordered, find_vote, select_user_by_name, get_post, get_comments_by_post_id, select_avatar
+from db.dbOperations import select_all_posts_ordered, select_post, select_user_info, find_vote, select_user_by_name, get_post, get_comments_by_post_id, select_avatar
 import json
 import datetime
 from pybars import Compiler
@@ -198,11 +198,15 @@ class routesGet(BaseHTTPRequestHandler):
             with open(os.path.join('templates', 'head.hbs'), 'r', encoding='utf-8') as file:
                 head_source = file.read()
             head_template = compiler.compile(head_source)
+            with open(os.path.join('templates', 'header.hbs'), 'r', encoding='utf-8') as file:
+                header_source = file.read()
+            header_template = compiler.compile(header_source)
 
             context = {
                 'user': user,
                 'avatar': avatar,
-                'head': head_template
+                'head': head_template,
+                'header': header_template
             }
 
             self.send_response(200)
@@ -308,6 +312,50 @@ class routesGet(BaseHTTPRequestHandler):
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
 
+    # @verify_jwt
+    # def render_comments(self):
+    #     try:
+    #         url = urlparse(self.path)
+    #         query_params = parse_qs(url.query)
+    #         post_id = int(query_params.get('post_id', [None])[0])
+
+    #         # Pega o usuário logado
+    #         id_user = self.decoded_token.get('name_user')
+    #         user = select_user_by_name(id_user)
+
+    #         raw_comments = get_comments_by_post_id(post_id)
+
+    #         comments = []
+    #         for comment in raw_comments:
+    #             comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+    #             comments.append({
+    #                 'id_comment': comment[0],
+    #                 'name_user': comment_user_info['name_user'],
+    #                 'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
+    #                 'comment': comment[3],
+    #                 'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
+    #                 'is_author': comment[1] == user['id_user']
+    #             })
+
+    #         compiler = Compiler()
+    #         with open(os.path.join('templates', 'comments.hbs'), 'r', encoding='utf-8') as file:
+    #             source = file.read()
+    #         template = compiler.compile(source)
+
+    #         self.send_response(200)
+    #         self.send_header('Content-type', 'text/html; charset=utf-8')
+    #         self.end_headers()
+
+    #         context = {
+    #             'comments': comments,
+    #             'post_id': post_id
+    #         }
+
+    #         self.wfile.write(template(context).encode('utf-8'))
+    #     except Exception as e:
+    #         print(e)
+    #         self.send_error_response(500, "Server Error: " + str(e))
+
     @verify_jwt
     def render_comments(self):
         try:
@@ -318,18 +366,29 @@ class routesGet(BaseHTTPRequestHandler):
             # Pega o usuário logado
             id_user = self.decoded_token.get('name_user')
             user = select_user_by_name(id_user)
+            user_avatar = select_avatar(user['id_user'])  # Adiciona o avatar do usuário logado
 
+            # Pega os detalhes do post
+            post = get_post(post_id)
+            post_author = select_user_info(post['p_id_user'])
+            post['post_image'] = post['post_image'].decode('utf-8') if post['post_image'] else None
+            post['post_video'] = post['post_video'].decode('utf-8') if post['post_video'] else None
+
+            # Pega os comentários
             raw_comments = get_comments_by_post_id(post_id)
+            comments = []
+            for comment in raw_comments:
+                comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+                comments.append({
+                    'id_comment': comment[0],
+                    'name_user': comment_user_info['name_user'],
+                    'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
+                    'comment': comment[3],
+                    'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
+                    'is_author': comment[1] == user['id_user']
+                })
 
-            comments = [{
-                'id_comment': comment[0],
-                'p_id_user': comment[1],
-                'p_id_post': comment[2],
-                'comment': comment[3],
-                'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
-                'is_author': comment[1] == user['id_user']  # Verifica se o usuário logado é o autor do comentário
-            } for comment in raw_comments]
-
+            # Compila o template
             compiler = Compiler()
             with open(os.path.join('templates', 'comments.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
@@ -339,14 +398,23 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
 
+            # Adiciona as informações do post ao contexto
             context = {
                 'comments': comments,
-                'post_id': post_id
+                'post_id': post_id,
+                'post_author': post_author['name_user'],
+                'post_avatar': post_author['avatar_image'].decode('utf-8') if post_author['avatar_image'] else None,
+                'post_title' :post['post_title'],
+                'post_description': post['post'],
+                'post_image': post['post_image'],
+                'post_video': post['post_video'],
+                'is_post_owner': post['p_id_user'] == user['id_user'],
+                'post_vote' : post['post_votes'],
+                'post_date' : post['post_date'],
+                'user_avatar': user_avatar['avatar_image'].decode('utf-8') if user_avatar else None,  # Adiciona o avatar do usuário logado
             }
 
             self.wfile.write(template(context).encode('utf-8'))
         except Exception as e:
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
-
-

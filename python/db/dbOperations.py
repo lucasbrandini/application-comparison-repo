@@ -608,3 +608,23 @@ def update_avatar(user_id, avatar_image):
     finally:
         cursor.close()
         connection.close()
+
+def select_user_info(user_id):
+    if not user_id:
+        raise ValueError("User ID cannot be null")
+
+    connection = get_connection()
+    try:
+        cursor = connection.cursor(dictionary=True)
+        sql = """
+            SELECT u.name_user, a.avatar_image 
+            FROM users u 
+            LEFT JOIN users_avatar a ON u.id_user = a.id_user 
+            WHERE u.id_user = %s
+        """
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result
+    finally:
+        cursor.close()
+        connection.close()

@@ -7,7 +7,7 @@ No VSCode,
   git checkout main
   git pull
   <faça as alterações que precisa fazer>
-  git add --all
+  git add .
   git checkout -B <nome-da-sua-branch>
   git commit -m "<mensagem para seu commit, lembre de usar prefixos como fix | chore | feat>"
   git push origin <nome-da-sua-branch>

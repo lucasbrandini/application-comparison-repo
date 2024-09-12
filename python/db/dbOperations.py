@@ -210,22 +210,6 @@ def select_comment(comment_id):
         cursor.close()
         connection.close()
 
-# Insert
-def insert_comment(user_id, post_id, comment):
-    if not user_id or not post_id or not comment:
-        raise ValueError("User ID, post ID or comment cannot be null")
-
-    connection = get_connection()
-    try:
-        cursor = connection.cursor()
-        sql = "INSERT INTO comments (p_id_user, p_id_post, comment) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (user_id, post_id, comment))
-        connection.commit()
-        return cursor.lastrowid
-    finally:
-        cursor.close()
-        connection.close()
-
 # Update
 def update_comment(comment_id, user_id, post_id, comment):
     if not comment_id or not user_id or not post_id or not comment:

@@ -9,17 +9,23 @@
 body {
     background: #111427;
     color:white;
-    margin-left: 49px;
-    margin-right: 49px;
+    margin: 50px 49px 160px 49px;
 }
 
 .return-home {
+    cursor: pointer;
     height: 34px;
     font-style: normal;
     font-weight: 700;
     font-size: 25px;
     line-height: 134.01%;
     color: rgba(247, 247, 247, 0.8);
+    margin-left: 15px;
+}
+
+.return-home:hover{
+    color: #ffffff;
+    fill: #ffffff;
 }
 
 h3 {
@@ -169,18 +175,27 @@ h3 {
     color: #F7F7F7;
 }
 
+
+.submit-btn:hover {
+    color: #080a14;
+}
+
+.submit-btn:hover .edit-icon {
+    filter: invert(1) grayscale(1) contrast(1) brightness(0);
+}
+
 .comment-box {
     margin-left: 19px;
-    margin-top: 55px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
 .comments {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    margin-bottom: 50px;
+    margin-top: 50px;
 }
 
 .comment-top {
@@ -215,6 +230,152 @@ h3 {
     color: #DADADA;
 }
 
+.subOption dropOption {
+    display: none;
+}
+
 .hidden {
     display:none;
+}
+
+.optionConfig {
+    position: relative;
+    margin: 0 19px 0 auto;
+}
+
+.options {
+    cursor: pointer;
+    padding: 10px;
+}
+
+.subOption {
+    display: none;
+    position: absolute;
+    top: calc(100% - 10px); /* Sobe o menu 10px */
+    right: 0;
+    background-color: #1C2340;
+    border-radius: 8px;
+    padding: 10px;
+    width: 180px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Estilo para o botão 'x' */
+.closeMenu {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+}
+
+.closeMenu:hover {
+    color: #ccc;
+}
+
+.subOption li {
+    list-style: none;
+    padding: 10px;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+.subOption li:hover {
+    background-color: #2A2F55;
+    border-radius: 6px;
+}
+
+.subOption li img {
+    margin-right: 10px;
+}
+
+.confirmDelete {
+    display: none;
+    background-color: #2A2F55;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+
+.confirmDelete p {
+    margin-bottom: 10px;
+    color: white;
+}
+
+.confirmDelete button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+
+.confirmDelete button:nth-child(2) {
+    background-color: #5A67D8;
+    color: white;
+}
+
+.confirmDelete button:nth-child(1) {
+    background-color: #333;
+    color: white;
+}
+
+/* Animações */
+.subOption.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.confirmDelete.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.comment-divider {
+    margin-top: 32px;
+    display: none;
+    background-color: #DADADA;
+    height: 1px;
+    width: 100%;
+}
+
+.comment-divider svg{
+    width: 100%
+}
+
+.comments:not(:last-child) .comment-divider {
+    display: block;
+}
+
+.count {
+    display: flex;
+    align-items: center;
+    color: #DADADA;
+    gap: 5px;
+    margin-bottom: 25px;
+}
+
+#comment-count {
+    padding: 5px;
+    background-color: #DADADA;
+    color: #080a14;
+    border-radius: 5px;
+    transform: translateY(-50%);
 }

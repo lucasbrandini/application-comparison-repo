@@ -6,12 +6,12 @@
     <title>Comentários</title>
 </head>
 <body>
-    <span class="return-home">
+    <a href="/home" class="return-home">
         <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 7.98365C0 7.51315 0.201645 7.10986 0.537719 6.841L7.93135 0.321163C8.40185 -0.149342 9.20843 -0.0821266 9.67894 0.388378C10.1494 0.858882 10.0822 1.66546 9.61172 2.13596L9.54451 2.20318L3.09188 7.91644C3.02467 7.98365 3.02467 8.05087 3.09188 8.1853L9.54451 13.8986C10.0822 14.3691 10.1494 15.1084 9.67894 15.6461C9.20843 16.1839 8.46907 16.2511 7.93135 15.7806L7.86414 15.7134L0.470504 9.19352C0.201644 8.85745 0 8.45416 0 7.98365Z" fill="white" fill-opacity="0.8"/>
         </svg>
         Voltar
-    </span>
+    </a>
     <br>
     <svg width="125" height="5" viewBox="0 0 125 5" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="125" height="5" rx="2.5" fill="#31396B"/>
@@ -42,8 +42,11 @@
             </div>
             {{/if}}
         </div>
+        <div class="count">
+            <span class="title-comments">Comentários</span>
+            <span id="comment-count"> X{{comment_count}}</span> 
+        </div>
 
-        <p class="title-comments"><strong>Comentários:</strong></p>
     </div>
 
     <form id="commentForm" action="/create-comment" method="POST">
@@ -58,7 +61,7 @@
             <input type="text" id="comment" class="commentInput" name="comment" required>
         </div>
         <button type="submit" class="submit-btn">
-            <img class="edit-icon" src="/public/assets/sendSubmit.svg" alt="Submit" width="23" height="23">
+            <img class="edit-icon" src="/public/assets/sendSubmit.svg" alt="Submit">
             Enviar
         </button>
     </form>
@@ -72,23 +75,36 @@
                     </div>
                     <p class="username"><strong>{{name_user}}</strong></p>
                     <p class="comment-date">• {{comment_date}}</p>
+
+                    {{#if is_author}}
+                        <div class="optionConfig">
+                            <div class="options" onclick="toggleOptions(this)">
+                                <svg width="5" height="23" viewBox="0 0 5 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.5 17.5C3.16304 17.5 3.79893 17.7634 4.26777 18.2322C4.73661 18.7011 5 19.337 5 20C5 20.663 4.73661 21.2989 4.26777 21.7678C3.79893 22.2366 3.16304 22.5 2.5 22.5C1.83696 22.5 1.20107 22.2366 0.732233 21.7678C0.263392 21.2989 0 20.663 0 20C0 19.337 0.263392 18.7011 0.732233 18.2322C1.20107 17.7634 1.83696 17.5 2.5 17.5ZM2.5 8.75C3.16304 8.75 3.79893 9.01339 4.26777 9.48223C4.73661 9.95107 5 10.587 5 11.25C5 11.913 4.73661 12.5489 4.26777 13.0178C3.79893 13.4866 3.16304 13.75 2.5 13.75C1.83696 13.75 1.20107 13.4866 0.732233 13.0178C0.263392 12.5489 0 11.913 0 11.25C0 10.587 0.263392 9.95107 0.732233 9.48223C1.20107 9.01339 1.83696 8.75 2.5 8.75ZM2.5 0C3.16304 0 3.79893 0.263392 4.26777 0.732233C4.73661 1.20107 5 1.83696 5 2.5C5 3.16304 4.73661 3.79893 4.26777 4.26777C3.79893 4.73661 3.16304 5 2.5 5C1.83696 5 1.20107 4.73661 0.732233 4.26777C0.263392 3.79893 0 3.16304 0 2.5C0 1.83696 0.263392 1.20107 0.732233 0.732233C1.20107 0.263392 1.83696 0 2.5 0Z" fill="white"/>
+                                </svg>
+                            </div>
+                            <div class="subOption dropOption">
+                                <li id="editPost" class="edit-comment-button dropOption" data-comment-id="{{id_comment}}"><img src="../public/assets/edit.svg" alt="">Editar comentário</li>
+                                <li onclick="confirmDelete(this)"><img src="../public/assets/delete.svg" alt="" srcset="">Deletar comentário</li>
+                                <div class="confirmDelete dropOption">
+                                    <p><img class="deleteConfirm" src="../public/assets/delete_open.svg" alt="" srcset="">Você tem certeza?</p>
+                                    <button class="noDeleteComment dropOption" onclick="cancelDelete(this)">Não</button>                                    
+                                    <button class="deleteComment dropOption" data-comment-id="{{id_comment}}">Sim</button>
+                                </div>
+                            </div>
+                        </div>
+                    {{/if}}
                 </div>
                 <span id="comment-text-{{id_comment}}" class="commment-text">{{comment}}</span>
-                {{#if is_author}}
-                    <button class="edit-comment-button" data-comment-id="{{id_comment}}">Editar</button>
-                    <button class="delete-comment-button" data-comment-id="{{id_comment}}">Deletar</button> 
-                {{/if}}
 
                 <form id="editCommentForm-{{id_comment}}" class="edit-comment-form" data-comment-id="{{id_comment}}" data-post-id="{{p_id_post}}" style="display: none;">
                     <textarea name="comment">{{comment}}</textarea>
                     <button type="submit">Salvar</button>
                 </form>
+                <div class="comment-divider"></div>
             </div>
         {{/each}}
     </div>
     <script src="/public/scripts/scriptsComment.js"></script>
 </body>
 </html>
-
-{{!-- Avatar do autor do post --}}
-{{!-- <img src="data:image/png;base64,{{post_avatar}}" alt="Avatar do Autor" class="avatar"> --}}

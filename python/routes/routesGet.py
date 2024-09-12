@@ -312,50 +312,6 @@ class routesGet(BaseHTTPRequestHandler):
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
 
-    # @verify_jwt
-    # def render_comments(self):
-    #     try:
-    #         url = urlparse(self.path)
-    #         query_params = parse_qs(url.query)
-    #         post_id = int(query_params.get('post_id', [None])[0])
-
-    #         # Pega o usuário logado
-    #         id_user = self.decoded_token.get('name_user')
-    #         user = select_user_by_name(id_user)
-
-    #         raw_comments = get_comments_by_post_id(post_id)
-
-    #         comments = []
-    #         for comment in raw_comments:
-    #             comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
-    #             comments.append({
-    #                 'id_comment': comment[0],
-    #                 'name_user': comment_user_info['name_user'],
-    #                 'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
-    #                 'comment': comment[3],
-    #                 'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
-    #                 'is_author': comment[1] == user['id_user']
-    #             })
-
-    #         compiler = Compiler()
-    #         with open(os.path.join('templates', 'comments.hbs'), 'r', encoding='utf-8') as file:
-    #             source = file.read()
-    #         template = compiler.compile(source)
-
-    #         self.send_response(200)
-    #         self.send_header('Content-type', 'text/html; charset=utf-8')
-    #         self.end_headers()
-
-    #         context = {
-    #             'comments': comments,
-    #             'post_id': post_id
-    #         }
-
-    #         self.wfile.write(template(context).encode('utf-8'))
-    #     except Exception as e:
-    #         print(e)
-    #         self.send_error_response(500, "Server Error: " + str(e))
-
     @verify_jwt
     def render_comments(self):
         try:

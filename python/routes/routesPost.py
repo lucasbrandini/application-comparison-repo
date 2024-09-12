@@ -261,18 +261,24 @@ class routesPost(BaseHTTPRequestHandler):
         try:
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
-            comment_data = dict(data.split('=') for data in post_data.split('&'))
 
+            # Use parse_qs para analisar os dados do formulário
+            comment_data = urllib.parse.parse_qs(post_data)
+
+            # Decodificar caracteres especiais
+            post_id = urllib.parse.unquote_plus(comment_data.get('post_id', [None])[0])
+            comment = urllib.parse.unquote_plus(comment_data.get('comment', [None])[0])
+
+            # Obter o usuário a partir do token decodificado
             user_name = self.decoded_token.get('name_user')
             user = select_user_by_name(user_name)
             if user:
-                insert_comment(user['id_user'], comment_data['post_id'], comment_data['comment'])
+                insert_comment(user['id_user'], post_id, comment)
                 self.redirect_to('/home')
             else:
                 self.send_error_response(404, "User not found")
         except Exception as e:
             logger.error(f"Error during comment creation: {e}")
             self.send_error_response(500, "Server error during comment creation")
-
     
             

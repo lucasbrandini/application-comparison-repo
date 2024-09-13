@@ -10,10 +10,24 @@ import os
 import requests
 from middleware.jwt import verify_jwt
 from urllib.parse import urlparse, parse_qs
+from datetime import datetime, timedelta
 
 def datetime_converter(o):
     if isinstance(o, datetime.datetime):
         return o.isoformat()
+
+def time_since(posted_time):
+    now = datetime.now()
+    delta = now - posted_time
+
+    if delta.days > 0:
+        return f"{delta.days} dias atrás"
+    elif delta.seconds > 3600:
+        return f"{delta.seconds // 3600} horas atrás"
+    elif delta.seconds > 60:
+        return f"{delta.seconds // 60} minutos atrás"
+    else:
+        return "Agora mesmo"
 
 class routesGet(BaseHTTPRequestHandler):
     
@@ -330,17 +344,24 @@ class routesGet(BaseHTTPRequestHandler):
             post['post_image'] = post['post_image'].decode('utf-8') if post['post_image'] else None
             post['post_video'] = post['post_video'].decode('utf-8') if post['post_video'] else None
 
-            # Pega os comentários
+            # Obtém os comentários
             raw_comments = get_comments_by_post_id(post_id)
+
+            # Se houver comentários, extraímos o número total de comentários
+            total_comments = raw_comments[0][-1] if raw_comments else 0
+
             comments = []
             for comment in raw_comments:
                 comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+                comment_date = comment[4]
+                time_elapsed = time_since(comment_date)
+
                 comments.append({
                     'id_comment': comment[0],
                     'name_user': comment_user_info['name_user'],
                     'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
                     'comment': comment[3],
-                    'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
+                    'comment_date': time_elapsed,  # Atualizado para exibir tempo decorrido
                     'is_author': comment[1] == user['id_user']
                 })
 
@@ -357,6 +378,7 @@ class routesGet(BaseHTTPRequestHandler):
             # Adiciona as informações do post ao contexto
             context = {
                 'comments': comments,
+                'comment_count': total_comments,  # Aqui está o número total de comentários
                 'post_id': post_id,
                 'post_author': post_author['name_user'],
                 'post_avatar': post_author['avatar_image'].decode('utf-8') if post_author['avatar_image'] else None,
@@ -367,7 +389,7 @@ class routesGet(BaseHTTPRequestHandler):
                 'is_post_owner': post['p_id_user'] == user['id_user'],
                 'post_vote' : post['post_votes'],
                 'post_date' : post['post_date'],
-                'user_avatar': user_avatar['avatar_image'].decode('utf-8') if user_avatar else None,  # Adiciona o avatar do usuário logado
+                'user_avatar': user_avatar['avatar_image'].decode('utf-8') if user_avatar else None,  
             }
 
             self.wfile.write(template(context).encode('utf-8'))

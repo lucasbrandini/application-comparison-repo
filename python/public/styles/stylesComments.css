@@ -12,6 +12,157 @@ body {
     margin: 50px 49px 160px 49px;
 }
 
+.sectionTop {
+    width: 100%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5625rem;
+    margin: 2rem;
+}
+
+.section1 {
+    width: 120px;
+}
+
+.dropbtn {
+    background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px; 
+    display: flex; /* Para alinhar o ícone e o texto */
+    align-items: center; /* Para centralizar o ícone verticalmente */
+    justify-content: space-between; /* Espaçar o texto e o ícone */
+    gap: 5px; /*Espaçamento entre o texto e o ícone */
+
+    margin-top: -4.8rem;
+    /* margin-left: 2rem; */
+}
+
+.dropbtn img {
+    width: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+    height: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+    margin-left: 8px; /* Espaço entre o texto e o ícone */
+    font-weight: 600;
+}
+
+.dropbtn span {
+    margin-right: 6px; /* Espaço entre o texto e o ícone */
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #555;
+}
+
+.dropdown-content {
+    display: block; /* Necessário para permitir transições */
+    position: absolute;
+    background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
+    width: 188px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 20px; 
+    margin-top: 0.3rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    margin-left: 2rem;
+}
+
+/* Estilo inicial do ícone */
+#toggleIcon {
+    transition: transform 0.4s ease;
+}
+
+/* Estilo do ícone quando o dropdown está aberto */
+#toggleIcon.rotate {
+    transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
+}
+
+.dropdown-content a {   
+    color: white;
+    font-size: 18px;
+    padding: 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center;
+}
+
+.dropdown-content a img {
+    margin-right: 8px; 
+    width: 20px; 
+    height: 20px; 
+}
+
+.dropdown-content a:hover {
+    background-color: #5e6fce7a;
+    transition: background-color 0.3s;
+    border-radius: 20px; 
+}
+
+.dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.section2 {
+    width: 120px;
+}
+
+.textGithub {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 21px;
+    line-height: 32px;
+    letter-spacing: 0.04em;
+    text-transform: capitalize;
+
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: -0.3rem;
+}
+
+.logoGithub {
+    margin-bottom: -0.25rem;
+}
+
+.github {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.section3 {
+    width: 158px;
+}
+
+.update {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    line-height: 3px;
+
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.update:hover {
+    text-decoration-line: underline;
+    color: #fff;
+}
+
+.dropdown{
+    margin-bottom: 4rem;
+}
+
 .return-home {
     cursor: pointer;
     height: 34px;
@@ -21,6 +172,7 @@ body {
     line-height: 134.01%;
     color: rgba(247, 247, 247, 0.8);
     margin-left: 15px;
+    margin-top: 50rem;
 }
 
 .return-home:hover{
@@ -140,6 +292,7 @@ h3 {
     background: #111427;
     border-radius: 6px;
     border: none;
+    padding-left: 10px;
 
     display: flex;
     flex-direction: column;
@@ -378,4 +531,52 @@ h3 {
     color: #080a14;
     border-radius: 5px;
     transform: translateY(-50%);
+}
+
+.edit-comment-form{
+    display: flex;
+}
+
+.commentArea {
+    resize: none;
+    padding: 10px;
+    width: 100%;
+    height: 67px;
+    background: #0b0d1a;
+    border-radius: 6px;
+    color: #DADADA;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 134.01%;
+}
+
+.saveComment {
+    margin-left: auto;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 173px;
+    height: 68px;
+    border:none;
+
+    background: #31396B;
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 134.01%;
+    color: #F7F7F7;
+}
+
+.saveComment:hover {
+    color: #080a14;
+}
+
+.saveComment:hover .edit-icon{
+    filter: invert(1) grayscale(1) contrast(1) brightness(0);
 }

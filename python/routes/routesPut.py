@@ -131,6 +131,7 @@ class routesPut(BaseHTTPRequestHandler):
         try:
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
+            logger.info(f"Received data: {post_data}")
 
             comment_data = json.loads(post_data)
             
@@ -157,6 +158,7 @@ class routesPut(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'success': False, 'message': str(e)}).encode('utf-8'))
+
     @verify_jwt
     def handle_update_avatar(self):
         try:

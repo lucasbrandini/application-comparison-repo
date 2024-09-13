@@ -70,15 +70,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 alert('Comentário deletado com sucesso');
+
+                // Remove o comentário da página
                 const commentElement = document.getElementById(`comment-${commentId}`);
-                commentElement.remove(); // Remove o comentário da página
+                commentElement.remove();
+
+                // Atualiza a contagem de comentários
+                const commentCountElement = document.getElementById('comment-count');
+                let currentCount = parseInt(commentCountElement.textContent, 10);
+                commentCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
             } else {
                 const result = await response.json();
                 alert(`Erro: ${result.error}`);
             }
         });
     });
-
 
 });
 
@@ -154,3 +160,36 @@ function cancelDelete(element) {
     const confirmBox = element.closest('.confirmDelete');
     confirmBox.classList.remove('show');
 }
+
+function toggleDropdown() {
+    const dropdown = document.getElementById("myDropdown");
+    const icon = document.getElementById("toggleIcon");
+
+    dropdown.classList.toggle("show");
+
+    if (dropdown.classList.contains("show")) {
+        icon.classList.add("rotate");
+    } else {
+        icon.classList.remove("rotate");
+    }
+}
+
+window.onclick = function (event) {
+    if (!event.target.matches(".dropbtn") && !event.target.closest(".dropdown")) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        const icon = document.getElementById("toggleIcon");
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+                openDropdown.classList.remove("show");
+                icon.classList.remove("rotate"); // Reseta o ícone para a posição original
+            }
+        }
+    }
+};
+
+// Evento de logout
+document.getElementById("logout").addEventListener("click", function () {
+    document.cookie = "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/login";
+});

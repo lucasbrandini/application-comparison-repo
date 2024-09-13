@@ -89,9 +89,9 @@ function renderHome(req, res) {
                     post.post_video = post.post_video.toString("utf-8");
                   if (post.avatar_image)
                     post.avatar_image = post.avatar_image.toString("utf-8");
-                  post.is_owner = post.p_id_user === user.id_user;
+                  post.is_owner = post.p_id_user === user[0].id_user;
                 });
-                
+
                 renderTemplate("home",{ posts, user, name_user: user[0].name_user },res);
               })
               .catch((err) => {

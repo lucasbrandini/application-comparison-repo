@@ -496,7 +496,11 @@ def get_comments_by_post_id(post_id):
     connection = get_connection()
     try:
         cursor = connection.cursor()
-        sql = "SELECT * FROM comments WHERE p_id_post = %s"
+        sql = """
+            SELECT *, COUNT(*) OVER() AS total_comments
+            FROM comments 
+            WHERE p_id_post = %s
+        """
         cursor.execute(sql, (post_id,))
         comments = cursor.fetchall()
         return comments

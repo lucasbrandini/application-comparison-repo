@@ -356,8 +356,11 @@ class routesGet(BaseHTTPRequestHandler):
                 comment_date = comment[4]
                 time_elapsed = time_since(comment_date)
 
+                print(comment)
+
                 comments.append({
                     'id_comment': comment[0],
+                    'p_id_post': comment[2],
                     'name_user': comment_user_info['name_user'],
                     'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
                     'comment': comment[3],

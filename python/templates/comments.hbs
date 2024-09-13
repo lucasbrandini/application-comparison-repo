@@ -22,7 +22,7 @@
         <div class="dropdown">
             <button class="dropbtn" onclick="toggleDropdown()">
                 <img id="toggleIcon" src="/public/assets/setaright.svg" alt="Toggle Icon">
-                <span>Olá, {{name_user}}</span> 
+                <span>Olá, {{user_name}}</span> 
             </button>
             <div id="myDropdown" class="dropdown-content">
                 <a href="/configuration" id="settings"><img src="/public/assets/settings.svg" alt="Seta"> Configurações</a>
@@ -122,13 +122,12 @@
                 </div>
                 <span id="comment-text-{{id_comment}}" class="comment-text">{{comment}}</span>
 
-                <form id="editCommentForm-{{id_comment}}" class="edit-comment-form" data-comment-id="{{id_comment}}" data-post-id="{{p_id_post}}" style="display: none;">
+                <form id="editCommentForm-{{id_comment}}" class="edit-comment-form" data-comment-id="{{id_comment}}" data-user-id="{{id_user}}" data-post-id="{{p_id_post}}" style="display: none;" required>
                     <textarea name="comment" class="commentArea">{{comment}}</textarea>
                     <button type="submit" class="saveComment">
                         <img class="edit-icon" src="../public/assets/pen.svg">
                         Salvar
                     </button>
-                    <span>{{post_id}}</span>        
                 </form>
                 <div class="comment-divider"></div>
             </div>

@@ -365,7 +365,8 @@ class routesGet(BaseHTTPRequestHandler):
                     'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
                     'comment': comment[3],
                     'comment_date': time_elapsed,  # Atualizado para exibir tempo decorrido
-                    'is_author': comment[1] == user['id_user']
+                    'is_author': comment[1] == user['id_user'],
+                    'id_user': user['id_user']
                 })
 
             # Compila o template
@@ -392,7 +393,8 @@ class routesGet(BaseHTTPRequestHandler):
                 'is_post_owner': post['p_id_user'] == user['id_user'],
                 'post_vote' : post['post_votes'],
                 'post_date' : post['post_date'],
-                'user_avatar': user_avatar['avatar_image'].decode('utf-8') if user_avatar else None,  
+                'user_avatar': user_avatar['avatar_image'].decode('utf-8') if user_avatar else None,
+                'user_name': id_user  
             }
 
             self.wfile.write(template(context).encode('utf-8'))

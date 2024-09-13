@@ -140,6 +140,16 @@ class routesPut(BaseHTTPRequestHandler):
             post_id = int(comment_data.get('post_id'))
             id_comment = comment_data.get('id_comment')
 
+            if not comment or comment.strip() == '':
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'message': 'O comentário não pode estar vazio.'
+                }).encode('utf-8'))
+                return
+
             message = edit_comment_by_author(comment, user_id, post_id, id_comment)
 
             if message == "Comment updated successfully.":

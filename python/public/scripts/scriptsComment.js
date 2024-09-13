@@ -13,11 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const commentId = form.getAttribute('data-comment-id');
+            const textarea = form.querySelector('.commentArea');
+            const comment = textarea.value.trim();
+
+            if (comment === '') {
+                alert('O comentário não pode estar vazio.');
+                return;
+            }
+
+            const userId = form.getAttribute('data-user-id');
+            const commentId = form.getAttribute('data-comment-id');            
             const postId = form.getAttribute('data-post-id');
             const formData = new FormData(form);
 
             const data = {
+                user_id: parseInt(userId, 10),
                 id_comment: parseInt(commentId, 10),
                 comment: formData.get('comment'),
                 post_id: parseInt(postId, 10)

@@ -20,6 +20,20 @@ body {
     margin: 2rem;
 }
 
+.dropOption {
+    font-size: 17px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.subOption.show {
+    width: 230px;
+}
+
+.deleteConfirm {
+    margin-right: 5px;
+}
+
 .banner {
     margin-top: 3.125rem;
     display: flex;
@@ -36,6 +50,7 @@ body {
     background: linear-gradient(90deg, #9F00EB 37.96%, #05F2B5 57.73%); 
     -webkit-text-fill-color: transparent; 
     -webkit-background-clip: text;
+    background-clip: text;
     height: 9rem;
 }
 
@@ -79,6 +94,12 @@ strong {
     gap: 1.4375rem;
 }
 
+.btnPost:hover {
+    background: #4F00FF;
+    cursor: pointer;
+    transition: 1s;
+}
+
 .cardBox {
     margin: 4.425rem auto;
     width: 56.25rem;
@@ -104,29 +125,51 @@ strong {
     gap: 1.25rem
 }
 
-.endTop {
-    display: flex;
-    justify-content: center;
+.cardTextTitle {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 23px;
+    /* identical to box height, or 34px */
+
+    color: #F7F7F7;
+
+    margin-top: 1rem;
 }
 
-.cardText {
-    margin-top: 1.25rem;
-    display: flex;
-    justify-content: center;
-    font-size: 1.25rem;
+.cardTextDescri {
+    font-style: normal;
     font-weight: 500;
-    line-height: 1.675rem;
-    text-align: left;
-    color: #FFFFFF8F;
-    text-align:left;
+    font-size: 19px;
+    /* or 27px */
+
+    color: #cccccc;
+    margin-top: 0.6rem;
+    margin-bottom: 1rem;
+
+    
+}
+
+.cardTextImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 15px;
 }
 
 .username {
-    font-size: 1.5625rem;
     font-weight: 700;
-    line-height: 2.0938rem;
-    text-align: left;
-    color: #FFFFFF;
+    font-size: 21px;
+    line-height: 134.01%;
+    /* or 28px */
+
+    color: #EAEAEA;
+}
+
+.username span {
+    color: #ACACAC;
+    font-size: 18px;
+    font-weight: semibold;
 }
 
 .postTime {
@@ -149,60 +192,170 @@ strong {
 .cardBottom {
     display: flex;
     margin-top: .625rem;
-    flex-direction: row-reverse;
+    gap: 0.5rem;
 }
 
 .voteStyle {
     display: flex;
     align-items: center;
-    width: 7.5rem;
+    gap: 1.25rem;
+    border: 2px solid #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    height: 2.2rem;
+}
+
+.commentCont {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    border: 2px solid #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    height: 2.2rem;
 }
 
 .upvote {
-    width:73%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    border-radius: 5px 0px 0px 5px;
-    border: 1px solid #5E6ECE;
-    background:transparent;
-    color: #5E6ECE;
+    /* width: 16.87px;
+    height: 21.09px; */
 
-    font-size: 1.125rem;
-    font-weight: 700;
-    line-height: 1.5075rem;
-    text-align: center;
-    padding: .3125rem;
-    height: 100%;
+    border: none;
+    background: transparent;
+    fill: #fff;
 }
 
 .downvote {
+    border: none;
+    background: transparent;
+}
+
+.post_votes {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 134.01%;
+    /* or 29px */
+
+    color: #FFFFFF;
+}
+
+/* Estilos para o menu dropdown */
+.optionConfig {
+    position: relative;
+}
+
+.options {
+    cursor: pointer;
+    padding: 10px;
+}
+
+.subOption {
+    display: none;
+    position: absolute;
+    top: calc(100% - 10px); /* Sobe o menu 10px */
+    right: 0;
+    background-color: #1C2340;
+    border-radius: 8px;
+    padding: 10px;
+    width: 180px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Estilo para o botão 'x' */
+.closeMenu {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+}
+
+.closeMenu:hover {
+    color: #ccc;
+}
+
+.subOption li {
+    list-style: none;
+    padding: 10px;
+    margin: 5px 0;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 27%;
-    border-radius: 0rem .3125rem .3125rem 0rem;
-    border: 1px solid #5E6ECE;
-    background:transparent;
-    text-align: center;
-    height: 100%;
+    color: white;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+
+.subOption li:hover {
+    background-color: #2A2F55;
+    border-radius: 6px;
+}
+
+.subOption li img {
+    margin-right: 10px;
+}
+
+.confirmDelete {
+    display: none;
+    background-color: #2A2F55;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+
+.confirmDelete p {
+    margin-bottom: 10px;
+    color: white;
+}
+
+.confirmDelete button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    background-color: #424F9F;
+}
+
+.confirmDelete button:nth-child(2) {
+    background-color: #1E2344;
+    color: white;
+}
+
+.confirmDelete button:nth-child(1) {
+    background-color: #424F9F;
+    color: white;
+}
+
+/* Animações */
+.subOption.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.confirmDelete.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.voteText {
+    display: none;
 }
 
 #userVote {
     display: none;
-}
-
-.upvoteImg {
-    height: 1.25rem;
-    width: 1.25rem;
-}
-
-.downvoteImg {
-    height: 1.25rem;
-    width: 1.25rem;
 }
 
 .modal {
@@ -225,7 +378,8 @@ strong {
     margin: 1.25rem auto;
     padding: 1.25rem;
     border: 4px solid #31396B;
-    width: 59.375rem; 
+    width: 59.375rem;
+    height: 550px;
     border-radius: 2.5rem;
     display: flex;
     justify-content: center;
@@ -329,7 +483,6 @@ strong {
     width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 20px;
 }
 
@@ -341,11 +494,21 @@ strong {
     border: none;
 }
 
+#preview {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #080a14;
+    border-radius: 7px;
+    width: 350px;
+    height: 270px;
+    margin: 63px 0 0 auto;
+}
+
 /* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
 .btnSubmit {
     height: 45px;
     width: 200px;
-    margin: 280px 0 15px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -357,6 +520,7 @@ strong {
     cursor: pointer;
     font-weight: 600;
     font-size: 20px;
+    position:relative;   
 }
 
 .btnIcon {
@@ -381,7 +545,6 @@ strong {
     left: 3%;
     width: 20px;
     height: 20px;
-    fill: #ccc;
 }
 
 .styleFileInput {
@@ -530,6 +693,7 @@ strong {
 
 .pfpImg {
     border-radius: 5px; /* Torna a imagem circular */
+    outline: 4px solid #31396B;
 }
 
 .textGithub {
@@ -583,4 +747,70 @@ strong {
 
 .section3 {
     width: 120px;
+}
+
+#file-name {
+    font-size: 14px;
+    color: #4A569C;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: inline-block;
+}
+
+#preview img,
+#preview video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#clear-input {
+    border: none;
+    cursor: pointer;
+    margin-top: 13px;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+.cancelSpan {
+    height: 45px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid;
+    border-color: #555;
+    border-radius: 5px;
+    background-color: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 20px;
+    margin-left: 60px;
+}
+
+.cancelSpan:hover{
+    color: #dd5151;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    width: 810px;
+    gap:51px;
+}
+
+.hide-error {
+    display: none;    
+}
+
+#submit-btn:disabled {
+    background-color: #cccccc; /* cor do botão desabilitado */
+    cursor: not-allowed;
 }

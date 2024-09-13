@@ -40,32 +40,46 @@
             </div>
             <div class="subBanner">
                 <h2 class="subText">Conecte-se com uma <strong>comunidade vibrante e unida.</strong> Descubra tudo o que você precisa <strong>em um só lugar.</strong> Junte-se a nós e <strong>faça parte da experiência!</strong></h2>
-            <button class="btnPost" id="openModal">Crie sua postagem aqui!</button>
+            <button class="btnPost" id="openModal">Crie sua postagem aqui!<img class="logoGithub" src="/public/assets/create.svg" alt="github"></button>
         </section>
 
         <section class="cardBox">
             {{#each posts}}
                 <div class="card">
+
                     <div class="cardTop">
                         <div class="initTop">
                             <img class="pfpImg" src="data:image/jpeg;base64,{{avatar_image}}" width="50" height="50" alt="Avatar">                
-                            <h3 class="username">{{name_user}}</h3>
-                            <h4 class="postTime">Há {{post_date}}</h4>
+                            <h3 class="username">{{name_user}} <span>• {{post_date}} atrás</span></h3>
                         </div>
-                        <div class="endTop">
-                            {{#if comment_count}}
-                            <h4 class="comentarios">({{comment_count}}) Comentários</h4>
-                            {{/if}}
-                        </div>
+                        {{#if is_owner}}
+                            <div class="optionConfig">
+                                <div class="options" onclick="toggleOptions(this)">
+                                    <svg width="5" height="23" viewBox="0 0 5 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.5 17.5C3.16304 17.5 3.79893 17.7634 4.26777 18.2322C4.73661 18.7011 5 19.337 5 20C5 20.663 4.73661 21.2989 4.26777 21.7678C3.79893 22.2366 3.16304 22.5 2.5 22.5C1.83696 22.5 1.20107 22.2366 0.732233 21.7678C0.263392 21.2989 0 20.663 0 20C0 19.337 0.263392 18.7011 0.732233 18.2322C1.20107 17.7634 1.83696 17.5 2.5 17.5ZM2.5 8.75C3.16304 8.75 3.79893 9.01339 4.26777 9.48223C4.73661 9.95107 5 10.587 5 11.25C5 11.913 4.73661 12.5489 4.26777 13.0178C3.79893 13.4866 3.16304 13.75 2.5 13.75C1.83696 13.75 1.20107 13.4866 0.732233 13.0178C0.263392 12.5489 0 11.913 0 11.25C0 10.587 0.263392 9.95107 0.732233 9.48223C1.20107 9.01339 1.83696 8.75 2.5 8.75ZM2.5 0C3.16304 0 3.79893 0.263392 4.26777 0.732233C4.73661 1.20107 5 1.83696 5 2.5C5 3.16304 4.73661 3.79893 4.26777 4.26777C3.79893 4.73661 3.16304 5 2.5 5C1.83696 5 1.20107 4.73661 0.732233 4.26777C0.263392 3.79893 0 3.16304 0 2.5C0 1.83696 0.263392 1.20107 0.732233 0.732233C1.20107 0.263392 1.83696 0 2.5 0Z" fill="white"/>
+                                    </svg>
+                                </div>
+                                <div class="subOption dropOption">
+                                    <li id="editPost" class="editPost dropOption"  data-post-id="{{id_posts}}"><img src="../public/assets/edit.svg" alt="" srcset="">Editar postagem</li>
+                                    <li onclick="confirmDelete(this)"><img src="../public/assets/delete.svg" alt="" srcset="">Deletar postagem</li>
+                                    <div class="confirmDelete dropOption">
+                                        <p><img class="deleteConfirm" src="../public/assets/delete_open.svg" alt="" srcset="">Você tem certeza?</p>
+                                        <button class="noDeletePost dropOption" onclick="cancelDelete(this)">Não</button>
+                                        <button id="deletePost" class="deletePost dropOption" data-post-id="{{id_posts}}">Sim</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/if}}
                     </div>
+                    
                     {{#if post_title}}
-                        <h4 class="cardText">titulo: {{post_title}}</h4>
+                        <h4 class="cardTextTitle">{{post_title}}</h4>
                     {{/if}}
                     {{#if post}}
-                        <h5 class="cardText">post: {{post}}</h5>
+                        <h5 class="cardTextDescri">{{post}}</h5>
                     {{/if}}
                     {{#if post_image}}
-                        <img src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
+                        <img class="cardTextImg" src="data:image/jpeg;base64,{{post_image}}" width="400" height="200" alt="Post Image">
                     {{/if}}
                     {{#if post_video}}
                         <video src="data:video/mp4;base64,{{post_video}}" width="400" height="200" alt="Post Video" controls></video>
@@ -73,38 +87,26 @@
                     <div class="cardBottom">
                         <div class="voteStyle">
                             <button id="upvote" class="upvote" data-post-id="{{id_posts}}">
-                                <svg width="24" height="15" viewBox="0 0 24 15" xmlns="http://www.w3.org/2000/svg">
-                                    <path class="upvotePath" d="M12.0681 0C12.7681 0 13.3681 0.3 13.7681 0.8L23.4681 11.8C24.1681 12.5 24.0681 13.7 23.3681 14.4C22.6681 15.1 21.4681 15 20.7681 14.3L20.6681 14.2L12.1681 4.6C12.0681 4.5 11.9681 4.5 11.7681 4.6L3.26811 14.2C2.56811 15 1.46811 15.1 0.668113 14.4C-0.131887 13.7 -0.231887 12.6 0.468113 11.8L0.568113 11.7L10.2681 0.7C10.7681 0.3 11.3681 0 12.0681 0Z" fill="#6272D6"/>
+                                <svg width="17" height="21" viewBox="0 0 19 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path class="upvotePath" d="M13.6546 21.3901V12.2495H17.1627C17.2962 12.2508 17.4273 12.214 17.5406 12.1434C17.6538 12.0729 17.7447 11.9715 17.8024 11.8512C17.8602 11.7309 17.8825 11.5966 17.8666 11.4641C17.8508 11.3315 17.7975 11.2063 17.7131 11.1029L9.98618 1.25919C9.91925 1.17806 9.8352 1.11274 9.74006 1.06789C9.64492 1.02305 9.54105 0.999792 9.43587 0.999792C9.33069 0.999792 9.22682 1.02305 9.13168 1.06789C9.03654 1.11274 8.95249 1.17806 8.88556 1.25919L1.15868 11.1029C1.07422 11.2063 1.02095 11.3315 1.00512 11.4641C0.989287 11.5966 1.01155 11.7309 1.0693 11.8512C1.12705 11.9715 1.21789 12.0729 1.33119 12.1434C1.44449 12.214 1.57554 12.2508 1.709 12.2495H5.21712L5.21712 21.3901C5.21749 21.4828 5.23611 21.5746 5.27193 21.6601C5.30775 21.7456 5.36006 21.8232 5.42587 21.8885C5.49169 21.9538 5.56971 22.0055 5.6555 22.0406C5.74129 22.0757 5.83316 22.0936 5.92587 22.0933H12.9459C13.0386 22.0936 13.1304 22.0757 13.2162 22.0406C13.302 22.0055 13.3801 21.9538 13.4459 21.8885C13.5117 21.8232 13.564 21.7456 13.5998 21.6601C13.6356 21.5746 13.6543 21.4828 13.6546 21.3901Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                {{post_votes}}
                             </button>
-
+                                <p class="post_votes">{{post_votes}}</p> 
                             <button id="downvote" class="downvote" data-post-id="{{id_posts}}">
-                                <svg width="24" height="17" viewBox="0 0 24 17" xmlns="http://www.w3.org/2000/svg">
-                                    <path class="downvotePath" d="M0.252186 3.21466L11.2522 15.6847C11.3512 15.7894 11.4706 15.8728 11.603 15.9298C11.7354 15.9868 11.878 16.0162 12.0222 16.0162C12.1663 16.0162 12.309 15.9868 12.4414 15.9298C12.5737 15.8728 12.6931 15.7894 12.7922 15.6847L23.7922 3.21466C23.9555 3.00841 24.0309 2.74614 24.0022 2.48466C23.9913 2.35142 23.9539 2.22171 23.8921 2.1032C23.8302 1.98468 23.7453 1.87977 23.6422 1.79466L21.7922 0.244655C21.6911 0.157242 21.5736 0.090967 21.4465 0.0497456C21.3194 0.00852417 21.1853 -0.00680765 21.0522 0.00465538C20.9197 0.0142406 20.7904 0.0501278 20.672 0.110221C20.5535 0.170315 20.4482 0.253411 20.3622 0.354655L12.1922 9.80466C12.1416 9.85473 12.0733 9.88282 12.0022 9.88282C11.931 9.88282 11.8627 9.85473 11.8122 9.80466L3.64219 0.354655C3.48053 0.161567 3.25198 0.0365767 3.00219 0.00465538C2.86974 -0.00816924 2.73607 0.00556803 2.609 0.0450621C2.48193 0.0845561 2.36403 0.149013 2.26219 0.234655L0.362186 1.79466C0.259108 1.87977 0.174141 1.98468 0.112307 2.1032C0.0504733 2.22171 0.0130285 2.35142 0.00218648 2.48466C-0.0065681 2.61683 0.0110238 2.74942 0.0539406 2.87474C0.0968574 3.00006 0.164244 3.1156 0.252186 3.21466Z" fill="#6272D6"/>
+                                <svg width="17" height="21" viewBox="0 0 19 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path class="downvotePath" d="M5.21696 1.70313V10.8438H1.70884C1.57538 10.8425 1.44433 10.8793 1.33103 10.9498C1.21774 11.0204 1.12689 11.1217 1.06914 11.2421C1.01139 11.3624 0.989127 11.4967 1.00496 11.6292C1.02079 11.7617 1.07406 11.887 1.15852 11.9903L8.8854 21.8341C8.95234 21.9152 9.03638 21.9805 9.13152 22.0254C9.22666 22.0702 9.33053 22.0935 9.43571 22.0935C9.54089 22.0935 9.64477 22.0702 9.7399 22.0254C9.83504 21.9805 9.91909 21.9152 9.98602 21.8341L17.7129 11.9903C17.7974 11.887 17.8506 11.7617 17.8665 11.6292C17.8823 11.4967 17.86 11.3624 17.8023 11.2421C17.7445 11.1217 17.6537 11.0204 17.5404 10.9498C17.4271 10.8793 17.296 10.8425 17.1626 10.8438H13.6545V1.70313C13.6541 1.61043 13.6355 1.5187 13.5997 1.43319C13.5638 1.34769 13.5115 1.27007 13.4457 1.20478C13.3799 1.13949 13.3019 1.0878 13.2161 1.05266C13.1303 1.01753 13.0384 0.999636 12.9457 1.00001H5.92571C5.83301 0.999636 5.74114 1.01753 5.65535 1.05266C5.56956 1.0878 5.49153 1.13949 5.42571 1.20478C5.3599 1.27007 5.30759 1.34769 5.27177 1.43319C5.23596 1.5187 5.21733 1.61043 5.21696 1.70313Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                        </div>
-                        
-                        <p class="voteText">{{user_vote}}</p>
+                        </div>  
 
-                        {{#if is_owner}}
-                            <button id="deletePost" class="deletePost" data-post-id="{{id_posts}}">
-                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path class="deletePath" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5c-5.238 0-9.5-4.262-9.5-9.5S6.762 3.5 12 3.5s9.5 4.262 9.5 9.5-4.262 9.5-9.5 9.5zm3.536-14.464c.39.39.39 1.024 0 1.414-.39.39-1.024.39-1.414 0L12 13.414l-2.122 2.122c-.39.39-1.024.39-1.414 0-.39-.39-.39-1.024 0-1.414L10.586 12 8.464 9.878c-.39-.39-.39-1.024 0-1.414.39-.39 1.024-.39 1.414 0L12 10.586l2.122-2.122c.39-.39 1.024-.39 1.414 0 .39.39.39 1.024 0 1.414L13.414 12l2.122 2.122z" fill="#6272D6"/>
-                                </svg>
-                            </button>
-                            <button id="editPost" class="editPost" data-post-id="{{id_posts}}">
-                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path class="editPath" d="M21.707 2.293c-.39-.39-1.024-.39-1.414 0L 3.707 19.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L21.707 3.707c.39-.39.39-1.024 0-1.414zM5 18.414V20h1.586l9.793-9.793-1.586-1.586L5 18.414zm12.793-10.207l-1.586-1.586L14 8.414l1.586 1.586 1.207-1.207z" fill="#6272D6"/>
-                                </svg>
-                            </button>
-                        {{/if}}
-                            <button id="commentPost" class="commentPost" data-post-id="{{id_posts}}">
-                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path class="commentPost" d="M21.707 2.293c-.39-.39-1.024-.39-1.414 0L 3.707 19.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L21.707 3.707c.39-.39.39-1.024 0-1.414zM5 18.414V20h1.586l9.793-9.793-1.586-1.586L5 18.414zm12.793-10.207l-1.586-1.586L14 8.414l1.586 1.586 1.207-1.207z" fill="#FFAA00"/>
-                                </svg>
-                            </button>
+                        <p class="voteText">{{user_vote}}</p>
+                        
+                        <btn class="commentCont commentPost" id="commentPost" data-post-id="{{id_posts}}">
+                            <p class="post_votes">{{comment_count}}</p>
+                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.0215 19.0918H11.7676L5.9082 23.4863V19.0918H2.97852C2.19727 19.0918 1.51367 18.4082 1.51367 17.627V2.97852C1.51367 2.19727 2.19727 1.51367 2.97852 1.51367H22.0215C22.8027 1.51367 23.4863 2.19727 23.4863 2.97852V17.627C23.4863 18.4082 22.8027 19.0918 22.0215 19.0918Z" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </btn>                       
                     </div>
                 </div>    
             {{/each}}   
@@ -145,9 +147,24 @@
                         <svg class="iconFile" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M0 3C0 1.34311 1.34311 0 3 0H17C18.6569 0 20 1.34311 20 3V9.5C19.9999 9.58435 19.9892 9.66837 19.968 9.75C19.9892 9.83163 19.9999 9.91565 20 10V17C20 18.6568 18.6568 19.9999 17 20H3C1.34311 20.0001 0 18.6569 0 17V14C8.5034e-05 13.9156 0.0107993 13.8316 0.0319728 13.75C0.0108843 13.6684 8.5034e-05 13.5844 0 13.5V3ZM2.99396 12.83C2.646 12.836 2.31403 12.852 2 12.876V3C2 2.4477 2.4477 2 3 2H17C17.5523 2 18 2.4477 18 3V9.01599C13.703 9.15502 10.6 10.19 8.41998 11.639C9.246 11.932 10.17 12.349 11.076 12.895C12.475 13.735 13.897 14.9151 14.854 16.478C15.2559 17.1346 14.7962 17.98 14.0265 17.9997C13.6694 18.0088 13.3345 17.8268 13.148 17.522C12.412 16.319 11.27 15.344 10.046 14.609C8.82398 13.875 7.58104 13.417 6.71896 13.217C5.50468 12.9397 4.26139 12.8101 3.01599 12.831L2.99396 12.83ZM4.97798 4.48801C5.42372 4.17398 5.95476 4.00366 6.5 4C6.91003 4 7.50298 4.11497 8.02202 4.48801C8.59201 4.89804 9 5.57398 9 6.5C9 7.42602 8.59201 8.10102 8.02202 8.51097C7.57636 8.82543 7.04532 8.996 6.5 9C6.08997 9 5.49702 8.88503 4.97798 8.51097C4.40799 8.10102 4 7.42704 4 6.5C4 5.57398 4.40799 4.89898 4.97798 4.48801Z" fill="#4A569C"/>
                         </svg>
-                        <label class="fileDesc" for="file">Arquivos da postagem</label>
-                        <input type="file" name="file" id="file" accept="image/*,video/mp4">                        
+                        <input type="file" name="file" id="file" accept="image/*,video/mp4">
+                        <label for="file" id="file-name">Selecione uma imagem/vídeo</label>
+                        <div id="clear-input">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="icon-bin" height="24" width="24"><path stroke="#be4c48" stroke-linecap="round" stroke-linejoin="round" d="M1 5h22" stroke-width="1.5"></path><path stroke="#be4c48" stroke-linecap="round" stroke-linejoin="round" d="M14.25 1h-4.5c-0.39782 0 -0.77936 0.15804 -1.06066 0.43934C8.40804 1.72064 8.25 2.10218 8.25 2.5V5h7.5V2.5c0 -0.39782 -0.158 -0.77936 -0.4393 -1.06066C15.0294 1.15804 14.6478 1 14.25 1Z" stroke-width="1.5"></path><path stroke="#be4c48" stroke-linecap="round" stroke-linejoin="round" d="M9.75 17.75v-7.5" stroke-width="1.5"></path><path stroke="#be4c48" stroke-linecap="round" stroke-linejoin="round" d="M14.25 17.75v-7.5" stroke-width="1.5"></path><path stroke="#be4c48" stroke-linecap="round" stroke-linejoin="round" d="M18.86 21.62c-0.0278 0.3758 -0.197 0.7271 -0.4735 0.9832 -0.2764 0.256 -0.6397 0.3978 -1.0165 0.3968H6.63c-0.37683 0.001 -0.74006 -0.1408 -1.01653 -0.3968 -0.27647 -0.2561 -0.44565 -0.6074 -0.47347 -0.9832L3.75 5h16.5l-1.39 16.62Z" stroke-width="1.5"></path></svg>
+                        </div>                                         
                     </div>
+                    <div class="buttons">
+                        <span id="cancel" class="cancelSpan">
+                            Cancelar
+                        </span> 
+                        <button type="submit" class="btnSubmit" id="submit-btn" form="postForm" disabled>
+                            <svg class="btnIcon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.34596 0.245057C0.651227 -0.0200745 1.08608 -0.0753457 1.4479 0.105094L19.4457 9.10401C20.1347 9.44737 20.1935 10.4077 19.5518 10.8326C19.5177 10.8552 19.4823 10.8756 19.4457 10.8938L1.4479 19.8928C0.759473 20.2372 -0.0435749 19.7073 0.00234271 18.939C0.0075297 18.8515 0.0242811 18.7651 0.0520018 18.6819L2.6137 10.9988H8.00009C8.7698 10.9988 9.25083 10.1656 8.86606 9.49899C8.68741 9.18964 8.35731 8.999 8.00009 8.999H2.6137L0.0510664 1.31596C-0.0763975 0.932376 0.0405224 0.509764 0.34596 0.245057Z"/>
+                            </svg>
+                            Criar
+                        </button>
+                    </div>
+                    <span id="title-error" class="hide-error">O post deve ter um título.</span>                    
             </div>
             <div class="diviser2">
                     <span class="close" id="close">                    
@@ -155,13 +172,8 @@
                             <path id="closeIcon" d="M20.5 20.5L3 3M20.5 20.5L38 38M20.5 20.5L38 3M20.5 20.5L3 38" stroke="#6272D6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
-                    <button type="submit" class="btnSubmit" form="postForm">
-                        <svg class="btnIcon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0.34596 0.245057C0.651227 -0.0200745 1.08608 -0.0753457 1.4479 0.105094L19.4457 9.10401C20.1347 9.44737 20.1935 10.4077 19.5518 10.8326C19.5177 10.8552 19.4823 10.8756 19.4457 10.8938L1.4479 19.8928C0.759473 20.2372 -0.0435749 19.7073 0.00234271 18.939C0.0075297 18.8515 0.0242811 18.7651 0.0520018 18.6819L2.6137 10.9988H8.00009C8.7698 10.9988 9.25083 10.1656 8.86606 9.49899C8.68741 9.18964 8.35731 8.999 8.00009 8.999H2.6137L0.0510664 1.31596C-0.0763975 0.932376 0.0405224 0.509764 0.34596 0.245057Z"/>
-                        </svg>
-                        Criar
-                    </button>
-                </form>
+                    <div id="preview"></div>
+                </form>                      
             </div>     
         </div>
     </div>       

@@ -41,6 +41,7 @@ function setupGetRoutes(req, res, renderTemplate) {
     "/register": renderRegister,
     "/home": renderHome,
     "/commits": renderCommits,
+    "/configuration": renderConfigurations,
   };
 
   if (method === "GET") {
@@ -75,7 +76,7 @@ function renderHome(req, res) {
         db.selectUserByName(userId)
           .then((user) => {
             const userVotes = {};
-            db.findVote(user.id_user)
+            db.findVote(user[0].id_user)
               .then((votes) => {
                 votes.forEach((vote) => {
                   userVotes[vote.id_posts] = vote.user_vote;
@@ -92,7 +93,13 @@ function renderHome(req, res) {
                   post.is_owner = post.p_id_user === user[0].id_user;
                 });
 
-                renderTemplate("home",{ posts, user, name_user: user[0].name_user },res);
+                const context = {
+                  posts,
+                  user,
+                  name_user: user[0].name_user,
+                };
+
+                renderTemplate("home", context, res);
               })
               .catch((err) => {
                 console.error(err);
@@ -131,6 +138,35 @@ async function renderCommits(req, res) {
     } catch (error) {
       res.writeHead(500, { "Content-Type": "text/plain" });
       res.end("Erro ao buscar commits");
+    }
+  });
+}
+
+async function renderConfigurations(req, res) {
+  authenticateToken(req, res, async () => {
+    try {
+      const name_user = req.user.name_user;
+      const user = await db.selectUserByName(name_user);
+      const user_id = user[0].id_user;
+
+      let avatar = await db.selectAvatar(user_id);
+
+      if (avatar.avatar_image) {
+        avatar.avatar_image = Buffer.isBuffer(avatar.avatar_image)
+          ? avatar.avatar_image.toString("utf-8")
+          : avatar.avatar_image;
+      }
+
+      const context = {
+        user: user[0],
+        avatar,
+      };
+
+      renderTemplate("configuration", context, res);
+    } catch (e) {
+      console.error(e);
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("Server Error: " + e.message);
     }
   });
 }

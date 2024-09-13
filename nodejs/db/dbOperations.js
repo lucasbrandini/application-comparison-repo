@@ -163,7 +163,6 @@ function deleteComment(commentId) {
 }
 
 //* upvote
-//* upvote
 function upvote(postId, userId) {
   return new Promise((resolve, reject) => {
     db.getConnection((err, connection) => {

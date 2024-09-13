@@ -125,8 +125,8 @@ function isValidFileField(file) {
 
 // Função para lidar com o upload do arquivo e convertê-lo em base64
 function handleFileUpload(file) {
-  const imageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-  const videoTypes = ['video/mp4'];
+  const imageTypes = ["image/gif", "image/jpeg", "image/png"];
+  const videoTypes = ["video/mp4"];
   const maxFileSize = 10 * 1024 * 1024; // 10 MB
 
   const fileData = fs.readFileSync(file[0].filepath);
@@ -134,13 +134,13 @@ function handleFileUpload(file) {
   const fileType = file[0].mimetype;
 
   if (imageTypes.includes(fileType) && fileSize <= maxFileSize) {
-    return { isImage: true, fileBase64: fileData.toString('base64') };
+    return { isImage: true, fileBase64: fileData.toString("base64") };
   } else if (videoTypes.includes(fileType) && fileSize <= maxFileSize) {
-    return { isImage: false, fileBase64: fileData.toString('base64') };
+    return { isImage: false, fileBase64: fileData.toString("base64") };
   } else if (fileSize === 0) {
-    throw new Error('Arquivo está vazio');
+    throw new Error("Arquivo está vazio");
   } else {
-    throw new Error('Tipo de arquivo ou tamanho inválido');
+    throw new Error("Tipo de arquivo ou tamanho inválido");
   }
 }
 
@@ -155,13 +155,13 @@ async function handleCreatePost(req, res) {
     form.parse(req, async (err, fields, files) => {
       if (err) {
         console.error(`Erro durante o parsing do formulário: ${err.message}`);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Erro no servidor.');
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
         return;
       }
 
       const title = fields.title ? fields.title[0] : null;
-      const content = fields.content ? fields.content[0] : '';
+      const content = fields.content ? fields.content[0] : "";
       const file = files.file; // Pode ser undefined se o arquivo não for enviado
 
       try {
@@ -169,8 +169,8 @@ async function handleCreatePost(req, res) {
         const user = await db.selectUserByName(userName);
 
         if (!user || user.length === 0) {
-          res.writeHead(404, { 'Content-Type': 'text/plain' });
-          res.end('Usuário não encontrado');
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
           return;
         }
 
@@ -190,11 +190,92 @@ async function handleCreatePost(req, res) {
           await db.insertPost(userID, title, content);
         }
 
-        res.writeHead(302, { Location: '/home' });
+        res.writeHead(302, { Location: "/home" });
         res.end();
       } catch (err) {
         console.error(`Erro durante a criação do post: ${err.message}`);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(`Erro no servidor: ${err.message}`);
+      }
+    });
+  });
+}
+
+//Logic for upvote and downvote
+async function handleUpVote(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const postId = fields.post_id;
+      const userName = req.user.name_user;
+
+      try {
+        const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userId = user[0].id_user;
+        if (userId > 0) {
+          await db.upvote(postId, userId);
+        }
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: true, message: "Upvoted successfully" })
+        );
+      } catch (err) {
+        console.error(`Erro durante a votação: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(`Erro no servidor: ${err.message}`);
+      }
+    });
+  });
+}
+
+async function handleDownVote(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const postId = fields.post_id;
+      const userName = req.user.name_user;
+
+      try {
+        const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userId = user[0].id_user;
+        if (userId > 0) {
+          await db.downvote(postId, userId);
+        }
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: true, message: "Downvoted successfully" })
+        );
+      } catch (err) {
+        console.error(`Erro durante a votação: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
         res.end(`Erro no servidor: ${err.message}`);
       }
     });
@@ -222,6 +303,8 @@ function setupPostRoutes(req, res) {
     "/login": handleLogin,
     "/logout": handleLogout,
     "/create-post": handleCreatePost,
+    "/upvote": handleUpVote,
+    "/downvote": handleDownVote,
     // Adicione aqui outras rotas POST e suas funções
   };
 

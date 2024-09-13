@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+
 });
 
 // Função para alternar o menu de opções

@@ -346,6 +346,17 @@ class routesGet(BaseHTTPRequestHandler):
 
             # Obtém os comentários
             raw_comments = get_comments_by_post_id(post_id)
+            comments = []
+            for comment in raw_comments:
+                comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+                comments.append({
+                    'id_comment': comment[0],
+                    'name_user': comment_user_info['name_user'],
+                    'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
+                    'comment': comment[3],
+                    'comment_date': comment[4].strftime('%Y-%m-%d %H:%M:%S'),
+                    'is_author': comment[1] == user['id_user']
+                })
 
             # Se houver comentários, extraímos o número total de comentários
             total_comments = raw_comments[0][-1] if raw_comments else 0

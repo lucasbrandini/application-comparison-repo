@@ -4,18 +4,17 @@
  - [x] - Register
  - [x] - Login
  - [x] - Create Post 
- - [ ] - Upvote
- - [ ] - Downvote
+ - [x] - Upvote
+ - [x] - Downvote
  - [ ] - Create Comment
  - [x] - Logout
 2. **Get**:
  - [x] - Login
  - [x] - Register
  - [x] - Home
- - [ ] - 404
+ - [x] - 404
  - [x] - Commits
- - [ ] - Create Post
- - [ ] - Configuration
+ - [x] - Configuration
  3. **Put**:
  - [ ] - Change Username
  - [ ] - Edit Post

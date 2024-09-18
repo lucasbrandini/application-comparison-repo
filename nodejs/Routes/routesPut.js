@@ -90,6 +90,7 @@ async function handleChangeUsername(req, res) {
   });
 }
 
+
 async function handleEditPost(req, res) {
   authenticateToken(req, res, () => {
     const form = new formidable.IncomingForm({
@@ -101,25 +102,45 @@ async function handleEditPost(req, res) {
       if (err) {
         console.error(`Erro durante o parsing do formulário: ${err.message}`);
         res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({ success: false, message: "Erro no servidor." })
-        );
+        res.end(JSON.stringify({ success: false, message: "Erro no servidor." }));
         return;
       }
-
-      // Verificação dos campos recebidos
-      console.log(fields); // Verifique se o post_id está sendo capturado corretamente
 
       const postId = fields.post_id ? fields.post_id[0] : null;
       const title = fields.title ? fields.title[0] : null;
       const content = fields.content ? fields.content[0] : null;
 
-      console.log(`Post ID: ${postId}, Title: ${title}, Content: ${content}`);
+      try {
+        if (isValidFileField(files.file)) {
+          // Usa a nova função handleFileUpload para processar o arquivo
+          const file = files.file;
+          const { isImage, fileBase64 } = handleFileUpload(file);
 
-      // Continue com o processamento...
+          if (isImage) {
+            // Atualiza o post com imagem
+            await db.updatePostImage(postId, title, content, fileBase64);
+          } else {
+            // Atualiza o post com vídeo
+            await db.updatePostVideo(postId, title, content, fileBase64);
+          }
+
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ success: true, message: "Post atualizado com sucesso." }));
+        } else {
+          // Atualiza o post sem imagem ou vídeo
+          await db.updatePost(postId, title, content);
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ success: true, message: "Post atualizado com sucesso." }));
+        }
+      } catch (err) {
+        console.error(`Erro ao atualizar o post: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: `Erro no servidor: ${err.message}` }));
+      }
     });
   });
 }
+
 
 async function handleEditComment(req, res) {
   authenticateToken(req, res, () => {
@@ -236,6 +257,32 @@ async function handleUpdateAvatar(req, res) {
       }
     });
   });
+}
+
+
+function isValidFileField(file) {
+  return file && file[0].size > 0 && file[0].mimetype;
+}
+
+// Função para lidar com o upload do arquivo e convertê-lo em base64
+function handleFileUpload(file) {
+  const imageTypes = ["image/gif", "image/jpeg", "image/png"];
+  const videoTypes = ["video/mp4"];
+  const maxFileSize = 10 * 1024 * 1024; // 10 MB
+
+  const fileData = fs.readFileSync(file[0].filepath);
+  const fileSize = file[0].size;
+  const fileType = file[0].mimetype;
+
+  if (imageTypes.includes(fileType) && fileSize <= maxFileSize) {
+    return { isImage: true, fileBase64: fileData.toString("base64") };
+  } else if (videoTypes.includes(fileType) && fileSize <= maxFileSize) {
+    return { isImage: false, fileBase64: fileData.toString("base64") };
+  } else if (fileSize === 0) {
+    throw new Error("Arquivo está vazio");
+  } else {
+    throw new Error("Tipo de arquivo ou tamanho inválido");
+  }
 }
 
 module.exports = setupPutRoutes;

@@ -17,7 +17,7 @@ function setupDeleteRoutes(req, res) {
     "/delete-comment": handle_delete_comment,
   };
 
-  // Verifica se o método é POST e se a rota existe
+  // Verifica se o método é delete e se a rota existe
   if (req.method === "DELETE" && deleteRoutes[pathName]) {
     deleteRoutes[pathName](req, res);
   } else if (req.method === "DELETE") {

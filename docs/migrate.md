@@ -16,10 +16,9 @@
  - [x] - Commits
  - [x] - comments
  - [x] - Configuration
- - [x] - edit post
+ - [ ] - edit post
  3. **Put**:
  - [x] - Change Username
- - [ ] - Edit Post
  - [x] - Edit Comment
  - [x] - Update Avatar
  4. **Delete**:

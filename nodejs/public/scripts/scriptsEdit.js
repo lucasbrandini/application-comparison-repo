@@ -46,8 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  const form = document.getElementById("editPostForm");
-
   if (form) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -57,8 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Pegue o valor do campo post_id diretamente do formulário
       const postId = document.getElementById("post_id").value;
-      formData.set("post_id", postId); // Forçando a inclusão do post_id
-
+      formData.set("post_id", postId);
+       // Forçando a inclusão do post_id
       fetch("/editpost", {
         method: "PUT",
         body: formData, // Enviando os dados do formulário como FormData

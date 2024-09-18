@@ -884,7 +884,7 @@ function selectUserInfo(user_id) {
   });
 }
 
-//* getComment 
+//* getComment
 function getComment(commentId) {
   return new Promise((resolve, reject) => {
     if (!commentId) {
@@ -902,9 +902,28 @@ function getComment(commentId) {
       });
     });
   });
-} 
+}
 
-
+//* Atualiza o post sem imagem ou vídeo
+function updatePost(postId, title, content) {
+  return new Promise((resolve, reject) => {
+    if (!postId) {
+      return reject(new Error("Post ID cannot be null"));
+    }
+    db.getConnection((err, connection) => {
+      if (err) return reject(err);
+      const sql =
+        "UPDATE posts SET post_title = ?, post = ?, post_image = null, post_video = null WHERE id_posts = ?";
+      connection.query(sql, [title, content, postId], (err, results) => {
+        connection.release();
+        if (err) {
+          return reject(err);
+        }
+        resolve(results);
+      });
+    });
+  });
+}
 
 //* Export all functions
 module.exports = {
@@ -933,4 +952,5 @@ module.exports = {
   selectUserInfo,
   getCommentsByPostId,
   getComment,
+  updatePost,
 };

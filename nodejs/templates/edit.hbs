@@ -18,8 +18,8 @@
             </div>
             <div class="diviser1">
                 <h3 class="titleModal">Editar post</h3>
-                <form id="edit-post-form" action="/edit-post" method="PUT" enctype="multipart/form-data">
-                    <input type="hidden" name="post_id" id="post_id" value="{{post.id_posts}}" readonly>
+                <form id="edit-post-form" action="/edit-post" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="post_id" id="post_id" value="{{post.id_posts}}">
                     <label for="title">Título</label>
                     <div class="styleInput">
                         <svg class="iconInput" width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">

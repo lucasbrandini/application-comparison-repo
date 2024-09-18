@@ -300,7 +300,7 @@ async function renderEditPost(req, res) {
         : null;
 
       const postContext = {
-        post_id: post[0].id_posts,
+        id_posts: post[0].id_posts,
         post_title: post[0].post_title,
         post: post[0].post,
         post_image: post.post_image,

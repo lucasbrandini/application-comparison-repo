@@ -91,24 +91,27 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.deletePost').forEach(button => {
         button.addEventListener('click', async () => {
             const postId = button.getAttribute('data-post-id');
-            const response = await fetch('/delete-post', {
+            fetch('/delete-post', {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${getCookie('token')}`
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 },
-                body: `post_id=${postId}`
+                body: JSON.stringify({ post_id: postId })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Deleted post successfully');
+                    window.location.href = '/home'; // Redirect to home after upvote
+                } else {
+                    console.error('Failed to delete:', data.message);
+                }
+            }).catch(error => {
+                console.error('Error during delete:', error);
             });
-    
-            if (response.ok) {
-                alert('Post deleted successfully');
-                location.reload();
-            } else {
-                const result = await response.json();
-                alert(`Error: ${result.error}`);
-            }
-        });
+        });	
     });
+    
     
     // preciso para editar o post
     document.querySelectorAll('.editPost').forEach(button => {

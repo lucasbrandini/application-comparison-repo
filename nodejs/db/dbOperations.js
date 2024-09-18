@@ -9,7 +9,8 @@ function insertUser(name, email, password) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO users (name_user, email, password) VALUES (?, ?, ?)";
+      const sql =
+        "INSERT INTO users (name_user, email, password) VALUES (?, ?, ?)";
       connection.query(sql, [name, email, password], (err, results) => {
         connection.release();
         if (err) {
@@ -49,7 +50,8 @@ function insertPost(userId, post_title, post) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO Posts (p_id_user, post_title, post) VALUES (?, ?, ?)";
+      const sql =
+        "INSERT INTO Posts (p_id_user, post_title, post) VALUES (?, ?, ?)";
       connection.query(sql, [userId, post_title, post], (err, results) => {
         connection.release();
         if (err) {
@@ -69,14 +71,19 @@ function insertPostWithImage(userId, post_title, post, post_image) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO Posts (p_id_user, post_title, post, post_image) VALUES (?, ?, ?, ?)";
-      connection.query(sql, [userId, post_title, post, post_image], (err, results) => {
-        connection.release();
-        if (err) {
-          return reject(err);
+      const sql =
+        "INSERT INTO Posts (p_id_user, post_title, post, post_image) VALUES (?, ?, ?, ?)";
+      connection.query(
+        sql,
+        [userId, post_title, post, post_image],
+        (err, results) => {
+          connection.release();
+          if (err) {
+            return reject(err);
+          }
+          resolve(results);
         }
-        resolve(results);
-      });
+      );
     });
   });
 }
@@ -89,14 +96,19 @@ function insertPostWithVideo(userId, post_title, post, post_video) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO Posts (p_id_user, post_title, post, post_video) VALUES (?, ?, ?, ?)";
-      connection.query(sql, [userId, post_title, post, post_video], (err, results) => {
-        connection.release();
-        if (err) {
-          return reject(err);
+      const sql =
+        "INSERT INTO Posts (p_id_user, post_title, post, post_video) VALUES (?, ?, ?, ?)";
+      connection.query(
+        sql,
+        [userId, post_title, post, post_video],
+        (err, results) => {
+          connection.release();
+          if (err) {
+            return reject(err);
+          }
+          resolve(results);
         }
-        resolve(results);
-      });
+      );
     });
   });
 }
@@ -140,7 +152,6 @@ function selectUserByName(name) {
     });
   });
 }
-
 
 //* DELETE
 function deleteComment(commentId) {
@@ -523,7 +534,8 @@ function changeUsername(user_id, new_name) {
             if (existing_user) {
               resolve("Username already exists.");
             } else {
-              const sql_update = "UPDATE users SET name_user = ? WHERE id_user = ?";
+              const sql_update =
+                "UPDATE users SET name_user = ? WHERE id_user = ?";
               connection.query(sql_update, [new_name, user_id], (err) => {
                 if (err) {
                   connection.rollback(() => {
@@ -616,7 +628,8 @@ function insertAvatar(user_id, avatar_image) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO users_avatar (id_user, avatar_image) VALUES (?, ?)";
+      const sql =
+        "INSERT INTO users_avatar (id_user, avatar_image) VALUES (?, ?)";
       connection.query(sql, [user_id, avatar_image], (err, results) => {
         connection.release();
         if (err) {
@@ -636,14 +649,19 @@ function updatePostImage(post_id, post_title, post, image) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "UPDATE posts SET post_title = ?, post = ?, post_image = ?, post_video = null WHERE id_posts = ?";
-      connection.query(sql, [post_title, post, image, post_id], (err, results) => {
-        connection.release();
-        if (err) {
-          return reject(err);
+      const sql =
+        "UPDATE posts SET post_title = ?, post = ?, post_image = ?, post_video = null WHERE id_posts = ?";
+      connection.query(
+        sql,
+        [post_title, post, image, post_id],
+        (err, results) => {
+          connection.release();
+          if (err) {
+            return reject(err);
+          }
+          resolve("Post updated successfully.");
         }
-        resolve("Post updated successfully.");
-      });
+      );
     });
   });
 }
@@ -656,34 +674,19 @@ function updatePostVideo(post_id, post_title, post, video) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "UPDATE posts SET post_title = ?, post = ?, post_image = null, post_video = ? WHERE id_posts = ?";
-      connection.query(sql, [post_title, post, video, post_id], (err, results) => {
-        connection.release();
-        if (err) {
-          return reject(err);
+      const sql =
+        "UPDATE posts SET post_title = ?, post = ?, post_image = null, post_video = ? WHERE id_posts = ?";
+      connection.query(
+        sql,
+        [post_title, post, video, post_id],
+        (err, results) => {
+          connection.release();
+          if (err) {
+            return reject(err);
+          }
+          resolve("Post updated successfully.");
         }
-        resolve("Post updated successfully.");
-      });
-    });
-  });
-}
-
-//* get comments by post_id
-function getCommentsByPostId(post_id) {
-  return new Promise((resolve, reject) => {
-    if (!post_id) {
-      return reject(new Error("Post ID cannot be null"));
-    }
-    db.getConnection((err, connection) => {
-      if (err) return reject(err);
-      const sql = "SELECT * FROM comments WHERE p_id_post = ?";
-      connection.query(sql, [post_id], (err, results) => {
-        connection.release();
-        if (err) {
-          return reject(err);
-        }
-        resolve(results);
-      });
+      );
     });
   });
 }
@@ -696,7 +699,8 @@ function insertComment(user_id, post_id, comment) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = "INSERT INTO comments (p_id_user, p_id_post, comment) VALUES (?, ?, ?)";
+      const sql =
+        "INSERT INTO comments (p_id_user, p_id_post, comment) VALUES (?, ?, ?)";
       connection.query(sql, [user_id, post_id, comment], (err, results) => {
         connection.release();
         if (err) {
@@ -730,26 +734,30 @@ function editCommentByAuthor(comment, user_id, post_id, comment_id) {
               p_id_post = ? 
           WHERE id_comment = ? 
         `;
-        connection.query(sql, [comment, user_id, post_id, comment_id], (err) => {
-          if (err) {
-            connection.rollback(() => {
-              connection.release();
-              reject(err);
-            });
-          } else {
-            connection.commit((err) => {
-              if (err) {
-                connection.rollback(() => {
-                  connection.release();
-                  reject(err);
-                });
-              } else {
+        connection.query(
+          sql,
+          [comment, user_id, post_id, comment_id],
+          (err) => {
+            if (err) {
+              connection.rollback(() => {
                 connection.release();
-                resolve("Comment updated successfully.");
-              }
-            });
+                reject(err);
+              });
+            } else {
+              connection.commit((err) => {
+                if (err) {
+                  connection.rollback(() => {
+                    connection.release();
+                    reject(err);
+                  });
+                } else {
+                  connection.release();
+                  resolve("Comment updated successfully.");
+                }
+              });
+            }
           }
-        });
+        );
       });
     });
   });
@@ -815,6 +823,88 @@ function updateAvatar(user_id, avatar_image) {
   });
 }
 
+//* get_comments_by_post_id
+function getCommentsByPostId(post_id) {
+  return new Promise((resolve, reject) => {
+    if (!post_id) {
+      return reject(new Error("Post ID cannot be null"));
+    }
+    db.getConnection((err, connection) => {
+      if (err) return reject(err);
+      const sql = `SELECT 
+                    c.id_comment,
+                    c.p_id_user,
+                    c.p_id_post,
+                    c.comment,
+                    CASE 
+                        WHEN TIMESTAMPDIFF(SECOND, c.comment_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, c.comment_date, NOW()), 's') 
+                        WHEN TIMESTAMPDIFF(MINUTE, c.comment_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, c.comment_date, NOW()), 'min') 
+                        WHEN TIMESTAMPDIFF(HOUR, c.comment_date, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, c.comment_date, NOW()), 'h') 
+                        WHEN TIMESTAMPDIFF(DAY, c.comment_date, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(DAY, c.comment_date, NOW()), 'd') 
+                        WHEN TIMESTAMPDIFF(WEEK, c.comment_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, c.comment_date, NOW()), 'w') 
+                        ELSE CONCAT(TIMESTAMPDIFF(MONTH, c.comment_date, NOW()), 'm') 
+                    END AS comment_date,
+                    COUNT(c.id_comment) OVER() AS comment_count
+                  FROM comments c
+                  WHERE p_id_post = ?`;
+      connection.query(sql, [post_id], (err, results) => {
+        connection.release();
+        if (err) {
+          return reject(err);
+        }
+        resolve(results);
+      });
+    });
+  });
+}
+
+//* Select user info by user_id
+function selectUserInfo(user_id) {
+  return new Promise((resolve, reject) => {
+    if (!user_id) {
+      return reject(new Error("User ID cannot be null"));
+    }
+    db.getConnection((err, connection) => {
+      if (err) return reject(err);
+      const sql = `SELECT 
+                    u.name_user, 
+                    a.avatar_image 
+                  FROM users u 
+                  LEFT JOIN users_avatar a 
+                  ON u.id_user = a.id_user 
+                  WHERE u.id_user = ?`;
+      connection.query(sql, [user_id], (err, results) => {
+        connection.release();
+        if (err) {
+          return reject(err);
+        }
+        resolve(results[0]);
+      });
+    });
+  });
+}
+
+//* getComment 
+function getComment(commentId) {
+  return new Promise((resolve, reject) => {
+    if (!commentId) {
+      return reject(new Error("Comment ID cannot be null"));
+    }
+    db.getConnection((err, connection) => {
+      if (err) return reject(err);
+      const sql = `SELECT * FROM comments WHERE id_comment = ?`;
+      connection.query(sql, [commentId], (err, results) => {
+        connection.release();
+        if (err) {
+          return reject(err);
+        }
+        resolve(results);
+      });
+    });
+  });
+} 
+
+
 
 //* Export all functions
 module.exports = {
@@ -835,10 +925,12 @@ module.exports = {
   insertAvatar,
   updatePostImage,
   updatePostVideo,
-  getCommentsByPostId,
   insertComment,
   editCommentByAuthor,
   deleteCommentByAuthor,
   selectAvatar,
   updateAvatar,
+  selectUserInfo,
+  getCommentsByPostId,
+  getComment,
 };

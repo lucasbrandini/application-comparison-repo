@@ -92,7 +92,11 @@ async function handleChangeUsername(req, res) {
 
 async function handleEditPost(req, res) {
   authenticateToken(req, res, () => {
-    const form = new formidable.IncomingForm();
+    const form = new formidable.IncomingForm({
+      allowEmptyFiles: true,
+      minFileSize: 0,
+    });
+
     form.parse(req, async (err, fields, files) => {
       if (err) {
         console.error(`Erro durante o parsing do formulário: ${err.message}`);
@@ -103,45 +107,16 @@ async function handleEditPost(req, res) {
         return;
       }
 
-      const postId = fields.post_id;
-      const title = fields.title;
-      const content = fields.content;
+      // Verificação dos campos recebidos
+      console.log(fields); // Verifique se o post_id está sendo capturado corretamente
 
-      try {
-        // Lógica para verificar e processar o arquivo
-        if (files.file) {
-          const filePath = files.file.filepath;
-          const fileType = files.file.mimetype;
+      const postId = fields.post_id ? fields.post_id[0] : null;
+      const title = fields.title ? fields.title[0] : null;
+      const content = fields.content ? fields.content[0] : null;
 
-          // Verifica se é uma imagem ou vídeo e processa
-          const isImage = fileType.startsWith("image/");
-          const fileData = fs.readFileSync(filePath);
-          const fileBase64 = Buffer.from(fileData).toString("base64");
+      console.log(`Post ID: ${postId}, Title: ${title}, Content: ${content}`);
 
-          if (isImage) {
-            await db.updatePostImage(postId, title, content, fileBase64);
-          } else {
-            await db.updatePostVideo(postId, title, content, fileBase64);
-          }
-        }
-
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: true,
-            message: "Post atualizado com sucesso",
-          })
-        );
-      } catch (err) {
-        console.error(`Erro ao editar o post: ${err.message}`);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: false,
-            message: `Erro no servidor: ${err.message}`,
-          })
-        );
-      }
+      // Continue com o processamento...
     });
   });
 }
@@ -209,7 +184,7 @@ async function handleUpdateAvatar(req, res) {
       const userName = req.user.name_user;
       const user = await db.selectUserByName(userName);
       const userId = user[0].id_user;
-      const avatar = files.avatar
+      const avatar = files.avatar;
 
       if (avatar) {
         const filePath = avatar[0].filepath;
@@ -217,7 +192,7 @@ async function handleUpdateAvatar(req, res) {
 
         if (
           fileType.startsWith("image/jpeg") ||
-          fileType.startsWith("image/png")  ||
+          fileType.startsWith("image/png") ||
           fileType.startsWith("image/gif")
         ) {
           const fileData = fs.readFileSync(filePath);

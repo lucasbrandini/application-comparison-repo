@@ -109,6 +109,7 @@ const setupTables = () => {
             FOR EACH ROW
             BEGIN
               DELETE FROM comments WHERE p_id_post = OLD.id_posts;
+              DELETE FROM votes WHERE id_post = OLD.id_posts;
             END
           `;
 

@@ -6,7 +6,7 @@
  - [x] - Create Post 
  - [x] - Upvote
  - [x] - Downvote
- - [ ] - Create Comment
+ - [x] - Create Comment
  - [x] - Logout
 2. **Get**:
  - [x] - Login
@@ -14,15 +14,17 @@
  - [x] - Home
  - [x] - 404
  - [x] - Commits
+ - [x] - comments
  - [x] - Configuration
+ - [x] - edit post
  3. **Put**:
- - [ ] - Change Username
+ - [x] - Change Username
  - [ ] - Edit Post
- - [ ] - Edit Comment
- - [ ] - Update Avatar
+ - [x] - Edit Comment
+ - [x] - Update Avatar
  4. **Delete**:
- - [ ] - Delete Post
- - [ ] - Delete Comment
+ - [X] - Delete Post
+ - [X] - Delete Comment
 ### Middleware:
 1. **JWT**:
 - [x] - Authenticate
@@ -46,12 +48,10 @@
 	- [x] - Login
 	- [x] - Register
 5. **Templates**:
-	- [ ] - Comments
+	- [X] - Comments
 	- [x] - Commits
-	- [ ] - Configuration
+	- [X] - Configuration
 	- [ ] - Edit
-	- [ ] - Head
-	- [ ] - Header
 	- [x] - Home
 	- [x] - Login
 	- [x] - Register

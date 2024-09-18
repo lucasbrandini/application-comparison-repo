@@ -4,6 +4,7 @@ const axios = require("axios");
 const db = require("../db/dbOperations");
 const authenticateToken = require("../middleware/jwt");
 const renderTemplate = require("../tools/renderTemplate");
+const formidable = require("formidable");
 
 // Função para servir arquivos estáticos
 function serveStaticFile(filePath, res) {
@@ -42,6 +43,8 @@ function setupGetRoutes(req, res, renderTemplate) {
     "/home": renderHome,
     "/commits": renderCommits,
     "/configuration": renderConfigurations,
+    "/comments": renderComments,
+    "/edit-post": renderEditPost,
   };
 
   if (method === "GET") {
@@ -163,6 +166,152 @@ async function renderConfigurations(req, res) {
       };
 
       renderTemplate("configuration", context, res);
+    } catch (e) {
+      console.error(e);
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("Server Error: " + e.message);
+    }
+  });
+}
+
+async function renderComments(req, res) {
+  authenticateToken(req, res, async () => {
+    const parsedUrl = require("url").parse(req.url, true); // Parseando a URL para pegar os parâmetros de consulta
+    const queryParams = parsedUrl.query; // Pegando os parâmetros de consulta
+
+    const post_id = parseInt(queryParams.post_id, 10); // Pegando o post_id da query string
+
+    if (!post_id) {
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("Post ID não fornecido.");
+      return;
+    }
+
+    try {
+      // Busca o usuário logado
+      const name_user = req.user.name_user;
+      const user = await db.selectUserByName(name_user);
+      const user_id = user[0].id_user;
+      const user_avatar = await db.selectAvatar(user_id);
+
+      // Busca o post e o autor do post
+      const post = await db.getPost(post_id);
+      const post_id_user = post[0].p_id_user;
+      const post_author = await db.selectUserInfo(post_id_user);
+
+      post.post_image = post[0].post_image
+        ? post[0].post_image.toString("utf-8")
+        : null;
+      post.post_video = post[0].post_video
+        ? post[0].post_video.toString("utf-8")
+        : null;
+
+      const hasMedia = post[0].post_image || post[0].post_video ? 1 : 0;
+
+      const raw_comments = await db.getCommentsByPostId(post_id);
+
+      const total_comments = raw_comments.length;
+
+      const comments = await Promise.all(
+        raw_comments.map(async (comment) => {
+          const comment_user_info = await db.selectUserInfo(comment.p_id_user);
+          return {
+            id_comment: comment.id_comment,
+            p_id_post: comment.p_id_post,
+            name_user: comment_user_info.name_user,
+            avatar_image: comment_user_info.avatar_image
+              ? comment_user_info.avatar_image.toString("utf-8")
+              : null,
+            comment: comment.comment,
+            comment_date: comment.comment_date,
+            is_author: comment.p_id_user === user_id,
+            id_user: user_id,
+          };
+        })
+      );
+
+      const context = {
+        comments,
+        comment_count: total_comments,
+        post_id,
+        post_author: post_author.name_user,
+        post_avatar: post_author.avatar_image
+          ? post_author.avatar_image.toString("utf-8")
+          : null,
+        post_title: post[0].post_title,
+        post_description: post[0].post,
+        post_image: post.post_image,
+        post_video: post.post_video,
+        is_post_owner: post[0].p_id_user === user_id,
+        post_date: post[0].post_date,
+        user_avatar: user_avatar.avatar_image
+          ? user_avatar.avatar_image.toString("utf-8")
+          : null,
+        user_name: name_user,
+        hasMedia: hasMedia,
+      };
+
+      renderTemplate("comments", context, res);
+    } catch (e) {
+      console.error(e);
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("Server Error: " + e.message);
+    }
+  });
+}
+
+async function renderEditPost(req, res) {
+  authenticateToken(req, res, async () => {
+    const parsedUrl = require("url").parse(req.url, true); // Parseando a URL para pegar os parâmetros de consulta
+    const queryParams = parsedUrl.query; // Pegando os parâmetros de consulta
+
+    const post_id = parseInt(queryParams.post_id, 10); // Pegando o post_id da query string
+
+    if (!post_id) {
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("Post ID não fornecido.");
+      return;
+    }
+
+    try {
+      // Busca o usuário logado
+      const name_user = req.user.name_user;
+      const user = await db.selectUserByName(name_user);
+      const user_id = user[0].id_user;
+      // Busca o post
+      const post = await db.getPost(post_id);
+
+      if (post.length === 0) {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("Post não encontrado.");
+        return;
+      }
+      if (post[0].p_id_user !== user_id) {
+        res.writeHead(403, { "Content-Type": "text/plain" });
+        res.end("Você não tem permissão para editar este post.");
+        return;
+      }
+
+      post.post_image = post[0].post_image
+        ? post[0].post_image.toString("utf-8")
+        : null;
+      post.post_video = post[0].post_video
+        ? post[0].post_video.toString("utf-8")
+        : null;
+
+      const postContext = {
+        post_id: post[0].id_posts,
+        post_title: post[0].post_title,
+        post: post[0].post,
+        post_image: post.post_image,
+        post_video: post.post_video,
+      };
+      const context = {
+        post: postContext,
+        is_owner: post[0].p_id_user === user_id,
+      };
+
+      renderTemplate("edit", context, res);
     } catch (e) {
       console.error(e);
       res.writeHead(500, { "Content-Type": "text/plain" });

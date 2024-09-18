@@ -282,6 +282,43 @@ async function handleDownVote(req, res) {
   });
 }
 
+async function handleCreateComment(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const postId = fields.post_id ? fields.post_id[0] : null;
+      const comment = fields.comment ? fields.comment[0] : null;
+      const userName = req.user.name_user;
+
+      try {
+        const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userId = user[0].id_user;
+        await db.insertComment(userId, postId, comment);
+
+        res.writeHead(302, { Location: "/home" });
+        res.end();
+      } catch (err) {
+        console.error(`Erro durante a criação do comentário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+      }
+    });
+  });
+}
+
 // Função para lidar com o logout
 function handleLogout(req, res) {
   res.writeHead(302, {
@@ -305,6 +342,7 @@ function setupPostRoutes(req, res) {
     "/create-post": handleCreatePost,
     "/upvote": handleUpVote,
     "/downvote": handleDownVote,
+    "/create-comment": handleCreateComment,
     // Adicione aqui outras rotas POST e suas funções
   };
 

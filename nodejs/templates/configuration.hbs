@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{{head}}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" type="text/css" href="/public/styles/stylesConfiguration.css">
+</head>
+<body>
+    
+    <div class="list-config">
+        <ul>
+            <li><a href="#item1">Item 1</a></li>
+            <li><a href="#item2">Item 2</a></li>
+            <li><a href="#item3">Trocar o avatar</a></li>
+            <li><a href="#item4">Trocar o nome</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div id="item1" class="content-item">Conteúdo do Item 1</div>
+        <div id="item2" class="content-item">Conteúdo do Item 2</div>
+        <div id="item3" class="content-item">
+            <form id="change-avatar">
+                <label for="avatar">TROCA O AVATAR:</label>
+                <br>
+                <br>
+                <div class="avatar-container">
+                    <img class="avatar-image" src="data:image/jpeg;base64,{{avatar.avatar_image}}" width="200" height="200" alt="Avatar">
+                    <img class="edit-icon" src="/public/assets/pencil.svg" alt="Edit" width="30" height="30">
+                </div>
+                <input type="file" id="avatar" name="avatar" accept="image/jpeg, image/png, image/gif" style="display: none;" required>
+                <br>
+                <br>
+                <button type="submit" id="save-button">Salvar</button>
+            </form>
+        </div>
+        <div id="item4" class="content-item">
+            <form id="change-username-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit">Alterar</button>
+            </form>
+        </div>
+    </div>
+    <script src="../public/scripts/scriptsConfiguration.js" defer></script>
+</body>
+</html>

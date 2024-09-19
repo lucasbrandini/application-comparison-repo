@@ -1,22 +1,13 @@
-// postRoutes.js
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const db = require("../db/dbOperations"); // Certifique-se de que a conexão e operações do db estão configuradas corretamente
+const db = require("../db/dbOperations");
+const authenticateToken = require("../middleware/jwt");
+const formidable = require("formidable");
 require("dotenv").config();
 
 const saltRounds = 10;
-
-// Função para converter dados de formulário para objeto
-function parseFormData(body) {
-  const data = new URLSearchParams(body);
-  const result = {};
-  for (const [key, value] of data.entries()) {
-    result[key] = value;
-  }
-  return result;
-}
 
 // Função para enviar resposta com cookie JWT
 function sendCookieResponse(res, token, location) {
@@ -29,13 +20,18 @@ function sendCookieResponse(res, token, location) {
 
 // Função para lidar com o registro de usuário
 async function handleRegister(req, res) {
-  let body = "";
-  req.on("data", (chunk) => {
-    body += chunk.toString();
-  });
+  const form = new formidable.IncomingForm();
+  form.parse(req, async (err, fields) => {
+    if (err) {
+      console.error(`Erro durante o parsing do formulário: ${err.message}`);
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("Erro no servidor.");
+      return;
+    }
 
-  req.on("end", async () => {
-    const { name, email, password } = parseFormData(body);
+    const name = fields.name[0];
+    const email = fields.email[0];
+    const password = fields.password[0];
 
     try {
       const userExists = await db.selectUserByName(name);
@@ -64,13 +60,17 @@ async function handleRegister(req, res) {
 
 // Função para lidar com o login de usuário
 async function handleLogin(req, res) {
-  let body = "";
-  req.on("data", (chunk) => {
-    body += chunk.toString();
-  });
+  const form = new formidable.IncomingForm();
+  form.parse(req, async (err, fields) => {
+    if (err) {
+      console.error(`Erro durante o parsing do formulário: ${err.message}`);
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("Erro no servidor.");
+      return;
+    }
 
-  req.on("end", async () => {
-    const { name, password } = parseFormData(body);
+    const name = fields.name[0];
+    const password = fields.password[0];
 
     try {
       const user = await db.selectUserByName(name);
@@ -118,6 +118,217 @@ function generateRandomAvatar() {
   return Buffer.from(imageBuffer).toString("base64");
 }
 
+// Função para verificar se o arquivo é válido
+function isValidFileField(file) {
+  return file && file[0].size > 0 && file[0].mimetype;
+}
+
+// Função para lidar com o upload do arquivo e convertê-lo em base64
+function handleFileUpload(file) {
+  const imageTypes = ["image/gif", "image/jpeg", "image/png"];
+  const videoTypes = ["video/mp4"];
+  const maxFileSize = 10 * 1024 * 1024; // 10 MB
+
+  const fileData = fs.readFileSync(file[0].filepath);
+  const fileSize = file[0].size;
+  const fileType = file[0].mimetype;
+
+  if (imageTypes.includes(fileType) && fileSize <= maxFileSize) {
+    return { isImage: true, fileBase64: fileData.toString("base64") };
+  } else if (videoTypes.includes(fileType) && fileSize <= maxFileSize) {
+    return { isImage: false, fileBase64: fileData.toString("base64") };
+  } else if (fileSize === 0) {
+    throw new Error("Arquivo está vazio");
+  } else {
+    throw new Error("Tipo de arquivo ou tamanho inválido");
+  }
+}
+
+// Função para lidar com a criação de post
+async function handleCreatePost(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm({
+      allowEmptyFiles: true, // Permite arquivos vazios
+      minFileSize: 0, // Permite tamanho mínimo de 0 bytes para evitar o erro
+    });
+
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const title = fields.title ? fields.title[0] : null;
+      const content = fields.content ? fields.content[0] : "";
+      const file = files.file; // Pode ser undefined se o arquivo não for enviado
+
+      try {
+        const userName = req.user.name_user;
+        const user = await db.selectUserByName(userName);
+
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userID = user[0].id_user;
+
+        // Verifica se o arquivo é válido e se existe
+        if (file && isValidFileField(file)) {
+          const { isImage, fileBase64 } = handleFileUpload(file);
+
+          if (isImage) {
+            await db.insertPostWithImage(userID, title, content, fileBase64);
+          } else {
+            await db.insertPostWithVideo(userID, title, content, fileBase64);
+          }
+        } else {
+          // Caso o arquivo não exista ou seja vazio, insere apenas o texto
+          await db.insertPost(userID, title, content);
+        }
+
+        res.writeHead(302, { Location: "/home" });
+        res.end();
+      } catch (err) {
+        console.error(`Erro durante a criação do post: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(`Erro no servidor: ${err.message}`);
+      }
+    });
+  });
+}
+
+//Logic for upvote and downvote
+async function handleUpVote(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const postId = fields.post_id;
+      const userName = req.user.name_user;
+
+      try {
+        const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userId = user[0].id_user;
+        if (userId > 0) {
+          await db.upvote(postId, userId);
+        }
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: true, message: "Upvoted successfully" })
+        );
+      } catch (err) {
+        console.error(`Erro durante a votação: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(`Erro no servidor: ${err.message}`);
+      }
+    });
+  });
+}
+
+async function handleDownVote(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const postId = fields.post_id;
+      const userName = req.user.name_user;
+
+      try {
+        const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userId = user[0].id_user;
+        if (userId > 0) {
+          await db.downvote(postId, userId);
+        }
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: true, message: "Downvoted successfully" })
+        );
+      } catch (err) {
+        console.error(`Erro durante a votação: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(`Erro no servidor: ${err.message}`);
+      }
+    });
+  });
+}
+
+async function handleCreateComment(req, res) {
+  authenticateToken(req, res, () => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        console.error(`Erro durante o parsing do formulário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+        return;
+      }
+
+      const postId = fields.post_id ? fields.post_id[0] : null;
+      const comment = fields.comment ? fields.comment[0] : null;
+      const userName = req.user.name_user;
+
+      try {
+        const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Usuário não encontrado");
+          return;
+        }
+
+        const userId = user[0].id_user;
+        await db.insertComment(userId, postId, comment);
+
+        res.writeHead(302, { Location: "/home" });
+        res.end();
+      } catch (err) {
+        console.error(`Erro durante a criação do comentário: ${err.message}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("Erro no servidor.");
+      }
+    });
+  });
+}
+
+// Função para lidar com o logout
+function handleLogout(req, res) {
+  res.writeHead(302, {
+    "Set-Cookie":
+      "jwt_token=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
+    Location: "/login", // Redireciona para a página de login
+  });
+  res.end();
+}
+
 // Função principal para lidar com as requisições POST
 function setupPostRoutes(req, res) {
   const parsedUrl = require("url").parse(req.url, true);
@@ -127,6 +338,11 @@ function setupPostRoutes(req, res) {
   const postRoutes = {
     "/register": handleRegister,
     "/login": handleLogin,
+    "/logout": handleLogout,
+    "/create-post": handleCreatePost,
+    "/upvote": handleUpVote,
+    "/downvote": handleDownVote,
+    "/create-comment": handleCreateComment,
     // Adicione aqui outras rotas POST e suas funções
   };
 

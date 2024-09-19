@@ -497,8 +497,20 @@ def get_comments_by_post_id(post_id):
     try:
         cursor = connection.cursor()
         sql = """
-            SELECT *, COUNT(*) OVER() AS total_comments
-            FROM comments 
+            SELECT c.id_comment,
+                c.p_id_user,
+                c.p_id_post,
+                c.comment,
+                CASE 
+                    WHEN TIMESTAMPDIFF(SECOND, c.comment_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, c.comment_date, NOW()), 's') 
+                    WHEN TIMESTAMPDIFF(MINUTE, c.comment_date, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, c.comment_date, NOW()), 'min') 
+                    WHEN TIMESTAMPDIFF(HOUR, c.comment_date, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, c.comment_date, NOW()), 'h') 
+                    WHEN TIMESTAMPDIFF(DAY, c.comment_date, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(DAY, c.comment_date, NOW()), 'd') 
+                    WHEN TIMESTAMPDIFF(WEEK, c.comment_date, NOW()) < 4 THEN CONCAT(TIMESTAMPDIFF(WEEK, c.comment_date, NOW()), 'w') 
+                    ELSE CONCAT(TIMESTAMPDIFF(MONTH, c.comment_date, NOW()), 'm') 
+                END AS comment_date,
+                COUNT(c.id_comment) OVER() AS comment_count
+            FROM comments c
             WHERE p_id_post = %s
         """
         cursor.execute(sql, (post_id,))

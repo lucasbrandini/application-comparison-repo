@@ -17,6 +17,20 @@ const span = document.getElementById("close");
 
 const path = document.getElementById("closeIcon")
 
+const cancelSpan = document.getElementById("cancel");
+
+const submitBtn = document.getElementById('submit-btn');
+
+const titleInput = document.getElementById('title');
+
+const titleError = document.getElementById('title-error');
+
+const fileInput = document.getElementById('file');
+
+const fileName = document.getElementById('file-name');
+
+const filePreviewDiv = document.getElementById('preview');
+
 btn.onclick = function() {
     modal.style.display = "block";
 }
@@ -55,6 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.add('hide');
     }
 
+    cancelSpan.onclick = function(event) {
+        event.stopPropagation();
+        modal.classList.remove('show');
+        modal.classList.add('hide');
+    }
+
     document.getElementById("logout").addEventListener("click", function () {
         // Excluir o cookie e redirecionar para a página de login
         document.cookie =
@@ -71,24 +91,27 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.deletePost').forEach(button => {
         button.addEventListener('click', async () => {
             const postId = button.getAttribute('data-post-id');
-            const response = await fetch('/delete-post', {
+            fetch('/delete-post', {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${getCookie('token')}`
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 },
-                body: `post_id=${postId}`
+                body: JSON.stringify({ post_id: postId })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Deleted post successfully');
+                    window.location.href = '/home'; // Redirect to home after upvote
+                } else {
+                    console.error('Failed to delete:', data.message);
+                }
+            }).catch(error => {
+                console.error('Error during delete:', error);
             });
-    
-            if (response.ok) {
-                alert('Post deleted successfully');
-                location.reload();
-            } else {
-                const result = await response.json();
-                alert(`Error: ${result.error}`);
-            }
-        });
+        });	
     });
+    
     
     // preciso para editar o post
     document.querySelectorAll('.editPost').forEach(button => {
@@ -104,34 +127,59 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = `/comments?post_id=${postId}`; //
         });
     });
+
+    document.querySelectorAll('.cardTextDescri').forEach(card => {
+        const maxLength = 190;
+        card.innerText = card.innerText.length > maxLength ? card.innerText.substring(0, maxLength) + '...' : card.innerText;
+    });
 });
   
 
-const voteReceive = document.querySelectorAll('.voteText');
+document.addEventListener('DOMContentLoaded', function() {
+    const voteReceive = document.querySelectorAll('.voteText');
+    const upvoteVote = document.querySelectorAll('.upvotePath');
+    const downvoteVote = document.querySelectorAll('.downvotePath');
+    const voteStyle = document.querySelectorAll('.voteStyle'); // Certifique-se de que os elementos com .voteStyle existem
 
-const upvoteVote = document.querySelectorAll('.upvotePath');
-  
-const downvoteVote = document.querySelectorAll('.downvotePath');
-  
-upvoteVote.forEach(function (userVoteElement, index) {
-    const vote = voteReceive[index].innerText;   
-    
-    if (vote == 'upvote') {
-        userVoteElement.style.fill = '#d1d8ff';
-    } else {
-        userVoteElement.style.fill = '';
-    }
+    upvoteVote.forEach(function (userVoteElement, index) {
+        if (voteReceive[index]) {
+            const vote = voteReceive[index].innerText.trim();
+
+            if (vote === 'upvote') {
+                userVoteElement.style.fill = '#fff';
+            } else {
+                userVoteElement.style.fill = '';
+            }
+        }
+    });
+
+    downvoteVote.forEach(function (userVoteElement, index) {
+        if (voteReceive[index]) {
+            const vote = voteReceive[index].innerText.trim();
+
+            if (vote === 'downvote') {
+                userVoteElement.style.fill = '#fff';
+            } else {
+                userVoteElement.style.fill = '';
+            }
+        }
+    });
+
+    voteStyle.forEach(function (userVoteElement, index) {
+        if (voteReceive[index]) {
+            const vote = voteReceive[index].innerText.trim();
+
+            if (vote === 'upvote') {       
+                userVoteElement.style.backgroundColor = '#75BA5B';
+            } else if (vote === 'downvote') {
+                userVoteElement.style.backgroundColor = '#BA5B5B';
+            } else {
+                userVoteElement.style.backgroundColor = '';
+            }
+        }
+    });
 });
-  
-downvoteVote.forEach(function (userVoteElement, index) {
-    const vote = voteReceive[index].innerText;
-    
-    if (vote == 'downvote') {
-        userVoteElement.style.fill = '#d1d8ff';
-    } else {
-        userVoteElement.style.fill = '';
-    }
-});
+
 
 document.querySelectorAll('.upvote').forEach(button => {
     button.addEventListener('click', function() {
@@ -207,3 +255,175 @@ window.onclick = function (event) {
     }
   }
 };
+
+// Função para alternar o menu de opções
+function toggleOptions(element) {
+    // Obtém o menu subOption relacionado a este botão
+    var subOption = element.parentElement.querySelector('.subOption');
+
+    // Verifica se o menu já está aberto
+    if (subOption.classList.contains('show')) {
+        subOption.classList.remove('show');
+        document.removeEventListener('click', outsideClickListener);
+        document.removeEventListener('keydown', escKeyListener);
+    } else {
+        // Fecha todos os outros menus abertos
+        closeAllMenus();
+
+        // Abre o menu atual
+        subOption.classList.add('show');
+
+        // Adiciona ouvintes de evento para fechar o menu
+        setTimeout(() => { // Timeout para evitar o fechamento imediato após a abertura
+            document.addEventListener('click', outsideClickListener);
+            document.addEventListener('keydown', escKeyListener);
+        }, 0);
+    }
+}
+
+// Função para fechar o menu ao clicar fora
+function outsideClickListener(event) {
+    var openMenus = document.querySelectorAll('.subOption.show');
+    openMenus.forEach(function(menu) {
+        if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+            menu.classList.remove('show');
+        }
+    });
+
+    // Remove os ouvintes se não houver menus abertos
+    if (openMenus.length === 0) {
+        document.removeEventListener('click', outsideClickListener);
+    }
+}
+
+// Função para fechar o menu ao pressionar Esc
+function escKeyListener(event) {
+    if (event.key === "Escape") {
+        closeAllMenus();
+        document.removeEventListener('keydown', escKeyListener);
+    }
+}
+
+// Função para fechar todos os menus abertos
+function closeAllMenus() {
+    var openMenus = document.querySelectorAll('.subOption.show');
+    openMenus.forEach(function(menu) {
+        menu.classList.remove('show');
+    });
+
+    // Esconde todas as confirmações de deletar
+    var confirmBoxes = document.querySelectorAll('.confirmDelete.show');
+    confirmBoxes.forEach(function(box) {
+        box.classList.remove('show');
+    });
+}
+
+// Certifique-se de que o botão de opções chame 'toggleOptions' ao ser clicado
+// <div class="options" onclick="toggleOptions(this)">
+
+function confirmDelete(element) {
+    const confirmBox = element.nextElementSibling; // Pega o próximo elemento .confirmDelete
+    confirmBox.classList.add('show'); // Exibe a confirmação de deletar
+}
+
+function cancelDelete(element) {
+    const confirmBox = element.parentElement; // Pega o elemento pai (o box de confirmação)
+    confirmBox.classList.remove('show'); // Esconde a confirmação de deletar
+}
+
+const clearInputButton = document.getElementById('clear-input');
+
+fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];    
+    
+    
+
+    if (file) {
+        filePreviewDiv.style.display = 'flex';
+        // Limitar o nome do arquivo a 20 caracteres, por exemplo
+        const maxLength = 28;
+        let displayName = file.name;
+        if (file.name.length > maxLength) {
+            displayName = file.name.slice(0, maxLength) + '...';
+        }
+
+        // Exibe o nome do arquivo truncado
+        fileName.textContent = displayName;
+
+        // Limpa qualquer preview anterior
+        filePreviewDiv.innerHTML = '';
+
+        // Cria um objeto URL para o arquivo selecionado
+        const fileURL = URL.createObjectURL(file);
+
+        if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = fileURL;
+            filePreviewDiv.appendChild(img);
+        } else if (file.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = fileURL;
+            video.controls = true;
+            filePreviewDiv.appendChild(video);
+        }
+    } else {
+        filePreviewDiv.style.display = 'none';
+        // Limpa o nome do arquivo e o preview se nenhum arquivo for selecionado
+        fileName.textContent = '';
+        filePreviewDiv.innerHTML = '';
+    }
+
+    if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+        clearInputButton.style.display = 'block'; // Mostra o botão de limpar
+    } else {
+        clearInputButton.style.display = 'none'; // Esconde o botão se não houver arquivo
+    }
+});
+
+document.getElementById('clear-input').addEventListener('click', function() {
+    const fileName = document.getElementById('file-name');
+
+    // Reseta o campo de arquivo
+    fileInput.value = '';
+
+    // Limpa o nome do arquivo e o preview
+    filePreviewDiv.style.display = 'none';
+    fileName.textContent = 'Selecione uma imagem/vídeo';
+    filePreviewDiv.innerHTML = '';
+    this.style.display = 'none';
+});
+
+cancelSpan.addEventListener('click', function() {
+
+    document.getElementById('postForm').reset();
+    
+    filePreviewDiv.style.display = 'none';
+
+    filePreviewDiv.innerHTML = '';
+    
+    clearInputButton.style.display = 'none';
+    
+    fileName.innerText = 'Selecione uma imagem/vídeo';
+    submitBtn.disabled = true;
+    titleError.classList.add('hide-error'); 
+});
+
+titleInput.addEventListener('input', function() {    
+
+    if (titleInput.value.trim() === '') {
+      submitBtn.disabled = true;
+      titleError.classList.remove('hide-error');
+    } else {
+      submitBtn.disabled = false;
+      titleError.classList.add('hide-error');
+    }
+});
+
+document.getElementById("logout").addEventListener("click", function () {
+    fetch('/logout', { method: 'POST' }) // Envia uma requisição para o servidor para realizar o logout
+        .then(() => {
+            window.location.href = "login"; // Substitua 'login' pelo caminho correto
+        })
+        .catch(err => console.error("Erro ao realizar logout:", err));
+});

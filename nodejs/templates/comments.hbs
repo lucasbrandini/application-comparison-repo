@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {{{head}}}
+    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/public/styles/stylesComments.css">
     <title>Comentários</title>
 </head>
@@ -51,6 +52,7 @@
         </div>
         <p class="post-desc">{{post_description}}</p>
 
+        {{#if hasMedia}}
         <div class="post-media">            
             {{#if post_image}}
             <div class="post-image">
@@ -67,6 +69,7 @@
             </div>
             {{/if}}
         </div>
+        {{/if}}
         <div class="count">
             <span class="title-comments">Comentários</span>
             <span id="comment-count">{{comment_count}}</span> 
@@ -100,7 +103,6 @@
                     </div>
                     <p class="username"><strong>{{name_user}}</strong></p>
                     <p class="comment-date">• {{comment_date}} atrás</p>
-
                     {{#if is_author}}
                         <div class="optionConfig">
                             <div class="options" onclick="toggleOptions(this)">

@@ -1,6 +1,5 @@
 import io
 import sys
-
 from http.server import BaseHTTPRequestHandler
 from db.dbOperations import select_all_posts_ordered, select_post, select_user_info, find_vote, select_user_by_name, get_post, get_comments_by_post_id, select_avatar
 import json
@@ -353,6 +352,24 @@ class routesGet(BaseHTTPRequestHandler):
             comments = []
             for comment in raw_comments:
                 comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+                
+                comments.append({
+                    'id_comment': comment[0],
+                    'p_id_post': comment[2],
+                    'name_user': comment_user_info['name_user'],
+                    'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
+                    'comment': comment[3],
+                    'comment_date': comment[4],  # Atualizado para exibir tempo decorrido
+                    'is_author': comment[1] == user['id_user'],
+                    'id_user': user['id_user']
+                })
+
+            # Se houver comentários, extraímos o número total de comentários
+            total_comments = raw_comments[0][-1] if raw_comments else 0
+
+            comments = []
+            for comment in raw_comments:
+                comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
                 comment_date = comment[4]
                 time_elapsed = time_since(comment_date)
 
@@ -391,7 +408,6 @@ class routesGet(BaseHTTPRequestHandler):
                 'post_image': post['post_image'],
                 'post_video': post['post_video'],
                 'is_post_owner': post['p_id_user'] == user['id_user'],
-                'post_vote' : post['post_votes'],
                 'post_date' : post['post_date'],
                 'user_avatar': user_avatar['avatar_image'].decode('utf-8') if user_avatar else None,
                 'user_name': id_user  

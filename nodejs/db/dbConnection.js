@@ -11,7 +11,8 @@ const pool = mysql.createPool({
 });
 
 pool.on("connection", () => {
-  console.log("Connected to the database.");
+  console.log("\u001b[32m","Connected to the database.", "\u001b[0m");
+  
 });
 
 const getConnection = (callback) => {

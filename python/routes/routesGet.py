@@ -3,30 +3,12 @@ import sys
 from http.server import BaseHTTPRequestHandler
 from db.dbOperations import select_all_posts_ordered, select_post, select_user_info, find_vote, select_user_by_name, get_post, get_comments_by_post_id, select_avatar
 import json
-import datetime
 from pybars import Compiler
 import os
 import requests
 from middleware.jwt import verify_jwt
 from urllib.parse import urlparse, parse_qs
-from datetime import datetime, timedelta
-
-def datetime_converter(o):
-    if isinstance(o, datetime.datetime):
-        return o.isoformat()
-
-def time_since(posted_time):
-    now = datetime.now()
-    delta = now - posted_time
-
-    if delta.days > 0:
-        return f"{delta.days} dias atrás"
-    elif delta.seconds > 3600:
-        return f"{delta.seconds // 3600} horas atrás"
-    elif delta.seconds > 60:
-        return f"{delta.seconds // 60} minutos atrás"
-    else:
-        return "Agora mesmo"
+from datetime import datetime
 
 class routesGet(BaseHTTPRequestHandler):
     
@@ -371,7 +353,6 @@ class routesGet(BaseHTTPRequestHandler):
             for comment in raw_comments:
                 comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
                 comment_date = comment[4]
-                time_elapsed = time_since(comment_date)
 
                 print(comment)
 
@@ -381,7 +362,7 @@ class routesGet(BaseHTTPRequestHandler):
                     'name_user': comment_user_info['name_user'],
                     'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
                     'comment': comment[3],
-                    'comment_date': time_elapsed,  # Atualizado para exibir tempo decorrido
+                    'comment_date': comment_date,  # Atualizado para exibir tempo decorrido
                     'is_author': comment[1] == user['id_user'],
                     'id_user': user['id_user']
                 })

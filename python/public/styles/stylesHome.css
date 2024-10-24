@@ -529,7 +529,7 @@ strong {
 .btnSubmit:hover .btnIcon,
 .btnSubmit:hover {
     color: #FFFFFF;
-    fill: #FFFFFF; /* Cor do ícone ao passar o mouse sobre o botão */
+    fill: #FFFFFF;
 }
 
 .styleInput {
@@ -810,6 +810,6 @@ strong {
 }
 
 #submit-btn:disabled {
-    background-color: #cccccc; /* cor do botão desabilitado */
+    background-color: #cccccc;
     cursor: not-allowed;
 }

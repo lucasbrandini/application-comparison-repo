@@ -27,13 +27,13 @@ def verify_jwt(handler):
                         self.decoded_token = decoded_token
                         return handler(self, *args, **kwargs)
                     else:
-                        self.redirect_to('/login')  # Redireciona para a página de login
+                        self.redirect_to('/login')
                 except jwt.ExpiredSignatureError:
-                    self.redirect_to('/login')  # Redireciona para a página de login
+                    self.redirect_to('/login')
                 except jwt.InvalidTokenError:
-                    self.redirect_to('/login')  # Redireciona para a página de login
+                    self.redirect_to('/login')
             else:
-                self.redirect_to('/login')  # Redireciona para a página de login
+                self.redirect_to('/login')
         else:
-            self.redirect_to('/login')  # Redireciona para a página de login
+            self.redirect_to('/login')
     return wrapper

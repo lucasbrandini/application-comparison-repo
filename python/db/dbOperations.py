@@ -1,9 +1,6 @@
-# This file contains all the functions that interact with the database
 from db.dbConnection import get_connection
 import bcrypt
 
-#! Users
-# Select
 def select_user(user_id):
     if not user_id:
         raise ValueError("User ID cannot be null")
@@ -19,7 +16,6 @@ def select_user(user_id):
         cursor.close()
         connection.close()
 
-# Select all users
 def select_all_users():
     connection = get_connection()
     try:
@@ -32,7 +28,6 @@ def select_all_users():
         cursor.close()
         connection.close()
 
-# Insert user with hashed password,email and name
 def insert_user(name, email, password):
     
     print(name)
@@ -51,7 +46,6 @@ def insert_user(name, email, password):
         cursor.close()
         connection.close()
 
-# Update
 def update_user(user_id, name, password):
     if not user_id or not name or not password:
         raise ValueError("User ID, name or password cannot be null")
@@ -66,7 +60,6 @@ def update_user(user_id, name, password):
         cursor.close()
         connection.close()
 
-# Delete
 def delete_user(user_id):
     if not user_id:
         raise ValueError("User ID cannot be null")
@@ -81,8 +74,6 @@ def delete_user(user_id):
         cursor.close()
         connection.close()
 
-#! Posts
-# Select
 def select_post(post_id):
     if not post_id:
         raise ValueError("Post ID cannot be null")
@@ -98,7 +89,6 @@ def select_post(post_id):
         cursor.close()
         connection.close()
 
-# Select all posts
 def select_all_posts():
     connection = get_connection()
     try:
@@ -111,8 +101,6 @@ def select_all_posts():
         cursor.close()
         connection.close()
 
-
-# Insert
 def insert_post(user_id, post_title, post):
     if not user_id or not post:
         raise ValueError("User ID or post cannot be null")
@@ -131,7 +119,6 @@ def insert_post(user_id, post_title, post):
         cursor.close()
         connection.close()
 
-# Insert post with image
 def insert_post_image(user_id, post_title, post, image):
     if not user_id:
         raise ValueError("User ID or post cannot be null")
@@ -147,7 +134,6 @@ def insert_post_image(user_id, post_title, post, image):
         cursor.close()
         connection.close()
 
-# Insert post with video
 def insert_post_video(user_id, post_title, post, video):
     if not user_id:
         raise ValueError("User ID or post cannot be null")
@@ -163,7 +149,6 @@ def insert_post_video(user_id, post_title, post, video):
         cursor.close()
         connection.close()
 
-# Delete
 def delete_post(post_id):
     if not post_id:
         raise ValueError("Post ID cannot be null")
@@ -178,7 +163,6 @@ def delete_post(post_id):
         cursor.close()
         connection.close()
 
-#! Comments
 def select_user_by_name(name):
     if not name:
         raise ValueError("Name cannot be null")
@@ -194,7 +178,6 @@ def select_user_by_name(name):
         cursor.close()
         connection.close()
 
-# Select
 def select_comment(comment_id):
     if not comment_id:
         raise ValueError("Comment ID cannot be null")
@@ -210,7 +193,6 @@ def select_comment(comment_id):
         cursor.close()
         connection.close()
 
-# Update
 def update_comment(comment_id, user_id, post_id, comment):
     if not comment_id or not user_id or not post_id or not comment:
         raise ValueError("Comment ID, user ID, post ID or comment cannot be null")
@@ -225,7 +207,6 @@ def update_comment(comment_id, user_id, post_id, comment):
         cursor.close()
         connection.close()
 
-# Delete
 def delete_comment(comment_id):
     if not comment_id:
         raise ValueError("Comment ID cannot be null")
@@ -246,26 +227,22 @@ def upvote(post_id, user_id):
     try:
         cursor = connection.cursor()
 
-        # Verificar se o usuário já votou no post
         sql_check = "SELECT vote_type FROM votes WHERE id_user = %s AND id_post = %s"
         cursor.execute(sql_check, (user_id, post_id))
         vote = cursor.fetchone()
 
         if vote:
             if vote[0] == 'upvote':
-                # Remover upvote
                 sql_delete_vote = "DELETE FROM votes WHERE id_user = %s AND id_post = %s"
                 cursor.execute(sql_delete_vote, (user_id, post_id))
                 sql_update_post = "UPDATE posts SET post_votes = post_votes - 1 WHERE id_posts = %s"
                 cursor.execute(sql_update_post, (post_id,))
             else:
-                # Alterar downvote para upvote
                 sql_update_vote = "UPDATE votes SET vote_type = 'upvote' WHERE id_user = %s AND id_post = %s"
                 cursor.execute(sql_update_vote, (user_id, post_id))
                 sql_update_post = "UPDATE posts SET post_votes = post_votes + 2 WHERE id_posts = %s"
                 cursor.execute(sql_update_post, (post_id,))
         else:
-            # Inserir novo upvote
             sql_insert_vote = "INSERT INTO votes (id_user, id_post, vote_type) VALUES (%s, %s, 'upvote')"
             cursor.execute(sql_insert_vote, (user_id, post_id))
             sql_update_post = "UPDATE posts SET post_votes = post_votes + 1 WHERE id_posts = %s"
@@ -282,26 +259,22 @@ def downvote(post_id, user_id):
     try:
         cursor = connection.cursor()
 
-        # Verificar se o usuário já votou no post
         sql_check = "SELECT vote_type FROM votes WHERE id_user = %s AND id_post = %s"
         cursor.execute(sql_check, (user_id, post_id))
         vote = cursor.fetchone()
 
         if vote:
             if vote[0] == 'downvote':
-                # Remover downvote
                 sql_delete_vote = "DELETE FROM votes WHERE id_user = %s AND id_post = %s"
                 cursor.execute(sql_delete_vote, (user_id, post_id))
                 sql_update_post = "UPDATE posts SET post_votes = post_votes + 1 WHERE id_posts = %s"
                 cursor.execute(sql_update_post, (post_id,))
             else:
-                # Alterar upvote para downvote
                 sql_update_vote = "UPDATE votes SET vote_type = 'downvote' WHERE id_user = %s AND id_post = %s"
                 cursor.execute(sql_update_vote, (user_id, post_id))
                 sql_update_post = "UPDATE posts SET post_votes = post_votes - 2 WHERE id_posts = %s"
                 cursor.execute(sql_update_post, (post_id,))
         else:
-            # Inserir novo downvote
             sql_insert_vote = "INSERT INTO votes (id_user, id_post, vote_type) VALUES (%s, %s, 'downvote')"
             cursor.execute(sql_insert_vote, (user_id, post_id))
             sql_update_post = "UPDATE posts SET post_votes = post_votes - 1 WHERE id_posts = %s"
@@ -376,7 +349,6 @@ def change_username(user_id, new_name):
     connection = get_connection()
     try:
         cursor = connection.cursor(dictionary=True)
-        # Verifica se o novo nome já existe
         sql_check = "SELECT * FROM users WHERE name_user = %s"
         cursor.execute(sql_check, (new_name,))
         existing_user = cursor.fetchone()
@@ -384,7 +356,6 @@ def change_username(user_id, new_name):
         if existing_user:
             return "Username already exists."
 
-        # Atualiza o nome do usuário
         sql_update = "UPDATE users SET name_user = %s WHERE id_user = %s"
         cursor.execute(sql_update, (new_name, user_id))
         connection.commit()
@@ -444,7 +415,6 @@ def select_all_posts_ordered():
         cursor.close()
         connection.close()
 
-#insert users_avatar
 def insert_avatar(user_id, avatar_image):
     if not user_id or not avatar_image:
         raise ValueError("User ID or avatar image cannot be null")
@@ -460,7 +430,6 @@ def insert_avatar(user_id, avatar_image):
         cursor.close()
         connection.close()
 
-#update post with image
 def update_post_image(post_id, post_title, post, image):
     if not post_id:
         raise ValueError("Post ID cannot be null")
@@ -474,7 +443,7 @@ def update_post_image(post_id, post_title, post, image):
     finally:
         cursor.close()
         connection.close()
-#update post with video
+
 def update_post_video(post_id, post_title, post, video):
     if not post_id:
         raise ValueError("Post ID cannot be null")
@@ -555,12 +524,12 @@ def edit_comment_by_author(comment, user_id, post_id, comment_id):
             p_id_post = %s 
         WHERE id_comment = %s 
         """
-        cursor.execute(sql, (comment, user_id, post_id, comment_id))  # Ordem corrigida
+        cursor.execute(sql, (comment, user_id, post_id, comment_id))
         connection.commit()
         return "Comment updated successfully."
     except Exception as e:
         connection.rollback()
-        raise e  # Relevante para o log de erros
+        raise e
     finally:
         cursor.close()
         connection.close()
@@ -578,7 +547,7 @@ def delete_comment_by_author(comment_id):
     finally:
         cursor.close()
         connection.close()
-#Select avatar by user_id
+
 def select_avatar(user_id):
     if not user_id:
         raise ValueError("User ID cannot be null")
@@ -593,7 +562,7 @@ def select_avatar(user_id):
     finally:
         cursor.close()
         connection.close()
-#update avatar by user_id
+
 def update_avatar(user_id, avatar_image):
     if not user_id or not avatar_image:
         raise ValueError("User ID or avatar image cannot be null")

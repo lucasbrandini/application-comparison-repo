@@ -1,9 +1,7 @@
-// tools/renderTemplate.js
 const fs = require("fs");
 const path = require("path");
 const Handlebars = require("handlebars");
 
-// Função para compilar e renderizar templates Handlebars
 function renderTemplate(templateName, context, res) {
   const templatePath = path.join(
     __dirname,

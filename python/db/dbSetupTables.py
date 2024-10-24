@@ -71,18 +71,15 @@ def create_tables():
     ]
 
     try:
-        # Create tables
         for table in table_definitions:
             sql = f"CREATE TABLE IF NOT EXISTS {table['tableName']} ({table['columns']})"
             cursor.execute(sql)
             print(f"\u001b[33mTable {table['tableName']} created successfully.\u001b[0m")
         
-        # Check if trigger exists
         cursor.execute("SHOW TRIGGERS LIKE 'posts'")
         triggers = cursor.fetchall()
         
         if not any(trigger[0] == 'before_post_delete' for trigger in triggers):
-            # Create trigger if it doesn't exist
             trigger_sql = """
             CREATE TRIGGER before_post_delete
             BEFORE DELETE ON posts

@@ -31,7 +31,6 @@ def time_since(posted_time):
 class routesGet(BaseHTTPRequestHandler):
     
     def do_GET(self):
-        # Rotas estáticas
         routes = {
             '/login': self.render_login,
             '/register': self.render_register,
@@ -42,7 +41,6 @@ class routesGet(BaseHTTPRequestHandler):
             '/configuration': self.render_configuration
         }
         
-        # Verificação de rotas dinâmicas
         if self.path in routes:
             routes[self.path]()
         elif self.path.startswith('/public/'):
@@ -56,7 +54,7 @@ class routesGet(BaseHTTPRequestHandler):
 
     def serve_static_file(self, path):
         try:
-            with open(path[1:], 'rb') as file:  # remove the leading '/'
+            with open(path[1:], 'rb') as file:
                 content = file.read()
             self.send_response(200)
             if path.endswith('.css'):
@@ -69,7 +67,6 @@ class routesGet(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'image/png')
             elif path.endswith('.svg'):
                 self.send_header('Content-type', 'image/svg+xml')
-            # add more content types if needed
             self.end_headers()
             self.wfile.write(content)
         except Exception as e:
@@ -87,7 +84,6 @@ class routesGet(BaseHTTPRequestHandler):
             user_vote = user['id_user']
             finds = find_vote(user_vote)
             
-            # Crie um dicionário para mapear os votos do usuário pelos id_posts
             votes_map = {find['id_posts']: find['user_vote'] for find in finds}
             
             is_owner = False
@@ -109,7 +105,6 @@ class routesGet(BaseHTTPRequestHandler):
             
             compiler = Compiler()
             
-            # Use gerenciadores de contexto para abrir e ler os arquivos
             with open(os.path.join('templates', 'home.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
             template = compiler.compile(source)
@@ -131,7 +126,7 @@ class routesGet(BaseHTTPRequestHandler):
                 'user': user,
                 'header': header_template,
                 'head': head_template,
-                'name_user': login_user  # Adiciona o nome do usuário ao contexto
+                'name_user': login_user
             }
             
             self.wfile.write(template(context).encode('utf-8'))
@@ -263,11 +258,9 @@ class routesGet(BaseHTTPRequestHandler):
             print(e)
             self.send_error_response(500, "Server Error: " + str(e))
             
-     # ROTA PARA RENDERIZAR A PÁGINA DE EDIÇÃO DE POSTS MAIS O POST QUE FOI SELECIONADO
     @verify_jwt
     def render_edit_post(self):
         try:
-            # Parse the URL to get the query parameters
             url = urlparse(self.path)
             query_params = parse_qs(url.query)
             post_id = int(query_params.get('post_id', [None])[0])
@@ -276,31 +269,25 @@ class routesGet(BaseHTTPRequestHandler):
                 self.send_error_response(400, "ID do post não fornecido")
                 return
             
-            # Pega o post pelo id
             post = get_post(post_id)
             
-            # Verifica se o post existe
             if post is None:
                 self.send_error_response(404, "Post não encontrado")
                 return
             
-            # Pega o usuário logado
             id_user = self.decoded_token.get('name_user')
             user = select_user_by_name(id_user)
             
-            # Verifica se o usuário é o dono do post
             if post['p_id_user'] != user['id_user']:
                 self.send_error_response(403, "Você não tem permissão para editar este post")
                 return
             
-            # Formata as imagens e vídeos
             if 'post_image' in post and post['post_image'] is not None:
                 post['post_image'] = post['post_image'].decode('utf-8') if isinstance(post['post_image'], bytes) else post['post_image']
             
             if 'post_video' in post and post['post_video'] is not None:
                 post['post_video'] = post['post_video'].decode('utf-8') if isinstance(post['post_video'], bytes) else post['post_video']
             
-            # Compila o template
             compiler = Compiler()
             with open(os.path.join('templates', 'edit.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
@@ -309,7 +296,6 @@ class routesGet(BaseHTTPRequestHandler):
                 head_source = file.read()
             head_template = compiler.compile(head_source)
 
-            # Passa o contexto para o template
             context = {
                 'post': post,
                 'head': head_template,
@@ -332,26 +318,22 @@ class routesGet(BaseHTTPRequestHandler):
             query_params = parse_qs(url.query)
             post_id = int(query_params.get('post_id', [None])[0])
 
-            # Pega o usuário logado
             id_user = self.decoded_token.get('name_user')
             user = select_user_by_name(id_user)
-            user_avatar = select_avatar(user['id_user'])  # Adiciona o avatar do usuário logado
+            user_avatar = select_avatar(user['id_user'])
 
-            # Pega os detalhes do post
             post = get_post(post_id)
             post_author = select_user_info(post['p_id_user'])
             post['post_image'] = post['post_image'].decode('utf-8') if post['post_image'] else None
             post['post_video'] = post['post_video'].decode('utf-8') if post['post_video'] else None
 
-            # Obtém os comentários
             raw_comments = get_comments_by_post_id(post_id)
 
-            # Se houver comentários, extraímos o número total de comentários
             total_comments = raw_comments[0][-1] if raw_comments else 0
 
             comments = []
             for comment in raw_comments:
-                comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+                comment_user_info = select_user_info(comment[1])
                 
                 comments.append({
                     'id_comment': comment[0],
@@ -359,17 +341,16 @@ class routesGet(BaseHTTPRequestHandler):
                     'name_user': comment_user_info['name_user'],
                     'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
                     'comment': comment[3],
-                    'comment_date': comment[4],  # Atualizado para exibir tempo decorrido
+                    'comment_date': comment[4],
                     'is_author': comment[1] == user['id_user'],
                     'id_user': user['id_user']
                 })
 
-            # Se houver comentários, extraímos o número total de comentários
             total_comments = raw_comments[0][-1] if raw_comments else 0
 
             comments = []
             for comment in raw_comments:
-                comment_user_info = select_user_info(comment[1])  # Pega nome e avatar do usuário
+                comment_user_info = select_user_info(comment[1])
                 comment_date = comment[4]
                 time_elapsed = time_since(comment_date)
 
@@ -381,12 +362,11 @@ class routesGet(BaseHTTPRequestHandler):
                     'name_user': comment_user_info['name_user'],
                     'avatar_image': comment_user_info['avatar_image'].decode('utf-8') if comment_user_info['avatar_image'] else None,
                     'comment': comment[3],
-                    'comment_date': time_elapsed,  # Atualizado para exibir tempo decorrido
+                    'comment_date': comment_date,
                     'is_author': comment[1] == user['id_user'],
                     'id_user': user['id_user']
                 })
 
-            # Compila o template
             compiler = Compiler()
             with open(os.path.join('templates', 'comments.hbs'), 'r', encoding='utf-8') as file:
                 source = file.read()
@@ -396,10 +376,9 @@ class routesGet(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
 
-            # Adiciona as informações do post ao contexto
             context = {
                 'comments': comments,
-                'comment_count': total_comments,  # Aqui está o número total de comentários
+                'comment_count': total_comments,
                 'post_id': post_id,
                 'post_author': post_author['name_user'],
                 'post_avatar': post_author['avatar_image'].decode('utf-8') if post_author['avatar_image'] else None,

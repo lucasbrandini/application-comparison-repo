@@ -11,13 +11,11 @@ function setupDeleteRoutes(req, res) {
   const parsedUrl = require("url").parse(req.url, true);
   const pathName = parsedUrl.pathname;
 
-  // Definindo as rotas delete e suas funções
   const deleteRoutes = {
     "/delete-post": handle_delete_post,
     "/delete-comment": handle_delete_comment,
   };
 
-  // Verifica se o método é delete e se a rota existe
   if (req.method === "DELETE" && deleteRoutes[pathName]) {
     deleteRoutes[pathName](req, res);
   } else if (req.method === "DELETE") {

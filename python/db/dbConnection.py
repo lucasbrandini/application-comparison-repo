@@ -1,4 +1,3 @@
-# This file contains the connection to the database, and the functions to get a connection to the database.
 import mysql.connector
 from mysql.connector import pooling
 import os
@@ -6,10 +5,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Create a pool of connections
 pool = pooling.MySQLConnectionPool(
     pool_name="mypool",
-    pool_size=10,  # Maximum number of connections to create at once
+    pool_size=10,
     host=os.getenv("DB_HOST"),
     user=os.getenv("DB_USER"),
     password=os.getenv("DB_PASSWORD"),

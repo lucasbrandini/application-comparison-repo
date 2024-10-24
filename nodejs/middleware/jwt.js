@@ -19,7 +19,6 @@ function authenticateToken(req, res, next) {
       return res.end();
     }
 
-    // Certifique-se de que 'name_user' está no payload do token
     req.user = decoded; 
     next();
   });

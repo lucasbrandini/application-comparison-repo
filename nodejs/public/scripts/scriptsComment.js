@@ -63,12 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
-    // Lidar com o clique no botão "Sim" para confirmar a exclusão
     const confirmDeleteButtons = document.querySelectorAll('.deleteComment');
     confirmDeleteButtons.forEach(button => {
         button.addEventListener('click', async function() {
-            const commentId = this.getAttribute('data-comment-id'); // Obtém o ID do comentário
-
+            const commentId = this.getAttribute('data-comment-id');
             const response = await fetch('/delete-comment', {
                 method: 'DELETE',
                 headers: {
@@ -81,11 +79,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 alert('Comentário deletado com sucesso');
 
-                // Remove o comentário da página
                 const commentElement = document.getElementById(`comment-${commentId}`);
                 commentElement.remove();
 
-                // Atualiza a contagem de comentários
                 const commentCountElement = document.getElementById('comment-count');
                 let currentCount = parseInt(commentCountElement.textContent, 10);
                 commentCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
@@ -98,32 +94,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-// Função para alternar o menu de opções
 function toggleOptions(element) {
-    // Obtém o menu subOption relacionado a este botão
     var subOption = element.parentElement.querySelector('.subOption');
 
-    // Verifica se o menu já está aberto
     if (subOption.classList.contains('show')) {
         subOption.classList.remove('show');
         document.removeEventListener('click', outsideClickListener);
         document.removeEventListener('keydown', escKeyListener);
     } else {
-        // Fecha todos os outros menus abertos
         closeAllMenus();
 
-        // Abre o menu atual
         subOption.classList.add('show');
 
-        // Adiciona ouvintes de evento para fechar o menu
-        setTimeout(() => { // Timeout para evitar o fechamento imediato após a abertura
+        setTimeout(() => {
             document.addEventListener('click', outsideClickListener);
             document.addEventListener('keydown', escKeyListener);
         }, 0);
     }
 }
 
-// Função para fechar o menu ao clicar fora
 function outsideClickListener(event) {
     var openMenus = document.querySelectorAll('.subOption.show');
     openMenus.forEach(function(menu) {
@@ -132,13 +121,11 @@ function outsideClickListener(event) {
         }
     });
 
-    // Remove os ouvintes se não houver menus abertos
     if (openMenus.length === 0) {
         document.removeEventListener('click', outsideClickListener);
     }
 }
 
-// Função para fechar o menu ao pressionar Esc
 function escKeyListener(event) {
     if (event.key === "Escape") {
         closeAllMenus();
@@ -146,14 +133,12 @@ function escKeyListener(event) {
     }
 }
 
-// Função para fechar todos os menus abertos
 function closeAllMenus() {
     var openMenus = document.querySelectorAll('.subOption.show');
     openMenus.forEach(function(menu) {
         menu.classList.remove('show');
     });
 
-    // Esconde todas as confirmações de deletar
     var confirmBoxes = document.querySelectorAll('.confirmDelete.show');
     confirmBoxes.forEach(function(box) {
         box.classList.remove('show');
@@ -165,7 +150,6 @@ function confirmDelete(element) {
     confirmBox.classList.add('show');
 }
 
-// Função para cancelar a exclusão
 function cancelDelete(element) {
     const confirmBox = element.closest('.confirmDelete');
     confirmBox.classList.remove('show');
@@ -192,13 +176,12 @@ window.onclick = function (event) {
             const openDropdown = dropdowns[i];
             if (openDropdown.classList.contains("show")) {
                 openDropdown.classList.remove("show");
-                icon.classList.remove("rotate"); // Reseta o ícone para a posição original
+                icon.classList.remove("rotate");
             }
         }
     }
 };
 
-// Evento de logout
 document.getElementById("logout").addEventListener("click", function () {
     document.cookie = "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/login";

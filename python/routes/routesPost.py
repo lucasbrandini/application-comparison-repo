@@ -12,7 +12,6 @@ from db.dbOperations import insert_user, select_user_by_name, insert_post, inser
 from middleware.jwt import verify_jwt
 import urllib.parse
 
-# Configuração do logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -106,13 +105,10 @@ class routesPost(BaseHTTPRequestHandler):
 
             hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
-            # Inserir o usuário e obter o id do usuário inserido
             user_id = insert_user(user_data['name'], user_data['email'], hashed_password)
 
-            # Gerar ou selecionar uma imagem aleatória para o avatar
             avatar_image = generate_random_avatar()
 
-            # Inserir o avatar na tabela users_avatar
             insert_avatar(user_id, avatar_image)
 
             self.send_response(302)
@@ -138,7 +134,7 @@ class routesPost(BaseHTTPRequestHandler):
                 fields = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': content_type})
                 post_content = {key: fields[key].value for key in fields if fields[key].value}
 
-                post_title = post_content.get('title')  # Adicionando o título do post
+                post_title = post_content.get('title')
 
                 if 'file' in fields:
                     file_field = fields['file']
@@ -191,8 +187,8 @@ class routesPost(BaseHTTPRequestHandler):
     def handle_file_upload(self, file_data, file_size, file_type):
         image_types = ['image/gif', 'image/jpeg', 'image/png']
         video_types = ['video/mp4']
-        max_image_size = 10 * 1024 * 1024  # 10 MB
-        max_video_size = 10 * 1024 * 1024  # 10 MB
+        max_image_size = 10 * 1024 * 1024
+        max_video_size = 10 * 1024 * 1024 
 
         if file_type in image_types and file_size <= max_image_size:
             return True, base64.b64encode(file_data).decode('utf-8')
@@ -262,14 +258,11 @@ class routesPost(BaseHTTPRequestHandler):
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
 
-            # Use parse_qs para analisar os dados do formulário
             comment_data = urllib.parse.parse_qs(post_data)
 
-            # Decodificar caracteres especiais
             post_id = urllib.parse.unquote_plus(comment_data.get('post_id', [None])[0])
             comment = urllib.parse.unquote_plus(comment_data.get('comment', [None])[0])
 
-            # Obter o usuário a partir do token decodificado
             user_name = self.decoded_token.get('name_user')
             user = select_user_by_name(user_name)
             if user:

@@ -112,22 +112,18 @@ async function handleEditPost(req, res) {
 
       try {
         if (isValidFileField(files.file)) {
-          // Usa a nova função handleFileUpload para processar o arquivo
           const file = files.file;
           const { isImage, fileBase64 } = handleFileUpload(file);
 
           if (isImage) {
-            // Atualiza o post com imagem
             await db.updatePostImage(postId, title, content, fileBase64);
           } else {
-            // Atualiza o post com vídeo
             await db.updatePostVideo(postId, title, content, fileBase64);
           }
 
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ success: true, message: "Post atualizado com sucesso." }));
         } else {
-          // Atualiza o post sem imagem ou vídeo
           await db.updatePost(postId, title, content);
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ success: true, message: "Post atualizado com sucesso." }));
@@ -264,11 +260,10 @@ function isValidFileField(file) {
   return file && file[0].size > 0 && file[0].mimetype;
 }
 
-// Função para lidar com o upload do arquivo e convertê-lo em base64
 function handleFileUpload(file) {
   const imageTypes = ["image/gif", "image/jpeg", "image/png"];
   const videoTypes = ["video/mp4"];
-  const maxFileSize = 10 * 1024 * 1024; // 10 MB
+  const maxFileSize = 10 * 1024 * 1024;
 
   const fileData = fs.readFileSync(file[0].filepath);
   const fileSize = file[0].size;

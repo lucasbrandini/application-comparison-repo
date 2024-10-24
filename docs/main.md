@@ -82,5 +82,3 @@ Depois rode o projeto com,
 ```bash
   python script.py
 ```
-
-Teste

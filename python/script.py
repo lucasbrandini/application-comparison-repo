@@ -5,14 +5,12 @@ from routes.routesDelete import routesDelete
 from routes.routesPut import routesPut
 from db.dbSetupTables import create_tables
 
-# Cria as tabelas
 create_tables()
 
 # Cria uma nova classe que herda de PostRoutes e GetRoutes
 class CombinedRoutes(routesPost, routesGet, routesDelete, routesPut):
     pass
 
-# Configura e inicia o servidor
 httpd = HTTPServer(('localhost', 8000), CombinedRoutes)
 print("\u001b[36;1mServing at port 8000, access http://localhost:8000/register\u001b[0m")
 

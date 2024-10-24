@@ -34,24 +34,23 @@ body {
     border: none;
     cursor: pointer;
     border-radius: 20px; 
-    display: flex; /* Para alinhar o ícone e o texto */
-    align-items: center; /* Para centralizar o ícone verticalmente */
-    justify-content: space-between; /* Espaçar o texto e o ícone */
-    gap: 5px; /*Espaçamento entre o texto e o ícone */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
 
     margin-top: -4.8rem;
-    /* margin-left: 2rem; */
 }
 
 .dropbtn img {
-    width: 16px; /* Ajuste o tamanho do ícone conforme necessário */
-    height: 16px; /* Ajuste o tamanho do ícone conforme necessário */
-    margin-left: 8px; /* Espaço entre o texto e o ícone */
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
     font-weight: 600;
 }
 
 .dropbtn span {
-    margin-right: 6px; /* Espaço entre o texto e o ícone */
+    margin-right: 6px;
     letter-spacing: 0.06em;
     font-weight: 600;
 }
@@ -61,7 +60,7 @@ body {
 }
 
 .dropdown-content {
-    display: block; /* Necessário para permitir transições */
+    display: block;
     position: absolute;
     background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
     width: 188px;
@@ -75,14 +74,12 @@ body {
     margin-left: 2rem;
 }
 
-/* Estilo inicial do ícone */
 #toggleIcon {
     transition: transform 0.4s ease;
 }
 
-/* Estilo do ícone quando o dropdown está aberto */
 #toggleIcon.rotate {
-    transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
+    transform: rotate(90deg);
 }
 
 .dropdown-content a {   

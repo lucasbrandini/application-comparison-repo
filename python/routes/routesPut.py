@@ -11,7 +11,6 @@ from http.server import BaseHTTPRequestHandler
 from db.dbOperations import select_user_by_name, change_username, update_post_image, update_post_video, edit_comment_by_author, update_avatar
 from middleware.jwt import verify_jwt
 
-# Configuração do logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -58,10 +57,8 @@ class routesPut(BaseHTTPRequestHandler):
                 user_id = user['id_user']
                 message = change_username(user_id, new_name)
                 if message == "Username updated successfully.":
-                    # Regenerar o token JWT com o novo nome de usuário
                     token = jwt.encode({'name_user': new_name}, os.getenv('JWT_SECRET'), algorithm='HS256')
                     
-                    # Enviar o novo token JWT no cookie de resposta
                     cookie = http.cookies.SimpleCookie()
                     cookie['jwt_token'] = token
                     cookie['jwt_token']['path'] = '/'
@@ -98,8 +95,6 @@ class routesPut(BaseHTTPRequestHandler):
                 post_id = post_content.get('post_id')
                 title = post_content.get('title')
                 content = post_content.get('content')
-
-                # Atualiza o post no banco de dados
 
                 if 'file' in fields:
                     file_field = fields['file']

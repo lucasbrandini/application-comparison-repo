@@ -249,6 +249,7 @@ async function renderComments(req, res) {
           : null,
         user_name: name_user,
         hasMedia: hasMedia,
+        user: user[0]
       };
 
       renderTemplate("comments", context, res);

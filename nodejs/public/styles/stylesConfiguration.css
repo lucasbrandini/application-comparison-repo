@@ -9,41 +9,53 @@
 body {
     background-color: #111427;
     color: #FFFFFF;
-}
-
-.list-config {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
-    overflow-y: auto;
-    background: #21274A;
-    padding: 10px;
-    border-radius: .75rem;
-    color: #FFFFFF;
-    font-size: 1rem;
-}
-
-.list-config li {
-    padding: 10px;
-    border-radius: 4px;
-}
-
-.list-config li.active {
-    background-color: #333;
 }
 
 .main {
-    margin-left: 320px;
-    padding: 20px;
-}
-
-.content-item {
-    margin-bottom: 100vh;
+    width: 100%;
+    max-width: 500px;
     padding: 20px;
     background: #21274A;
     border-radius: .75rem;
+}
+
+.content-item {
+    padding: 20px;
+    background: #21274A;
+    border-radius: .75rem;
+}
+
+.content-item-change-name {
+    padding: 20px;
+    background: #21274A;
+    border-radius: .75rem;
+}
+
+#change-username-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#change-username-form input {
+    padding: 10px;
+    border-radius: .75rem;
+    border: none;
+    background: #ffffff;
+    color: #000000;
+}
+
+#change-username-form button {
+    padding: 10px;
+    border-radius: .75rem;
+    border: none;
+    background: #333;
+    color: #FFFFFF;
+    cursor: pointer;
 }
 
 .avatar-container {
@@ -54,7 +66,7 @@ body {
 }
 
 .avatar-image {
-    border-radius: 50%;
+    border-radius: 10%;
     width: 100%;
     height: 100%;
 }
@@ -77,4 +89,29 @@ body {
 
 #save-button {
     display: none; /* Esconde o botão */
+}
+
+.back-to-menu {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #333;
+    border-radius: .75rem;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.change-avatar-p {
+    opacity: 50%;
+}
+
+.back-to-menu:hover {
+    background: #444;
+}
+
+#change-avatar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
 }

@@ -814,3 +814,95 @@ strong {
     background-color: #cccccc; /* cor do botão desabilitado */
     cursor: not-allowed;
 }
+
+@media (max-width: 900px) {
+    .sectionTop {
+        display: none;
+        margin: 0.5rem;
+    }
+
+    .section1, .section2, .section3 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .dropbtn {
+        width: 100%;
+        justify-content: center;
+        margin: 0;
+        width: 100%;
+    }
+
+    .bannerTxt {
+        font-size: 2rem;
+        line-height: 2rem;
+        height: auto;
+    }
+
+    .subText {
+        font-size: 1.2rem;
+        line-height: 1.5rem;
+        width: 100%;
+    }
+
+    .btnPost {
+        width: 95%;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .dropdown-content {
+        margin: 0;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .cardBox {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .cardTextTitle {
+        font-size: 1.5rem;
+    }
+
+    .cardTextDescri {
+        font-size: 1.2rem;
+    }
+
+    .cardTextImg, .cardTextVideo {
+        width: 100%;
+        height: auto;
+    }
+
+    .voteStyle, .commentCont {
+        /* flex-direction: column;
+        align-items: flex-start; */
+    }
+
+    .voteStyle button, .commentCont button {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 90%;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .diviser1, .diviser2 {
+        width: 100%;
+        padding: 0;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .btnSubmit, .cancelSpan {
+        width: 100%;
+    }
+}

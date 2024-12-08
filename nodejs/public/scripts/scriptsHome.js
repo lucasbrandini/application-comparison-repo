@@ -37,12 +37,10 @@ btn.onclick = function() {
 
 span.addEventListener('mouseover', () => {
     path.style.stroke = "white";
-    console.log('Overzou');
 }) 
 
 span.addEventListener('mouseout', () => {
     path.style.stroke = "#6272D6";
-    console.log('Overzou pra fora');
 }) 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -55,11 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     modal.onclick = function(event) {
-        console.log(span, modal) ;
       if (event.target == modal) {
         modal.classList.remove('show');
         modal.classList.add('hide');
-        console.log('fechou1');
       }
     }
 
@@ -76,10 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById("logout").addEventListener("click", function () {
-        // Excluir o cookie e redirecionar para a página de login
         document.cookie =
           "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.href = "login"; // Substitua 'login.html' pelo caminho correto
+        window.location.href = "login";
     });
 
     function getCookie(name) {
@@ -91,29 +86,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.deletePost').forEach(button => {
         button.addEventListener('click', async () => {
             const postId = button.getAttribute('data-post-id');
-            fetch('/delete-post', {
+            const response = await fetch('/delete-post', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Certifique-se de que o token está correto
                 },
                 body: JSON.stringify({ post_id: postId })
-            }).then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Deleted post successfully');
-                    window.location.href = '/home'; // Redirect to home after upvote
-                } else {
-                    console.error('Failed to delete:', data.message);
-                }
-            }).catch(error => {
-                console.error('Error during delete:', error);
             });
-        });	
+    
+            const data = await response.json();
+            if (response.ok) {
+                window.location.href = '/home';
+            } else {
+                console.error('Failed to delete:', data.message);
+            }
+        });
     });
     
-    
-    // preciso para editar o post
     document.querySelectorAll('.editPost').forEach(button => {
         button.addEventListener('click', async () => {
             const postId = button.getAttribute('data-post-id');
@@ -139,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const voteReceive = document.querySelectorAll('.voteText');
     const upvoteVote = document.querySelectorAll('.upvotePath');
     const downvoteVote = document.querySelectorAll('.downvotePath');
-    const voteStyle = document.querySelectorAll('.voteStyle'); // Certifique-se de que os elementos com .voteStyle existem
+    const voteStyle = document.querySelectorAll('.voteStyle');
 
     upvoteVote.forEach(function (userVoteElement, index) {
         if (voteReceive[index]) {
@@ -188,14 +178,13 @@ document.querySelectorAll('.upvote').forEach(button => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming you store JWT token in localStorage
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             body: JSON.stringify({ post_id: postId })
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Upvoted successfully');
-                window.location.href = '/home'; // Redirect to home after upvote
+                window.location.href = '/home';
             } else {
                 console.error('Failed to upvote:', data.message);
             }
@@ -212,14 +201,13 @@ document.querySelectorAll('.downvote').forEach(button => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming you store JWT token in localStorage
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             body: JSON.stringify({ post_id: postId })
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Downvoted successfully');
-                window.location.href = '/home'; // Redirect to home after downvote
+                window.location.href = '/home';
             } else {
                 console.error('Failed to downvote:', data.message);
             }
@@ -236,9 +224,9 @@ function toggleDropdown() {
     dropdown.classList.toggle("show");
   
     if (dropdown.classList.contains("show")) {
-      icon.classList.add("rotate"); // Adiciona a rotação
+      icon.classList.add("rotate");
     } else {
-      icon.classList.remove("rotate"); // Remove a rotação
+      icon.classList.remove("rotate");
     }
   }
 
@@ -250,38 +238,31 @@ window.onclick = function (event) {
       const openDropdown = dropdowns[i];
       if (openDropdown.classList.contains("show")) {
         openDropdown.classList.remove("show");
-        icon.src = "/public/assets/setaright.svg"; // Ícone para a direita
+        icon.src = "/public/assets/setaright.svg";
       }
     }
   }
 };
 
-// Função para alternar o menu de opções
 function toggleOptions(element) {
-    // Obtém o menu subOption relacionado a este botão
     var subOption = element.parentElement.querySelector('.subOption');
 
-    // Verifica se o menu já está aberto
     if (subOption.classList.contains('show')) {
         subOption.classList.remove('show');
         document.removeEventListener('click', outsideClickListener);
         document.removeEventListener('keydown', escKeyListener);
     } else {
-        // Fecha todos os outros menus abertos
         closeAllMenus();
 
-        // Abre o menu atual
         subOption.classList.add('show');
 
-        // Adiciona ouvintes de evento para fechar o menu
-        setTimeout(() => { // Timeout para evitar o fechamento imediato após a abertura
+        setTimeout(() => {
             document.addEventListener('click', outsideClickListener);
             document.addEventListener('keydown', escKeyListener);
         }, 0);
     }
 }
 
-// Função para fechar o menu ao clicar fora
 function outsideClickListener(event) {
     var openMenus = document.querySelectorAll('.subOption.show');
     openMenus.forEach(function(menu) {
@@ -290,13 +271,11 @@ function outsideClickListener(event) {
         }
     });
 
-    // Remove os ouvintes se não houver menus abertos
     if (openMenus.length === 0) {
         document.removeEventListener('click', outsideClickListener);
     }
 }
 
-// Função para fechar o menu ao pressionar Esc
 function escKeyListener(event) {
     if (event.key === "Escape") {
         closeAllMenus();
@@ -304,31 +283,26 @@ function escKeyListener(event) {
     }
 }
 
-// Função para fechar todos os menus abertos
 function closeAllMenus() {
     var openMenus = document.querySelectorAll('.subOption.show');
     openMenus.forEach(function(menu) {
         menu.classList.remove('show');
     });
 
-    // Esconde todas as confirmações de deletar
     var confirmBoxes = document.querySelectorAll('.confirmDelete.show');
     confirmBoxes.forEach(function(box) {
         box.classList.remove('show');
     });
 }
 
-// Certifique-se de que o botão de opções chame 'toggleOptions' ao ser clicado
-// <div class="options" onclick="toggleOptions(this)">
-
 function confirmDelete(element) {
-    const confirmBox = element.nextElementSibling; // Pega o próximo elemento .confirmDelete
-    confirmBox.classList.add('show'); // Exibe a confirmação de deletar
+    const confirmBox = element.nextElementSibling;
+    confirmBox.classList.add('show');
 }
 
 function cancelDelete(element) {
-    const confirmBox = element.parentElement; // Pega o elemento pai (o box de confirmação)
-    confirmBox.classList.remove('show'); // Esconde a confirmação de deletar
+    const confirmBox = element.parentElement;
+    confirmBox.classList.remove('show');
 }
 
 const clearInputButton = document.getElementById('clear-input');
@@ -340,20 +314,16 @@ fileInput.addEventListener('change', function(event) {
 
     if (file) {
         filePreviewDiv.style.display = 'flex';
-        // Limitar o nome do arquivo a 20 caracteres, por exemplo
         const maxLength = 28;
         let displayName = file.name;
         if (file.name.length > maxLength) {
             displayName = file.name.slice(0, maxLength) + '...';
         }
 
-        // Exibe o nome do arquivo truncado
         fileName.textContent = displayName;
 
-        // Limpa qualquer preview anterior
         filePreviewDiv.innerHTML = '';
 
-        // Cria um objeto URL para o arquivo selecionado
         const fileURL = URL.createObjectURL(file);
 
         if (file.type.startsWith('image/')) {
@@ -368,26 +338,23 @@ fileInput.addEventListener('change', function(event) {
         }
     } else {
         filePreviewDiv.style.display = 'none';
-        // Limpa o nome do arquivo e o preview se nenhum arquivo for selecionado
         fileName.textContent = '';
         filePreviewDiv.innerHTML = '';
     }
 
     if (fileInput.files.length > 0) {
         fileName.textContent = fileInput.files[0].name;
-        clearInputButton.style.display = 'block'; // Mostra o botão de limpar
+        clearInputButton.style.display = 'block';
     } else {
-        clearInputButton.style.display = 'none'; // Esconde o botão se não houver arquivo
+        clearInputButton.style.display = 'none';
     }
 });
 
 document.getElementById('clear-input').addEventListener('click', function() {
     const fileName = document.getElementById('file-name');
 
-    // Reseta o campo de arquivo
     fileInput.value = '';
 
-    // Limpa o nome do arquivo e o preview
     filePreviewDiv.style.display = 'none';
     fileName.textContent = 'Selecione uma imagem/vídeo';
     filePreviewDiv.innerHTML = '';
@@ -421,9 +388,9 @@ titleInput.addEventListener('input', function() {
 });
 
 document.getElementById("logout").addEventListener("click", function () {
-    fetch('/logout', { method: 'POST' }) // Envia uma requisição para o servidor para realizar o logout
+    fetch('/logout', { method: 'POST' })
         .then(() => {
-            window.location.href = "login"; // Substitua 'login' pelo caminho correto
+            window.location.href = "login";
         })
         .catch(err => console.error("Erro ao realizar logout:", err));
 });

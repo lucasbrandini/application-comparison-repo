@@ -5,16 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const img = document.createElement("img");
   const video = document.createElement("video");
 
-  // Função para limpar o preview
   function clearFileInput(event) {
     event.preventDefault();
-    // Limpar preview de imagem e vídeo
     img.src = "";
     video.src = "";
-    preview.innerHTML = ""; // Limpar o conteúdo do preview
+    preview.innerHTML = "";
   }
 
-  // Verificar se os elementos existem antes de adicionar event listeners
   const clearButton = document.getElementById("clearButton");
   const fileInput = document.getElementById("file");
   const form = document.getElementById("edit-post-form");
@@ -50,16 +47,13 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      // Criação de FormData para pegar todos os campos do formulário
       const formData = new FormData(form);
 
-      // Pegue o valor do campo post_id diretamente do formulário
       const postId = document.getElementById("post_id").value;
       formData.set("post_id", postId);
-       // Forçando a inclusão do post_id
       fetch("/editpost", {
         method: "PUT",
-        body: formData, // Enviando os dados do formulário como FormData
+        body: formData,
       })
         .then((response) => {
           if (!response.ok) {
@@ -70,12 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then((data) => {
-          // Redirecionar em caso de sucesso
           window.location.href = "/home";
         })
         .catch((error) => {
           console.error("Error:", error);
-          // Tratamento de erro
         });
     });
   }

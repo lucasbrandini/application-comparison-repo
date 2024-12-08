@@ -69,10 +69,9 @@ const setupTables = () => {
       }
     ];
 
-    //* Create tables sequentially to avoid issues with foreign key constraints
     const createTable = (index) => {
       if (index >= tableDefinitions.length) {
-        createTrigger(); // Proceed to create trigger after all tables are created
+        createTrigger();
         return;
       }
 
@@ -90,7 +89,6 @@ const setupTables = () => {
       });
     };
 
-    //* Create trigger after creating all tables
     const createTrigger = () => {
       const checkTriggerSql = "SHOW TRIGGERS LIKE 'posts'";
       connection.query(checkTriggerSql, (err, results) => {
@@ -128,7 +126,7 @@ const setupTables = () => {
       });
     };
 
-    createTable(0); // Start the table creation process
+    createTable(0);
   });
 };
 

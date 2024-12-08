@@ -5,16 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const img = document.createElement('img');
     const video = document.createElement('video');
 
-    // Função para limpar o preview
     function clearFileInput(event) {
         event.preventDefault();
-        // Limpar preview de imagem e vídeo
         img.src = '';
         video.src = '';
-        preview.innerHTML = ''; // Limpar o conteúdo do preview
+        preview.innerHTML = '';
     }
 
-    // Verificar se os elementos existem antes de adicionar event listeners
     const clearButton = document.getElementById('clearButton');
     const fileInput = document.getElementById('file');
     const form = document.getElementById('edit-post-form');
@@ -59,12 +56,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                // Handle success response
                 window.location.href = '/home';
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Handle error response
             });
         });
     }

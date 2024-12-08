@@ -6,7 +6,6 @@ const authenticateToken = require("../middleware/jwt");
 const renderTemplate = require("../tools/renderTemplate");
 const formidable = require("formidable");
 
-// Função para servir arquivos estáticos
 function serveStaticFile(filePath, res) {
   fs.readFile(filePath, (err, content) => {
     if (err) {
@@ -15,7 +14,7 @@ function serveStaticFile(filePath, res) {
       return;
     }
 
-    let contentType = "application/octet-stream"; // Tipo de conteúdo padrão
+    let contentType = "application/octet-stream";
     if (filePath.endsWith(".css")) contentType = "text/css; charset=utf-8";
     else if (filePath.endsWith(".js"))
       contentType = "application/javascript; charset=utf-8";
@@ -29,13 +28,11 @@ function serveStaticFile(filePath, res) {
   });
 }
 
-// Função principal para lidar com as requisições
 function setupGetRoutes(req, res, renderTemplate) {
   const parsedUrl = require("url").parse(req.url, true);
   const method = req.method;
   const pathName = parsedUrl.pathname;
 
-  // Rotas definidas
   const routes = {
     "/": renderLogin,
     "/login": renderLogin,
@@ -62,13 +59,14 @@ function setupGetRoutes(req, res, renderTemplate) {
   }
 }
 
-// Funções de renderização
 function renderLogin(req, res) {
   renderTemplate("login", {}, res);
 }
 
 function renderRegister(req, res) {
-  renderTemplate("register", {}, res);
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const error = url.searchParams.get("error");
+  renderTemplate("register", { error }, res);
 }
 
 function renderHome(req, res) {
@@ -176,10 +174,10 @@ async function renderConfigurations(req, res) {
 
 async function renderComments(req, res) {
   authenticateToken(req, res, async () => {
-    const parsedUrl = require("url").parse(req.url, true); // Parseando a URL para pegar os parâmetros de consulta
-    const queryParams = parsedUrl.query; // Pegando os parâmetros de consulta
+    const parsedUrl = require("url").parse(req.url, true);
+    const queryParams = parsedUrl.query;
 
-    const post_id = parseInt(queryParams.post_id, 10); // Pegando o post_id da query string
+    const post_id = parseInt(queryParams.post_id, 10);
 
     if (!post_id) {
       res.writeHead(400, { "Content-Type": "text/plain" });
@@ -188,13 +186,11 @@ async function renderComments(req, res) {
     }
 
     try {
-      // Busca o usuário logado
       const name_user = req.user.name_user;
       const user = await db.selectUserByName(name_user);
       const user_id = user[0].id_user;
       const user_avatar = await db.selectAvatar(user_id);
 
-      // Busca o post e o autor do post
       const post = await db.getPost(post_id);
       const post_id_user = post[0].p_id_user;
       const post_author = await db.selectUserInfo(post_id_user);
@@ -263,10 +259,10 @@ async function renderComments(req, res) {
 
 async function renderEditPost(req, res) {
   authenticateToken(req, res, async () => {
-    const parsedUrl = require("url").parse(req.url, true); // Parseando a URL para pegar os parâmetros de consulta
-    const queryParams = parsedUrl.query; // Pegando os parâmetros de consulta
+    const parsedUrl = require("url").parse(req.url, true);
+    const queryParams = parsedUrl.query;
 
-    const post_id = parseInt(queryParams.post_id, 10); // Pegando o post_id da query string
+    const post_id = parseInt(queryParams.post_id, 10);
 
     if (!post_id) {
       res.writeHead(400, { "Content-Type": "text/plain" });
@@ -275,11 +271,9 @@ async function renderEditPost(req, res) {
     }
 
     try {
-      // Busca o usuário logado
       const name_user = req.user.name_user;
       const user = await db.selectUserByName(name_user);
       const user_id = user[0].id_user;
-      // Busca o post
       const post = await db.getPost(post_id);
 
       if (post.length === 0) {

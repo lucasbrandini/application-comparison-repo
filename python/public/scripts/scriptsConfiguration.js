@@ -20,12 +20,10 @@ document
         return response.json();
       })
       .then((data) => {
-        // Handle success response
         window.location.href = "/home";
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Handle error response
       });
   });
 
@@ -33,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const links = document.querySelectorAll(".list-config a");
   const sections = document.querySelectorAll(".content-item");
 
-  // Scroll suave ao clicar nos links
   links.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -81,7 +78,7 @@ document.getElementById("avatar").addEventListener("change", function () {
     reader.readAsDataURL(file);
   } else {
     alert("Por favor, selecione um arquivo de imagem válido (JPEG, PNG, GIF).");
-    this.value = ""; // Limpa o input caso o arquivo não seja válido
+    this.value = "";
   }
 });
 document
@@ -140,12 +137,12 @@ avatarInput.addEventListener("change", function () {
     const reader = new FileReader();
     reader.onload = function (e) {
       document.querySelector(".avatar-image").src = e.target.result;
-      saveButton.style.display = "inline-block"; // Mostra o botão de salvar
+      saveButton.style.display = "inline-block";
     };
     reader.readAsDataURL(file);
   } else {
     alert("Por favor, selecione um arquivo de imagem válido (JPEG, PNG, GIF).");
-    this.value = ""; // Limpa o input caso o arquivo não seja válido
-    saveButton.style.display = "none"; // Esconde o botão de salvar novamente
+    this.value = "";
+    saveButton.style.display = "none";
   }
 });

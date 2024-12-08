@@ -25,6 +25,9 @@
             <img class="logo-img" src="/public/assets/logo.svg">
             <h1>Crie sua conta!</h1>
             <p>Novo por aqui? <br class="pMobile"> Registre-se e junte-se a nós!</p>
+            {{#if error}}
+                <p class="error">{{error}}</p>
+            {{/if}}
             <form action="/register" method="post">
             <div class="form-content">
                 <div class="left-column">

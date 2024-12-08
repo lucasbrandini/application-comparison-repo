@@ -1,20 +1,21 @@
+/* Estilos gerais */
 * {
     margin: 0;
     padding: 0;
-    box-sizing:border-box;
+    box-sizing: border-box;
     text-decoration: none;
     font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 body {
     background: #111427;
-    color:white;
-    margin: 50px 49px 160px 49px;
+    color: white;
+    margin: 10px;
 }
 
 .sectionTop {
     width: 100%;
-    display:flex;
+    display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -33,25 +34,23 @@ body {
     font-size: 18px;
     border: none;
     cursor: pointer;
-    border-radius: 20px; 
-    display: flex; /* Para alinhar o ícone e o texto */
-    align-items: center; /* Para centralizar o ícone verticalmente */
-    justify-content: space-between; /* Espaçar o texto e o ícone */
-    gap: 5px; /*Espaçamento entre o texto e o ícone */
-
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
     margin-top: -4.8rem;
-    /* margin-left: 2rem; */
 }
 
 .dropbtn img {
-    width: 16px; /* Ajuste o tamanho do ícone conforme necessário */
-    height: 16px; /* Ajuste o tamanho do ícone conforme necessário */
-    margin-left: 8px; /* Espaço entre o texto e o ícone */
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
     font-weight: 600;
 }
 
 .dropbtn span {
-    margin-right: 6px; /* Espaço entre o texto e o ícone */
+    margin-right: 6px;
     letter-spacing: 0.06em;
     font-weight: 600;
 }
@@ -61,13 +60,13 @@ body {
 }
 
 .dropdown-content {
-    display: block; /* Necessário para permitir transições */
+    display: block;
     position: absolute;
     background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
     width: 188px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    border-radius: 20px; 
+    border-radius: 20px;
     margin-top: 0.3rem;
     opacity: 0;
     visibility: hidden;
@@ -75,37 +74,35 @@ body {
     margin-left: 2rem;
 }
 
-/* Estilo inicial do ícone */
 #toggleIcon {
     transition: transform 0.4s ease;
 }
 
-/* Estilo do ícone quando o dropdown está aberto */
 #toggleIcon.rotate {
-    transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
+    transform: rotate(90deg);
 }
 
-.dropdown-content a {   
+.dropdown-content a {
     color: white;
     font-size: 18px;
     padding: 16px;
     text-decoration: none;
     display: block;
-    border-radius: 8px; 
-    display: flex; 
+    border-radius: 8px;
+    display: flex;
     align-items: center;
 }
 
 .dropdown-content a img {
-    margin-right: 8px; 
-    width: 20px; 
-    height: 20px; 
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
 }
 
 .dropdown-content a:hover {
     background-color: #5e6fce7a;
     transition: background-color 0.3s;
-    border-radius: 20px; 
+    border-radius: 20px;
 }
 
 .dropdown-content.show {
@@ -124,7 +121,6 @@ body {
     line-height: 32px;
     letter-spacing: 0.04em;
     text-transform: capitalize;
-
     color: rgba(255, 255, 255, 0.72);
     margin-bottom: -0.3rem;
 }
@@ -150,7 +146,6 @@ body {
     letter-spacing: 0.03em;
     cursor: pointer;
     line-height: 3px;
-
     color: rgba(255, 255, 255, 0.5);
 }
 
@@ -159,7 +154,7 @@ body {
     color: #fff;
 }
 
-.dropdown{
+.dropdown {
     margin-bottom: 4rem;
 }
 
@@ -175,7 +170,7 @@ body {
     margin-top: 50rem;
 }
 
-.return-home:hover{
+.return-home:hover {
     color: #ffffff;
     fill: #ffffff;
 }
@@ -258,7 +253,8 @@ h3 {
 }
 
 .comment {
-    width: 1174px;
+    width: 100%;
+    max-width: 1174px;
 }
 
 .post-media {
@@ -266,7 +262,8 @@ h3 {
     justify-content: center;
     align-items: center;
     align-self: center;
-    width: 1207px;
+    width: 100%;
+    max-width: 1207px;
     height: 485px;
     border-radius: 15px;
     background-color: #080a14;
@@ -277,23 +274,22 @@ h3 {
 }
 
 #commentForm {
-    padding-left: 19px;
-    padding-top: 19px;
     display: flex;
     flex-direction: column;
     height: 165px;
     background: #1A1E38;
     border-radius: 6px;
+    padding: 15px;
 }
 
 .commentInput {
-    width: 1690px;
+    width: 100%;
+    max-width: 1690px;
     height: 55px;
     background: #111427;
     border-radius: 6px;
     border: none;
     padding-left: 10px;
-
     display: flex;
     flex-direction: column;
     font-style: normal;
@@ -319,7 +315,6 @@ h3 {
     background: #31396B;
     border-radius: 10px;
     border: none;
-
     margin: 10px 14px 14px auto;
     font-style: normal;
     font-weight: 700;
@@ -327,7 +322,6 @@ h3 {
     line-height: 134.01%;
     color: #F7F7F7;
 }
-
 
 .submit-btn:hover {
     color: #080a14;
@@ -388,7 +382,7 @@ h3 {
 }
 
 .hidden {
-    display:none;
+    display: none;
 }
 
 .optionConfig {
@@ -404,7 +398,7 @@ h3 {
 .subOption {
     display: none;
     position: absolute;
-    top: calc(100% - 10px); /* Sobe o menu 10px */
+    top: calc(100% - 10px);
     right: 0;
     background-color: #1C2340;
     border-radius: 8px;
@@ -414,7 +408,6 @@ h3 {
     z-index: 10;
 }
 
-/* Estilo para o botão 'x' */
 .closeMenu {
     position: absolute;
     top: 5px;
@@ -438,6 +431,7 @@ h3 {
     cursor: pointer;
     font-family: Arial, sans-serif;
 }
+
 .subOption li:hover {
     background-color: #2A2F55;
     border-radius: 6px;
@@ -479,7 +473,6 @@ h3 {
     color: white;
 }
 
-/* Animações */
 .subOption.show {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
@@ -509,8 +502,8 @@ h3 {
     width: 100%;
 }
 
-.comment-divider svg{
-    width: 100%
+.comment-divider svg {
+    width: 100%;
 }
 
 .comments:not(:last-child) .comment-divider {
@@ -533,7 +526,7 @@ h3 {
     transform: translateY(-50%);
 }
 
-.edit-comment-form{
+.edit-comment-form {
     display: flex;
 }
 
@@ -545,7 +538,6 @@ h3 {
     background: #0b0d1a;
     border-radius: 6px;
     color: #DADADA;
-
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
@@ -562,8 +554,7 @@ h3 {
     gap: 7px;
     width: 173px;
     height: 68px;
-    border:none;
-
+    border: none;
     background: #31396B;
     border-radius: 10px;
     font-style: normal;
@@ -577,6 +568,98 @@ h3 {
     color: #080a14;
 }
 
-.saveComment:hover .edit-icon{
+.saveComment:hover .edit-icon {
     filter: invert(1) grayscale(1) contrast(1) brightness(0);
+}
+
+/* Estilos responsivos */
+@media (max-width: 900px) {
+    .sectionTop {
+        display: none;
+        margin: 0.5rem;
+    }
+
+    .avatar-box {
+        width: 75px;
+    }
+
+    .avatar-box-bottom {
+        width: 60px;
+    }
+
+    .comment-divider {
+        width: 90%;
+    }
+
+    .section1, .section2, .section3 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .dropbtn {
+        width: 100%;
+        justify-content: center;
+        margin: 5px auto;
+        border-radius: .75rem;
+    }
+
+    .dropdown-content {
+        margin-left: -10px;
+        width: 100%;
+    }
+
+    .return-home {
+        font-size: 20px;
+    }
+    
+    .return-home svg {
+        margin-right: 10px; 
+    }   
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .post-title {
+        font-size: 24px;
+    }
+
+    .post-desc {
+        font-size: 16px;
+    }
+
+    .commentInput {
+        width: 100%;
+    }
+
+    .submit-btn {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .comment-box {
+        width: 100%;
+    }
+
+    .comments {
+        width: 100%;
+    }
+
+    .comment-top {
+        flex-direction: row;
+    }
+
+    .username, .comment-date {
+        font-size: 16px;
+    }
+
+    .comment-text {
+        font-size: 16px;
+    }
+
+    .saveComment {
+        width: 100%;
+    }
 }

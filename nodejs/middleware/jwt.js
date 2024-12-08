@@ -14,12 +14,10 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err || !decoded) {
-      console.log("Token verification failed:", err);
       res.writeHead(302, { Location: "/login" });
       return res.end();
     }
 
-    // Certifique-se de que 'name_user' está no payload do token
     req.user = decoded; 
     next();
   });

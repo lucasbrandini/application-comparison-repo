@@ -8,7 +8,7 @@ const setupPutRoutes = require("./Routes/routesPut");
 const setupDeleteRoutes = require("./Routes/routesDelete");
 require("dotenv").config();
 
-const PORT = process.env.PORT || 8000; // Definindo a porta como 8000 por padrão
+const PORT = process.env.PORT || 8000;
 
 const options = {
   key: fs.readFileSync('/etc/letsencrypt/live/lucascriado.com-0002/privkey.pem'),
@@ -32,10 +32,8 @@ const server = https.createServer(options, (req, res) => {
   }
 });
 
-// Configuração das tabelas do banco de dados
 setupTables();
 
-// Iniciando o servidor na porta especificada
 server.listen(PORT, () => {
   console.log('\u001b[36m',`Servidor rodando na porta ${PORT}`, '\u001b[0m');
 });

@@ -7,7 +7,7 @@ const setupPutRoutes = require("./Routes/routesPut");
 const setupDeleteRoutes = require("./Routes/routesDelete");
 require("dotenv").config();
 
-const PORT = process.env.PORT; // Definindo a porta como 8000 por padrão
+const PORT = process.env.PORT;
 
 const server = http.createServer((req, res) => {
   if (req.method === "GET" || req.method === "POST" || req.method === "PUT" || req.method === "DELETE") {
@@ -26,10 +26,8 @@ const server = http.createServer((req, res) => {
   }
 });
 
-// Configuração das tabelas do banco de dados
 setupTables();
 
-// Iniciando o servidor na porta especificada
 server.listen(PORT, () => {
   console.log('\u001b[36m',`Servidor rodando na porta ${PORT}`, '\u001b[0m');
 });

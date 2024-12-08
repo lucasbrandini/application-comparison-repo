@@ -11,13 +11,11 @@ function setupDeleteRoutes(req, res) {
   const parsedUrl = require("url").parse(req.url, true);
   const pathName = parsedUrl.pathname;
 
-  // Definindo as rotas delete e suas funções
   const deleteRoutes = {
     "/delete-post": handle_delete_post,
     "/delete-comment": handle_delete_comment,
   };
 
-  // Verifica se o método é delete e se a rota existe
   if (req.method === "DELETE" && deleteRoutes[pathName]) {
     deleteRoutes[pathName](req, res);
   } else if (req.method === "DELETE") {
@@ -40,18 +38,23 @@ async function handle_delete_post(req, res) {
         return;
       }
 
-      const postId = fields.post_id[0];
+      const postId = fields.post_id;
       const userName = req.user.name_user;
 
       try {
         const user = await db.selectUserByName(userName);
+        if (!user || user.length === 0) {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Usuário não encontrado" }));
+          return;
+        }
         const userId = user[0].id_user;
 
         const postFromDb = await db.getPost(postId);
-
-        if (postFromDb.length === 0) {
+ 
+        if (!postFromDb || postFromDb.length === 0) {
           res.writeHead(404, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Post not found" }));
+          res.end(JSON.stringify({ error: "Postagem não encontrada" }));
           return;
         }
 
@@ -59,8 +62,7 @@ async function handle_delete_post(req, res) {
           res.writeHead(403, { "Content-Type": "application/json" });
           res.end(
             JSON.stringify({
-              error:
-                "Forbidden: You do not have permission to delete this post",
+              error: "Proibido: Você não tem permissão para deletar esta postagem",
             })
           );
           return;
@@ -68,13 +70,11 @@ async function handle_delete_post(req, res) {
 
         await db.deletePost(postId);
         res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({ success: true, message: "Delete successfully" })
-        );
-      } catch (err) {
-        console.error(`Erro ao deletar post: ${err.message}`);
+        res.end(JSON.stringify({ success: true, message: "Deletado com sucesso" }));
+      } catch (error) {
+        console.error(`Erro ao deletar a postagem: ${error.message}`);
         res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Internal server error" }));
+        res.end(JSON.stringify({ error: "Erro no servidor." }));
       }
     });
   });

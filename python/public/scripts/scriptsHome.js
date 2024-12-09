@@ -37,12 +37,10 @@ btn.onclick = function() {
 
 span.addEventListener('mouseover', () => {
     path.style.stroke = "white";
-    console.log('Overzou');
 }) 
 
 span.addEventListener('mouseout', () => {
     path.style.stroke = "#6272D6";
-    console.log('Overzou pra fora');
 }) 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -55,11 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     modal.onclick = function(event) {
-        console.log(span, modal) ;
       if (event.target == modal) {
         modal.classList.remove('show');
         modal.classList.add('hide');
-        console.log('fechou1');
       }
     }
 
@@ -140,8 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (voteReceive[index]) {
             const vote = voteReceive[index].innerText.trim();
 
-            console.log(vote, "vote");
-
             if (vote === 'upvote') {
                 userVoteElement.style.fill = '#fff';
             } else {
@@ -192,7 +186,6 @@ document.querySelectorAll('.upvote').forEach(button => {
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Upvoted successfully');
                 window.location.href = '/home';
             } else {
                 console.error('Failed to upvote:', data.message);
@@ -216,7 +209,6 @@ document.querySelectorAll('.downvote').forEach(button => {
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Downvoted successfully');
                 window.location.href = '/home';
             } else {
                 console.error('Failed to downvote:', data.message);

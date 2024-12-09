@@ -230,6 +230,12 @@ header div a {
     color:white;
 }
 
+.content .error {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
 @media (max-width: 900px) {
     main {
         flex-direction: column;

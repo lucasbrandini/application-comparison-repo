@@ -28,6 +28,9 @@
                 <p>
                     Bem vindo,<br> faça login para continuar!
                 </p>
+                {{#if error}}
+                    <p class="error">{{error}}</p>
+                {{/if}}
                 <div class="form-content">
                     <form action="/login" method="post">
                         <label for="name" id="name">Nome de usuário</label>

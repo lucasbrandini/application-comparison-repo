@@ -60,7 +60,9 @@ function setupGetRoutes(req, res, renderTemplate) {
 }
 
 function renderLogin(req, res) {
-  renderTemplate("login", {}, res);
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const error = url.searchParams.get("error");
+  renderTemplate("login", { error }, res);
 }
 
 function renderRegister(req, res) {

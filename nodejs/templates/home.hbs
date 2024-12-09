@@ -42,7 +42,12 @@
                 <span>Tudo está por aqui<br></span>
             </div>
             <div class="subBanner">
-                <h2 class="subText">Conecte-se com uma <strong>comunidade vibrante e unida.</strong> Descubra tudo o que você precisa <strong>em um só lugar.</strong> Junte-se a nós e <strong>faça parte da experiência!</strong></h2>
+                <h2 class="subText">
+                    Este projeto foi desenvolvido por: <br>
+                    Lucas de Oliveira Criado: <a href="https://github.com/lucascriado" target="_blank">https://github.com/lucascriado</a> <br>
+                    Renam Rodas de Abreu: <a href="https://github.com/renamrr" target="_blank">https://github.com/renamrr</a> <br>
+                    Victor Itchiro Okayama: <a href="https://github.com/VictorOkayama" target="_blank">https://github.com/VictorOkayama</a>
+                </h2>
             <button class="btnPost" id="openModal">Crie sua postagem aqui!<img class="logoGithub" src="/public/assets/create.svg" alt="github"></button>
         </section>
 
@@ -130,11 +135,11 @@
             </div>
             <div class="diviser1">
                 <h3 class="titleModal">Criar postagem
-                    <span class="closeMobile" id="close">                    
+                    {{!-- <span class="closeMobile" id="close">                    
                         <svg width="30" height="30" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path id="closeIcon" d="M20.5 20.5L3 3M20.5 20.5L38 38M20.5 20.5L38 3M20.5 20.5L3 38" stroke="#6272D6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    </span>
+                    </span> --}}
                 </h3>
                 <form id="postForm" action="/create-post" method="POST" enctype="multipart/form-data">
                     <label for="title">Título</label>

@@ -45,8 +45,6 @@ async function handleChangeUsername(req, res) {
       const newName = fields.username;
       const userName = req.user.name_user;
 
-      console.log(newName, userName);
-
       try {
         const user = await db.selectUserByName(userName);
         if (!user || user.length === 0) {

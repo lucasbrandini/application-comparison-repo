@@ -153,6 +153,25 @@ function selectUserByName(name) {
   });
 }
 
+function selectUserByEmail(name) {
+  return new Promise((resolve, reject) => {
+    if (!name) {
+      return reject(new Error("Email cannot be null"));
+    }
+    db.getConnection((err, connection) => {
+      if (err) return reject(err);
+      const sql = `SELECT * FROM users WHERE email = ?`;
+      connection.query(sql, [name], (err, results) => {
+        connection.release();
+        if (err) {
+          return reject(err);
+        }
+        resolve(results);
+      });
+    });
+  });
+}
+
 //* DELETE
 function deleteComment(commentId) {
   return new Promise((resolve, reject) => {
@@ -934,6 +953,7 @@ module.exports = {
   insertPostWithVideo,
   deletePost,
   selectUserByName,
+  selectUserByEmail,
   deleteComment,
   upvote,
   downvote,

@@ -65,9 +65,7 @@ body {
     font-weight: 500;
     line-height: 2.1938rem;
     text-align: center;
-    color: rgba(255, 255, 255, 0.58);
-    opacity: 0.74;
-    width: 38.25rem;
+    color: #fff;
     margin: 0 auto;
 }
 
@@ -851,7 +849,6 @@ strong {
     .subText {
         font-size: 1.2rem;
         line-height: 1.5rem;
-        width: 100%;
     }
 
     .btnPost {

@@ -33,8 +33,16 @@ async function handleRegister(req, res) {
 
     try {
       const userExists = await db.selectUserByName(name);
+      const emailExists = await db.selectUserByEmail(email);  
       if (userExists.length > 0) {
         const errorMessage = encodeURIComponent("O nome de usuário já está sendo utilizado");
+        res.writeHead(302, { Location: `/register?error=${errorMessage}` });
+        res.end();
+        return;
+      }
+
+      if (emailExists.length > 0) {
+        const errorMessage = encodeURIComponent("O email já está sendo utilizado");
         res.writeHead(302, { Location: `/register?error=${errorMessage}` });
         res.end();
         return;
@@ -61,8 +69,8 @@ async function handleLogin(req, res) {
   form.parse(req, async (err, fields) => {
     if (err) {
       console.error(`Erro durante o parsing do formulário: ${err.message}`);
-      res.writeHead(500, { "Content-Type": "text/plain" });
-      res.end("Erro no servidor.");
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false, message: "Erro no servidor." }));
       return;
     }
 
@@ -80,18 +88,15 @@ async function handleLogin(req, res) {
         );
         sendCookieResponse(res, token, "/home");
       } else {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: false,
-            message: "Usuário ou senha incorretos",
-          })
-        );
+        const errorMessage = encodeURIComponent("Nome de usuário ou senha incorretos");
+        res.writeHead(302, { Location: `/login?error=${errorMessage}` });
+        res.end();
+        return;
       }
     } catch (err) {
       console.error(`Erro durante o login: ${err.message}`);
-      res.writeHead(500, { "Content-Type": "text/plain" });
-      res.end("Erro no servidor.");
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false, message: "Erro no servidor." }));
     }
   });
 }

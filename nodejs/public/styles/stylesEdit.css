@@ -254,3 +254,50 @@ body {
     color: white;
     background-color: red;
 }
+
+.close-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .modal-content {
+        width: 90%;
+        padding: 1rem;
+        display: grid;
+    }
+
+    .diviser1, .diviser2 {
+        width: 100%;
+        padding: 0;
+    }
+
+    .close {
+        display: none;
+    }
+
+    .diviserIcon {
+        width: 100%;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+
+    .close-mobile {
+        display: block;
+    }
+
+    .btnSubmit {
+        width: 100%;
+        margin: 0;
+    }
+
+    #preview {
+        width: 100%;
+        height: auto;
+        margin: 0;
+    }
+
+    #clearButton {
+        width: 100%;
+        margin: 0;
+    }
+}

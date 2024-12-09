@@ -39,8 +39,6 @@ Depois que for mergeado,
   GRANT ALL ON python.* TO 'admin'@'localhost';
   FLUSH PRIVILEGES;
   ALTER USER 'admin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Password1!';
-
-  use python;
   SET GLOBAL log_bin_trust_function_creators = 1;
 ```
 

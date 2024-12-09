@@ -51,7 +51,7 @@ function insertPost(userId, post_title, post) {
     db.getConnection((err, connection) => {
       if (err) return reject(err);
       const sql =
-        "INSERT INTO Posts (p_id_user, post_title, post) VALUES (?, ?, ?)";
+        "INSERT INTO posts (p_id_user, post_title, post) VALUES (?, ?, ?)";
       connection.query(sql, [userId, post_title, post], (err, results) => {
         connection.release();
         if (err) {
@@ -72,7 +72,7 @@ function insertPostWithImage(userId, post_title, post, post_image) {
     db.getConnection((err, connection) => {
       if (err) return reject(err);
       const sql =
-        "INSERT INTO Posts (p_id_user, post_title, post, post_image) VALUES (?, ?, ?, ?)";
+        "INSERT INTO posts (p_id_user, post_title, post, post_image) VALUES (?, ?, ?, ?)";
       connection.query(
         sql,
         [userId, post_title, post, post_image],
@@ -97,7 +97,7 @@ function insertPostWithVideo(userId, post_title, post, post_video) {
     db.getConnection((err, connection) => {
       if (err) return reject(err);
       const sql =
-        "INSERT INTO Posts (p_id_user, post_title, post, post_video) VALUES (?, ?, ?, ?)";
+        "INSERT INTO posts (p_id_user, post_title, post, post_video) VALUES (?, ?, ?, ?)";
       connection.query(
         sql,
         [userId, post_title, post, post_video],

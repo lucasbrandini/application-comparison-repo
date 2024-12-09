@@ -29,7 +29,7 @@ const setupTables = () => {
         `,
       },
       {
-        tableName: "Posts",
+        tableName: "posts",
         columns: `
           id_posts INT AUTO_INCREMENT PRIMARY KEY,
           p_id_user INT,

@@ -29,7 +29,7 @@ const setupTables = () => {
         `,
       },
       {
-        tableName: "posts",
+        tableName: "Posts",
         columns: `
           id_posts INT AUTO_INCREMENT PRIMARY KEY,
           p_id_user INT,
@@ -80,7 +80,7 @@ const setupTables = () => {
 
       connection.query(sql, (err) => {
         if (err) {
-          console.error('\x1b[31m', 'Error creating table ${tableDef.tableName}:', err, '\x1b[0m');
+          console.error('\x1b[31m', `Error creating table ${tableDef.tableName}:`, err, '\x1b[0m');
         } else {
           console.log('\x1b[38;5;215m', `Table ${tableDef.tableName} created successfully.`, '\x1b[0m');
         }

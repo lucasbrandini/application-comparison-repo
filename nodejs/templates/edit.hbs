@@ -20,7 +20,13 @@
                 </svg>
             </div>
             <div class="diviser1">
-                <h3 class="titleModal">Editar post</h3>
+                <h3 class="titleModal">Editar post
+                    <span class="closeMobile" id="close">                    
+                        <svg width="30" height="30" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path id="closeIcon" d="M20.5 20.5L3 3M20.5 20.5L38 38M20.5 20.5L38 3M20.5 20.5L3 38" stroke="#6272D6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </h3>
                 <form id="edit-post-form" action="/edit-post" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="post_id" id="post_id" value="{{post.id_posts}}">
                     <label for="title">Título</label>
@@ -46,6 +52,20 @@
                         <input type="file" name="file" id="file" accept="image/*,video/mp4">                        
                     </div>
             </div>
+            <div id="preview" class="previewMobile">
+                {{#if post.post_image}}
+                    <img src="data:image/jpeg;base64,{{post.post_image}}" width="400" height="200" alt="Post Image">
+                {{/if}}
+                {{#if post.post_video}}
+                    <video src="data:video/mp4;base64,{{post.post_video}}" width="400" height="200" alt="Post Video" controls></video>
+                {{/if}}
+            </div>
+            <button type="submit" class="btnSubmitMobile" form="edit-post-form">
+                <svg class="btnIcon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.34596 0.245057C0.651227 -0.0200745 1.08608 -0.0753457 1.4479 0.105094L19.4457 9.10401C20.1347 9.44737 20.1935 10.4077 19.5518 10.8326C19.5177 10.8552 19.4823 10.8756 19.4457 10.8938L1.4479 19.8928C0.759473 20.2372 -0.0435749 19.7073 0.00234271 18.939C0.0075297 18.8515 0.0242811 18.7651 0.0520018 18.6819L2.6137 10.9988H8.00009C8.7698 10.9988 9.25083 10.1656 8.86606 9.49899C8.68741 9.18964 8.35731 8.999 8.00009 8.999H2.6137L0.0510664 1.31596C-0.0763975 0.932376 0.0405224 0.509764 0.34596 0.245057Z"/>
+                </svg>
+                Editar                       
+            </button>
             <div class="diviser2">
                     <span class="close" id="close">
                         <a class="cancel" href="/home">
@@ -56,7 +76,7 @@
                         </a>
                     </span>
 
-                    <div id="preview">
+                    <div id="preview" class="previewPC">
                         {{#if post.post_image}}
                             <img src="data:image/jpeg;base64,{{post.post_image}}" width="400" height="200" alt="Post Image">
                         {{/if}}

@@ -462,12 +462,14 @@ strong {
 }
 
 .titleModal {
-    width: 196px;
+    width: 100%;
     height: 34px;
     font-weight: 700;
     font-size: 25px;
     line-height: 34px;
     color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
 }
 
 .diviser1 {
@@ -604,6 +606,10 @@ strong {
     stroke: white;
 }
 
+.closeMobile {
+    display: none;
+}
+
 .dropbtn {
     background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
     color: white;
@@ -622,14 +628,14 @@ strong {
 }
 
 .dropbtn img {
-    width: 16px; /* Ajuste o tamanho do ícone conforme necessário */
-    height: 16px; /* Ajuste o tamanho do ícone conforme necessário */
-    margin-left: 8px; /* Espaço entre o texto e o ícone */
+    width: 16px; 
+    height: 16px; 
+    margin-left: 8px; 
     font-weight: 600;
 }
 
 .dropbtn span {
-    margin-right: 6px; /* Espaço entre o texto e o ícone */
+    margin-right: 6px; 
     letter-spacing: 0.06em;
     font-weight: 600;
 }
@@ -639,7 +645,7 @@ strong {
 }
 
 .dropdown-content {
-    display: block; /* Necessário para permitir transições */
+    display: block;
     position: absolute;
     background-image: radial-gradient(141.01% 141.01% at 50% 50%, #111427 0%, #3D488D 100%);
     width: 188px;
@@ -681,18 +687,16 @@ strong {
     visibility: visible;
 }
 
-/* Estilo inicial do ícone */
 #toggleIcon {
     transition: transform 0.4s ease;
 }
 
-/* Estilo do ícone quando o dropdown está aberto */
 #toggleIcon.rotate {
-    transform: rotate(90deg); /* Altere o valor de acordo com o ângulo desejado */
+    transform: rotate(90deg);
 }
 
 .pfpImg {
-    border-radius: 5px; /* Torna a imagem circular */
+    border-radius: 5px;
     outline: 4px solid #31396B;
 }
 
@@ -811,7 +815,7 @@ strong {
 }
 
 #submit-btn:disabled {
-    background-color: #cccccc; /* cor do botão desabilitado */
+    background-color: #cccccc;
     cursor: not-allowed;
 }
 
@@ -879,11 +883,6 @@ strong {
         height: auto;
     }
 
-    .voteStyle, .commentCont {
-        /* flex-direction: column;
-        align-items: flex-start; */
-    }
-
     .voteStyle button, .commentCont button {
         width: 100%;
     }
@@ -894,6 +893,10 @@ strong {
         padding: 1rem;
     }
 
+    .diviserIcon {
+        display: none;
+    }
+
     .diviser1, .diviser2 {
         width: 100%;
         padding: 0;
@@ -901,11 +904,29 @@ strong {
 
     .buttons {
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
         gap: 1rem;
         width: 100%;
     }
 
+    .cancelSpan {
+        margin: 0;
+    }
+
     .btnSubmit, .cancelSpan {
         width: 100%;
+    }
+
+    .close {
+        display: none;
+    }
+
+    .closeMobile {
+        display: block;
+    }
+
+    .diviser2 {
+        display: none;
     }
 }

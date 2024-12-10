@@ -380,8 +380,8 @@ strong {
     height: 550px;
     border-radius: 2.5rem;
     display: flex;
-    justify-content: center;
-    gap: .625rem; /* Espaçamento entre os itens */
+    justify-content: flex-start;
+    gap: .625rem;
   }
   
   .modal-background {
@@ -459,37 +459,29 @@ strong {
     outline: none;
 }
 
-.titleModal {
+.topModal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
+}
+
+.titleModal {
     height: 34px;
     font-weight: 700;
     font-size: 25px;
     line-height: 34px;
     color: #FFFFFF;
-    display: flex;
-    justify-content: space-between;
+    gap: 10px;
+    margin-left: -46px;
 }
 
 .diviser1 {
-    width: 50%;
+    width: 100%;
+    margin-left: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 20px;
-    border: none;
-}
-
-.diviser2 {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-}
-
-.diviserIcon {
-    width: 3%;
-    display: flex;
-    flex-direction: column;
     padding: 20px;
     border: none;
 }
@@ -502,7 +494,7 @@ strong {
     border-radius: 7px;
     width: 350px;
     height: 270px;
-    margin: 63px 0 0 auto;
+    margin: 45px 0 0 auto;
 }
 
 /* Certifique-se de que esses estilos são aplicados no final do arquivo CSS para sobrescrever qualquer outro estilo conflitante */
@@ -602,10 +594,6 @@ strong {
 
 .activeClose {
     stroke: white;
-}
-
-.closeMobile {
-    display: none;
 }
 
 .dropbtn {
@@ -817,6 +805,14 @@ strong {
     cursor: not-allowed;
 }
 
+.formContent {
+    width: 50%;
+}
+
+.middleForm {
+    display: flex;
+}
+
 @media (max-width: 900px) {
     .sectionTop {
         display: none;
@@ -890,11 +886,30 @@ strong {
         padding: 1rem;
     }
 
-    .diviserIcon {
+    .topIcon {
         display: none;
     }
 
-    .diviser1, .diviser2 {
+    .middleForm {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .titleModal {
+        margin-left: 0;
+    }
+    
+    .formContent {
+        width: 95%;
+    }
+
+    #preview {
+        width: 95%;
+        margin-top: 20px;
+        margin-left: 0;
+    }
+
+    .diviser1{
         width: 100%;
         padding: 0;
     }
@@ -904,7 +919,7 @@ strong {
         align-items: center;
         justify-content: center;
         gap: 1rem;
-        width: 100%;
+        width: 95%;
     }
 
     .cancelSpan {
@@ -921,9 +936,5 @@ strong {
 
     .closeMobile {
         display: block;
-    }
-
-    .diviser2 {
-        display: none;
     }
 }

@@ -121,7 +121,7 @@ function deletePost(postId) {
     }
     db.getConnection((err, connection) => {
       if (err) return reject(err);
-      const sql = `DELETE FROM Posts WHERE id_posts = ?`;
+      const sql = `DELETE FROM posts WHERE id_posts = ?`;
       connection.query(sql, [postId], (err, results) => {
         connection.release();
         if (err) {
